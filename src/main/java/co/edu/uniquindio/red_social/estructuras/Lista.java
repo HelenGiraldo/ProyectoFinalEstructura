@@ -16,7 +16,7 @@ import java.util.Iterator;
      *  <p>
      *  Solo JhancaGOD
      **/
-    public interface Lista<T> extends Iterable<T> {
+    public interface Lista<T> extends Coleccion<T> {
 
         // -------------------------- Consultas -----------------------------
         int size();
@@ -63,7 +63,7 @@ import java.util.Iterator;
 
         boolean removeLast();
 
-        boolean update(T objeto);
+        boolean update(T objetoInicial, T objetoFinal);
 
         boolean clear();
 

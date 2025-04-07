@@ -5,4 +5,6 @@ module co.edu.uniquindio.red_social {
 
     opens co.edu.uniquindio.red_social to javafx.fxml;
     exports co.edu.uniquindio.red_social;
+    exports co.edu.uniquindio.red_social.clases;
+    opens co.edu.uniquindio.red_social.clases to javafx.fxml;
 }

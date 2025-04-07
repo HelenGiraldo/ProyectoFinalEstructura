@@ -1,4 +1,4 @@
-package co.edu.uniquindio.red_social;
+package co.edu.uniquindio.red_social.clases;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

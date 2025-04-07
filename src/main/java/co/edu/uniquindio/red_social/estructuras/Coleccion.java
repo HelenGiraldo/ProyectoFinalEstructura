@@ -67,10 +67,11 @@ public interface Coleccion<T> extends Iterable<T> {
 
     /** Actualiza el primer objeto que coincida en la lista
      *
-     * @param objeto Objeto que se desea modificar
+     * @param objetoInicial Objeto a eliminar
+     * @param objetoFinal Objeto a añadir
      * @return boolean - El objeto fue actualizado correctamente o no
      */
-    boolean update(T objeto);
+    boolean update(T objetoInicial, T objetoFinal);
 
 
     // -------------------------- Masivas -----------------------------

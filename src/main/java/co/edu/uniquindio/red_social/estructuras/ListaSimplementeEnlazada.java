@@ -183,11 +183,6 @@ public class ListaSimplementeEnlazada<T> implements Lista<T> {
         return true;
     }
 
-    /**
-     * Arreglar este metodo luego
-     * @param objeto
-     * @return
-     */
     @Override
     public boolean remove(T objeto) {
         if(head == null){
@@ -195,17 +190,20 @@ public class ListaSimplementeEnlazada<T> implements Lista<T> {
         }
         boolean borrado = false;
         Nodo<T> current = head;
-        if(current.getValue().equals(objeto)){
+        while(current !=null && current.getValue().equals(objeto)){
             head = head.getNext();
+            current = head;
             borrado = true;
             length--;
         }
-
         while (current.getNext() != null) {
             if(current.getNext().getValue().equals(objeto)){
                 current.setNext(current.getNext().getNext());
                 borrado = true;
                 length--;
+                if(current.getNext() == null){
+                    tail = current;
+                }
             }
             current = current.getNext();
         }
@@ -215,47 +213,123 @@ public class ListaSimplementeEnlazada<T> implements Lista<T> {
 
     @Override
     public boolean remove(int index) {
+        if (indexIsValid(index)) {
+            if (index == 0) {
+                head = head.getNext();
+            } else {
+                Nodo<T> current = head;
+                for (int i = 0; i < index - 1; i++) {
+                    current = current.getNext();
+                }
+                current.setNext(current.getNext().getNext());
+            }
+            length--;
+            return true;
+        }
         return false;
     }
 
     @Override
     public boolean removeFirst() {
+        if (head != null) {
+            head = head.getNext();
+            length--;
+            return true;
+        }
         return false;
     }
 
     @Override
     public boolean removeLast() {
-        return false;
+        if (head == null) {
+            return false;
+        }
+        if (head.getNext() == null) {
+            head = null;
+            tail = null;
+        } else {
+            Nodo<T> current = head;
+            while (current.getNext().getNext() != null) {
+                current = current.getNext();
+            }
+            current.setNext(null);
+            tail = current;
+        }
+        length--;
+        return true;
     }
 
     @Override
-    public boolean update(T objeto) {
-        return false;
+    public boolean update(T objetoInicial, T objetoFinal) {
+        Nodo<T> current = head;
+        if(head == null){
+            return false;
+        }
+        boolean borrado = false;
+        while (current != null) {
+            if (current.getValue().equals(objetoInicial)) {
+                current.setValue(objetoFinal);
+                borrado = true;
+            }
+            current = current.getNext();
+        }
+        return borrado;
     }
+
 
     @Override
     public boolean clear() {
-        return false;
+        head = null;
+        tail = null;
+        length = 0;
+        return true;
     }
 
     @Override
     public boolean containsAll(Coleccion<T> coleccion) {
-        return false;
+        Iterator<T> iterator = coleccion.iterator();
+        while (iterator.hasNext()) {
+            if (!contains(iterator.next())) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
     public boolean addAll(Coleccion<T> coleccion) {
-        return false;
+
+        Iterator<T> iterator = coleccion.iterator();
+        while (iterator.hasNext()) {
+            add(iterator.next());
+        }
+        return true;
     }
 
     @Override
     public boolean addAll(Coleccion<T> coleccion, int index) {
+
+        if (indexIsValid(index)) {
+            Iterator<T> iterator = coleccion.iterator();
+            while (iterator.hasNext()) {
+                addBeforeElement(iterator.next(), index);
+                index++;
+            }
+            return true;
+        }
         return false;
     }
 
     @Override
     public boolean removeAll(Coleccion<T> coleccion) {
-        return false;
+        Iterator<T> iterator = coleccion.iterator();
+        boolean flag = true;
+        while (iterator.hasNext()) {
+            if(!remove(iterator.next())){
+                flag = false;
+            }
+        }
+        return flag;
     }
 
 }
