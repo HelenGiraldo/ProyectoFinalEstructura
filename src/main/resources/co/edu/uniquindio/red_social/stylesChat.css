@@ -1,0 +1,157 @@
+/* Fondo general */
+.root {
+    -fx-background-color: #1c1c1e;
+}
+
+#userchatListVBox {
+    -fx-background-color: #bcbcc3;
+    -fx-background-radius: 30;
+
+}
+/* VBox de la lista de chats */
+#chatListVBox {
+    -fx-background-color: #59595e;
+    -fx-background-radius: 15;
+
+}
+/* VBox de la lista de chats */
+#chatListVBoxFondo1{
+    -fx-background-color: #fbfbfb;
+    -fx-background-radius: 15;
+
+}
+/* VBox de la lista de chats */
+#chatListVBoxFondo2{
+    -fx-background-color: #c1bfbf;
+    -fx-background-radius: 15;
+
+}
+
+
+.scroll-pane {
+    -fx-background: transparent;
+    -fx-background-color: transparent;
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+/* Item de la lista de conversaciones */
+.chat-item {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #353333;
+    -fx-padding: 10;
+    -fx-background-radius: 10;
+    -fx-margin: 5;
+}
+.chat-item.recibido {
+    -fx-background-color: #91ec89;
+    -fx-alignment: center-left;
+}
+
+.chat-item.enviado {
+    -fx-background-color: #0055aa;
+    -fx-alignment: center-right;
+}
+
+
+
+.chat-item:hover {
+    -fx-background-color: #3a3a3c;
+    -fx-cursor: hand;
+}
+
+/* Avatar (ImageView con clip redondo) */
+.avatar {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 4, 0.3, 0, 1);
+    -fx-border-color: white;
+    -fx-border-width: 1px;
+    -fx-background-radius: 50%;
+    -fx-border-radius: 60%;
+}
+
+/* Nombre de contacto */
+.contact-name {
+    -fx-text-fill: #000000;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+}
+
+/* Último mensaje */
+.last-message {
+    -fx-text-fill: #493e3e;
+    -fx-font-size: 12px;
+}
+
+/* Hora del último mensaje */
+.timestamp {
+    -fx-text-fill: #4a4242;
+    -fx-font-size: 10px;
+    -fx-alignment: center-right;
+}
+
+/* Mensaje recibido */
+.message-bubble {
+    -fx-background-color: #494949;
+    -fx-text-fill: #f2f2f2;
+    -fx-padding: 8 12 8 12;
+    -fx-background-radius: 15;
+    -fx-max-width: 300;
+    -fx-wrap-text: true;
+}
+
+/* Mensaje propio (enviado) */
+.message-bubble-user {
+    -fx-background-color: #606060;
+    -fx-text-fill: #f2f2f2;
+    -fx-padding: 8 12 8 12;
+    -fx-background-radius: 15;
+    -fx-max-width: 300;
+    -fx-wrap-text: true;
+}
+
+/* Caja de texto para escribir mensajes */
+#messageTextField {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #000000;
+    -fx-prompt-text-fill: #888282;
+    -fx-background-radius: 20;
+    -fx-border-color: transparent;
+    -fx-padding: 8;
+}
+
+/* Botón de enviar */
+#sendButton {
+    -fx-background-color: white;
+    -fx-graphic-text-gap: 5;
+    -fx-background-radius: 40;
+}
+
+#sendButton:hover {
+    -fx-background-color: #bce3ba;
+    -fx-background-radius: 20;
+}
+.sidebar-button-chat {
+    -fx-background-color: transparent;
+    -fx-text-fill: #444;
+    -fx-font-size: 14px;
+    -fx-alignment: CENTER_LEFT;
+    -fx-pref-width: 160;
+    -fx-padding: 10 15 10 15;
+    -fx-spacing: 10;
+    -fx-cursor: hand;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+}
+
+.sidebar-button-chat:hover {
+    -fx-background-color: #eaeaea;
+}
+
+.sidebar-button-chat:selected,
+.sidebar-button-chat-active {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: white;
+}
+
