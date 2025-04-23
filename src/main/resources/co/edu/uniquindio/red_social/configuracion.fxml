@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.red_social.ConfiguracionController">
+   <children>
+      <BorderPane layoutX="3.0" layoutY="6.0" prefHeight="387.0" prefWidth="594.0">
+         <top>
+            <VBox prefHeight="65.0" prefWidth="594.0" BorderPane.alignment="CENTER">
+               <children>
+                  <HBox prefHeight="73.0" prefWidth="594.0">
+                     <children>
+                        <HBox prefHeight="65.0" prefWidth="174.0">
+                           <children>
+                              <Label fx:id="TextFieldTitle" prefHeight="90.0" prefWidth="160.0" styleClass="title-label" stylesheets="@styles.css" text="ThinkTogether" />
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="65.0" prefWidth="30.0" />
+                        <HBox prefHeight="65.0" prefWidth="227.0">
+                           <children>
+                              <Label prefHeight="46.0" prefWidth="291.0" styleClass="title-label" stylesheets="@styles.css" text="ACCOUNT SETTINGS" />
+                           </children></HBox>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </top>
+         <left>
+            <VBox prefHeight="322.0" prefWidth="192.0" BorderPane.alignment="CENTER">
+               <children>
+                  <ToggleButton fx:id="InicioButton" mnemonicParsing="false" prefHeight="37.0" prefWidth="161.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Inicio" />
+                  <ToggleButton fx:id="misContenidosButton" mnemonicParsing="false" prefHeight="43.0" prefWidth="132.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Mis Contenidos" />
+                  <ToggleButton fx:id="gruposEstudioButton" mnemonicParsing="false" prefHeight="42.0" prefWidth="151.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Grupos estudio" />
+                  <ToggleButton fx:id="MensajesButton" mnemonicParsing="false" prefHeight="42.0" prefWidth="161.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Mensajes" />
+                  <ToggleButton fx:id="SugerenciasButton" mnemonicParsing="false" prefHeight="38.0" prefWidth="159.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Sugerencias" />
+                  <ToggleButton fx:id="SolicitudesDeAyudaButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="160.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Solicitudes de ayuda" />
+                  <ToggleButton fx:id="configuracionPerfilButton" mnemonicParsing="false" prefHeight="39.0" prefWidth="161.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Configuracion perfil" />
+               </children>
+            </VBox>
+         </left>
+         <center>
+            <HBox prefHeight="371.0" prefWidth="402.0" BorderPane.alignment="CENTER">
+               <children>
+                  <HBox fx:id="hBoxIzquierda" prefHeight="322.0" prefWidth="197.0" styleClass="card-mini" stylesheets="@styles.css">
+                     <children>
+                        <VBox prefHeight="302.0" prefWidth="187.0">
+                           <children>
+                              <Label prefHeight="30.0" prefWidth="177.0" styleClass="title-label-configuration" stylesheets="@stylesConfig.css" text="User information" />
+                              <Label maxWidth="180.0" prefHeight="32.0" prefWidth="177.0" styleClass="label-description-user-information" stylesheets="@stylesConfig.css" text="Aqui puedes editar tu informacion publica sobre ti." />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox fx:id="hBoxDerecha" prefHeight="100.0" prefWidth="200.0" />
+               </children>
+            </HBox>
+         </center>
+      </BorderPane>
+   </children>
+</AnchorPane>
