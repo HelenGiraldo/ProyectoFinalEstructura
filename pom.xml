@@ -36,7 +36,9 @@
             <artifactId>junit-jupiter-engine</artifactId>
             <version>${junit.version}</version>
             <scope>test</scope>
+
         </dependency>  </dependencies>
+
 
     <build>
         <plugins>
@@ -47,6 +49,7 @@
                 <configuration>
                     <source>21</source>
                     <target>21</target>
+
                 </configuration>
             </plugin>
             <plugin>
@@ -59,6 +62,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>co.edu.uniquindio.demo/co.edu.uniquindio.demo.HelloApplication</mainClass>
+
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>
