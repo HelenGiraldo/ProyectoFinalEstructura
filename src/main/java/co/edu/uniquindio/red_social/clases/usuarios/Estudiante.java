@@ -3,16 +3,14 @@ package co.edu.uniquindio.red_social.clases.usuarios;
 import co.edu.uniquindio.red_social.estructuras.ListaSimplementeEnlazada;
 
 import java.io.File;
+import java.time.LocalDate;
 
 public class Estudiante extends Usuario {
-    private String id;
-    private static int contador = 0;
     private ListaSimplementeEnlazada<Usuario> contactos;
     private ListaSimplementeEnlazada<String> preferencias;
 
-    public Estudiante(String nombre, String correo, String contrasena, String fechaNacimiento, File fotoPerfil) {
+    public Estudiante(String nombre, String correo, String contrasena, LocalDate fechaNacimiento, File fotoPerfil) {
         super(nombre, correo, contrasena, fechaNacimiento, fotoPerfil);
-        this.id = String.valueOf(++contador);
         this.contactos = new ListaSimplementeEnlazada<>();
         this.preferencias = new ListaSimplementeEnlazada<>();
     }
@@ -46,22 +44,6 @@ public class Estudiante extends Usuario {
         return false;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public static int getContador() {
-        return contador;
-    }
-
-    public static void setContador(int contador) {
-        Estudiante.contador = contador;
-    }
-
     public ListaSimplementeEnlazada<Usuario> getContactos() {
         return contactos;
     }
@@ -76,5 +58,15 @@ public class Estudiante extends Usuario {
 
     public void setPreferencias(ListaSimplementeEnlazada<String> preferencias) {
         this.preferencias = preferencias;
+    }
+
+    @Override
+    public String toString() {
+        return "Estudiante{" +
+                "nombre='" + nombre + '\'' +
+                ", correo='" + correo + '\'' +
+                ", contrasena='" + contrasena + '\'' +
+                ", fechaNacimiento=" + fechaNacimiento +
+                '}';
     }
 }

@@ -5,6 +5,10 @@ target/
 !**/src/test/**/target/
 
 /src/main/resources/sql.properties
+src/main/java/co/edu/uniquindio/red_social/data_base/estructuras.sql
+src/main/java/co/edu/uniquindio/red_social/data_base/IniciarBase.java
+src/main/java/co/edu/uniquindio/red_social/pruebas
+
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
