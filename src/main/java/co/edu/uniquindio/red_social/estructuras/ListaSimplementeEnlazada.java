@@ -4,9 +4,9 @@ import java.util.Iterator;
 
 public class ListaSimplementeEnlazada<T> implements Lista<T> {
 
-    Nodo<T> head;
-    Nodo<T> tail;
-    int length;
+    protected Nodo<T> head;
+    protected Nodo<T> tail;
+    protected int length;
 
     public ListaSimplementeEnlazada() {
         length = 0;

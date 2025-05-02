@@ -19,24 +19,21 @@ public class Estudiante extends Usuario {
 
     public boolean anadirContacto(Usuario contacto) {
         if (!contactos.contains(contacto)) {
-            contactos.add(contacto);
-            return true;
+            return contactos.add(contacto);
         }
         return false;
     }
 
     public boolean eliminarContacto(Usuario contacto) {
         if (contactos.contains(contacto)) {
-            contactos.remove(contacto);
-            return true;
+            return contactos.remove(contacto);
         }
         return false;
     }
 
     public boolean anadirPreferencia(String preferencia) {
         if (!preferencias.contains(preferencia)) {
-            preferencias.add(preferencia);
-            return true;
+           return  preferencias.add(preferencia);
         }
         return false;
     }
