@@ -1,17 +1,17 @@
 package co.edu.uniquindio.red_social.clases.usuarios;
 
 import java.io.File;
+import java.time.LocalDate;
 
 public abstract class Usuario {
     protected String nombre;
-
     protected String correo;
     protected String contrasena;
-    protected String fechaNacimiento;
+    protected LocalDate fechaNacimiento;
     protected File fotoPerfil;
 
 
-    public Usuario(String nombre, String correo, String contrasena, String fechaNacimiento, File fotoPerfil) {
+    public Usuario(String nombre, String correo, String contrasena, LocalDate fechaNacimiento, File fotoPerfil) {
         this.nombre = nombre;
         this.correo = correo;
         this.contrasena = contrasena;
@@ -44,11 +44,11 @@ public abstract class Usuario {
         this.contrasena = contrasena;
     }
 
-    public String getFechaNacimiento() {
+    public LocalDate getFechaNacimiento() {
         return fechaNacimiento;
     }
 
-    public void setFechaNacimiento(String fechaNacimiento) {
+    public void setFechaNacimiento(LocalDate fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
     }
 

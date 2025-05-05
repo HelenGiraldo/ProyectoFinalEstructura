@@ -19,6 +19,7 @@ import java.util.Iterator;
     public interface Lista<T> extends Coleccion<T> {
 
         // -------------------------- Consultas -----------------------------
+
         int size();
 
         default int length() {

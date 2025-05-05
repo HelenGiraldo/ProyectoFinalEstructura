@@ -97,4 +97,10 @@ public interface Coleccion<T> extends Iterable<T> {
      */
     boolean removeAll(Coleccion<T> coleccion);
 
+
+    /** Elimina todos los elementos presentes en una colección
+     *
+     * @return boolean - Se limpió correctamente o no
+     */
+    boolean clear();
 }

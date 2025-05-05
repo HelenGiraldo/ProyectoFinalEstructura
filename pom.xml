@@ -5,24 +5,25 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>co.edu.uniquindio</groupId>
-    <artifactId>demo</artifactId>
+    <artifactId>red_social</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>demo</name>
+    <name>red_social</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <junit.version>5.10.2</junit.version>  </properties>
+        <junit.version>5.10.2</junit.version>
+    </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
-            <version>21</version>
+            <version>17.0.6</version>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
-            <version>21</version>
+            <version>17.0.6</version>
         </dependency>
 
         <dependency>
@@ -36,9 +37,8 @@
             <artifactId>junit-jupiter-engine</artifactId>
             <version>${junit.version}</version>
             <scope>test</scope>
-
-        </dependency>  </dependencies>
-
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>
@@ -47,9 +47,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.13.0</version>
                 <configuration>
-                    <source>21</source>
-                    <target>21</target>
-
+                    <source>23</source>
+                    <target>23</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -61,8 +60,8 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>co.edu.uniquindio.demo/co.edu.uniquindio.demo.HelloApplication</mainClass>
-
+                            <mainClass>co.edu.uniquindio.red_social/co.edu.uniquindio.red_social.clases.RedSocial
+                            </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>

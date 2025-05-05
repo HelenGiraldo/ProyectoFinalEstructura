@@ -1,4 +1,4 @@
-package co.edu.uniquindio.red_social;
+package co.edu.uniquindio.red_social.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

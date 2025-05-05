@@ -2,11 +2,11 @@ package co.edu.uniquindio.red_social.estructuras;
 
 import java.util.Iterator;
 
-public class ListaSimplementeEnlazada<T> implements Lista<T> {
+public class ListaSimplementeEnlazada<T> implements Lista<T>, Iterable<T> {
 
-    Nodo<T> head;
-    Nodo<T> tail;
-    int length;
+    protected Nodo<T> head;
+    protected Nodo<T> tail;
+    protected int length;
 
     public ListaSimplementeEnlazada() {
         length = 0;
@@ -45,21 +45,7 @@ public class ListaSimplementeEnlazada<T> implements Lista<T> {
 
     @Override
     public Iterator<T> iterator(){
-        return new Iterator<T>() {
-            Nodo<T> current = head;
-
-            @Override
-            public boolean hasNext() {
-                return current.getNext() != null;
-            }
-
-            @Override
-            public T next() {
-                T value = current.getValue();
-                current = current.getNext();
-                return value;
-            }
-        };
+        return new IteradorNodo<>(head);
     }
 
     @Override
