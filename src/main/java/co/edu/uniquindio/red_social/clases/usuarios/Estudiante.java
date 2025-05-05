@@ -3,40 +3,35 @@ package co.edu.uniquindio.red_social.clases.usuarios;
 import co.edu.uniquindio.red_social.estructuras.ListaSimplementeEnlazada;
 
 import java.io.File;
+import java.time.LocalDate;
 
 public class Estudiante extends Usuario {
-    private String id;
-    private static int contador = 0;
     private ListaSimplementeEnlazada<Usuario> contactos;
     private ListaSimplementeEnlazada<String> preferencias;
 
-    public Estudiante(String nombre, String correo, String contrasena, String fechaNacimiento, File fotoPerfil) {
+    public Estudiante(String nombre, String correo, String contrasena, LocalDate fechaNacimiento, File fotoPerfil) {
         super(nombre, correo, contrasena, fechaNacimiento, fotoPerfil);
-        this.id = String.valueOf(++contador);
         this.contactos = new ListaSimplementeEnlazada<>();
         this.preferencias = new ListaSimplementeEnlazada<>();
     }
 
     public boolean anadirContacto(Usuario contacto) {
         if (!contactos.contains(contacto)) {
-            contactos.add(contacto);
-            return true;
+            return contactos.add(contacto);
         }
         return false;
     }
 
     public boolean eliminarContacto(Usuario contacto) {
         if (contactos.contains(contacto)) {
-            contactos.remove(contacto);
-            return true;
+            return contactos.remove(contacto);
         }
         return false;
     }
 
     public boolean anadirPreferencia(String preferencia) {
         if (!preferencias.contains(preferencia)) {
-            preferencias.add(preferencia);
-            return true;
+           return  preferencias.add(preferencia);
         }
         return false;
     }
@@ -47,22 +42,6 @@ public class Estudiante extends Usuario {
             return true;
         }
         return false;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public static int getContador() {
-        return contador;
-    }
-
-    public static void setContador(int contador) {
-        Estudiante.contador = contador;
     }
 
     public ListaSimplementeEnlazada<Usuario> getContactos() {
@@ -79,5 +58,15 @@ public class Estudiante extends Usuario {
 
     public void setPreferencias(ListaSimplementeEnlazada<String> preferencias) {
         this.preferencias = preferencias;
+    }
+
+    @Override
+    public String toString() {
+        return "Estudiante{" +
+                "nombre='" + nombre + '\'' +
+                ", correo='" + correo + '\'' +
+                ", contrasena='" + contrasena + '\'' +
+                ", fechaNacimiento=" + fechaNacimiento +
+                '}';
     }
 }

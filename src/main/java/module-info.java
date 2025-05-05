@@ -1,6 +1,10 @@
 module co.edu.uniquindio.red_social {
     requires javafx.controls;
     requires javafx.fxml;
+    requires java.sql;
+
+    requires java.desktop;
+
 
     requires java.desktop;
 
