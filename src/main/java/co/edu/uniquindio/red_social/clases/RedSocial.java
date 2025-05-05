@@ -1,22 +1,31 @@
 package co.edu.uniquindio.red_social.clases;
 
-import co.edu.uniquindio.red_social.clases.interfaces.AdministracionUsuario;
+import co.edu.uniquindio.red_social.clases.interfaces.AdministracionEstudiante;
 import co.edu.uniquindio.red_social.clases.usuarios.Administrador;
 import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
 import co.edu.uniquindio.red_social.estructuras.ListaSimplementeEnlazada;
 
 import java.io.File;
+import java.time.LocalDate;
 import java.util.Iterator;
 
-public class RedSocial implements AdministracionUsuario {
+public class RedSocial implements AdministracionEstudiante {
     private String nombre;
     private ListaSimplementeEnlazada<Estudiante> estudiantes;
     private ListaSimplementeEnlazada<Administrador> administradores;
+    private static RedSocial redSocial;
 
-    public RedSocial(String nombre) {
+    private RedSocial(String nombre) {
         this.nombre = nombre;
         this.estudiantes = new ListaSimplementeEnlazada<>();
         this.administradores = new ListaSimplementeEnlazada<>();
+    }
+
+    public static RedSocial getInstance(String nombre) {
+        if (redSocial == null) {
+            redSocial = new RedSocial(nombre);
+        }
+        return redSocial;
     }
 
     public String getNombre() {
@@ -44,17 +53,25 @@ public class RedSocial implements AdministracionUsuario {
     }
 
     @Override
-    public boolean crearUsuario(String nombre, String correo, String contrasena, String fechaNacimiento, File fotoPerfil) {
+    public boolean crearEstudiante(String nombre, String correo, String contrasena, LocalDate fechaNacimiento, File fotoPerfil) {
+        Estudiante nuevoEstudiante = new Estudiante(nombre, correo, contrasena, fechaNacimiento, fotoPerfil);
+        if (estudianteExisteCorreo(correo)!=null) {
+            return estudiantes.add(nuevoEstudiante);
+        }
         return false;
     }
 
     @Override
-    public boolean eliminarUsuario(String correo) {
-return  false;
+    public boolean eliminarEstudiante(String correo) {
+        Estudiante estudiante = estudianteExisteCorreo(correo);
+        if (estudiante != null) {
+            return estudiantes.remove(estudiante);
+        }
+        return false;
     }
 
     @Override
-    public boolean modificarUsuario(Estudiante usuarioAntiguo, Estudiante usuarioNuevo) {
+    public boolean modificarEstudiante(Estudiante usuarioAntiguo, Estudiante usuarioNuevo) {
 
         if (estudiantes.contains(usuarioAntiguo)) {
             usuarioAntiguo.setNombre(usuarioNuevo.getNombre());
@@ -67,8 +84,10 @@ return  false;
         return false;
     }
 
+
+
     @Override
-    public Estudiante usuarioExiste(String correo) {
+    public Estudiante estudianteExisteCorreo(String correo) {
         Iterator<Estudiante> iterator = estudiantes.iterator();
         while (iterator.hasNext()) {
             Estudiante estudiante = iterator.next();

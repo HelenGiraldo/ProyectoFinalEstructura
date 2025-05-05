@@ -3,7 +3,7 @@ package co.edu.uniquindio.red_social.clases.contenidos;
 import java.io.File;
 import java.time.LocalDateTime;
 
-public class Contenido {
+public class Contenido implements Comparable<Contenido> {
     String tipoContenido;
     File contenido;
 
@@ -28,4 +28,8 @@ public class Contenido {
         this.contenido = contenido;
     }
 
+    @Override
+    public int compareTo(Contenido o) {
+        return 0;
+    }
 }
