@@ -6,10 +6,10 @@ module co.edu.uniquindio.red_social {
     requires java.desktop;
 
 
-    requires java.desktop;
-
 
 
     opens co.edu.uniquindio.red_social to javafx.fxml;
     exports co.edu.uniquindio.red_social;
+    exports co.edu.uniquindio.red_social.controllers;
+    opens co.edu.uniquindio.red_social.controllers to javafx.fxml;
 }
