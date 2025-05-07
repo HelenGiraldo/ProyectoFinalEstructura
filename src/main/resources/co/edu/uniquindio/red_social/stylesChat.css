@@ -3,8 +3,17 @@
     -fx-background-color: #1c1c1e;
 }
 
-.text-field:empty {
-    visibility: visible !important;
+/* Asegurar que el campo de texto siempre sea visible */
+.text-field {
+    -fx-display-caret: true;
+    -fx-focus-traversable: true;
+    -fx-visible: true;
+    -fx-managed: true;
+}
+
+/* Estilo para el botón de enviar */
+.button {
+    -fx-focus-traversable: false;
 }
 
 /* ScrollPane transparente */
@@ -266,3 +275,4 @@
     -fx-border-color: rgba(214, 228, 255, 0.6);
     -fx-border-width: 1px;
 }
+
