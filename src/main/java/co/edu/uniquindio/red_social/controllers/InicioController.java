@@ -5,59 +5,129 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 
+import java.io.IOException;
 import java.net.URL;
 
 public class InicioController {
 
     @FXML
-    private Label TextFieldSaludo;
+    private HBox HboxTusContendiosContenido;
 
     @FXML
-    private ScrollPane scrollPrincipal;
+    private ToggleButton InicioButton;
 
     @FXML
-    private Label LabelGrupoSugerido;
+    private Label LabelBienvendioAThinkTogether;
 
     @FXML
     private Label LabelCantidadIntegrantes;
 
     @FXML
+    private Label LabelExploraContenidos;
+
+    @FXML
+    private Label LabelGrupoSugerido;
+
+    @FXML
+    private Label LabelGruposDeEstudiosSugeridos;
+
+    @FXML
+    private Label LabelGruposEncontradosParaTi;
+
+    @FXML
     private Label LabelTipo;
+
+    @FXML
+    private Label LabelTotalPublicados;
+
+    @FXML
+    private Label LabelTusContenidos;
+
+    @FXML
+    private Label LabelTusContenidosContenido;
+
+    @FXML
+    private Label LabelUltimoContenido;
+
+    @FXML
+    private Label LabelUltimoContenidoTexto;
 
     @FXML
     private Label LabelValoracion;
 
     @FXML
+    private ToggleButton MensajesButton;
+
+    @FXML
+    private ToggleButton SolicitudesDeAyudaButton;
+
+    @FXML
+    private ToggleButton SugerenciasButton;
+
+    @FXML
+    private Label TextFieldSaludo;
+
+    @FXML
+    private Label TextFieldTitle;
+
+    @FXML
+    private VBox TuscontendiosVBox;
+
+    @FXML
+    private VBox VBoxGruposEstudio;
+
+    @FXML
+    private VBox VBoxTusContenidosContenido;
+
+    @FXML
+    private VBox VistaInicio;
+
+    @FXML
+    private Button botonBuscar;
+
+    @FXML
+    private TextField campoBusqueda;
+
+    @FXML
+    private ToggleButton configuracionPerfilButton;
+
+    @FXML
+    private ToggleButton gruposEstudioButton;
+
+    @FXML
+    private VBox hBoxDerecha;
+
+    @FXML
+    private GridPane hBoxizquierda;
+
+    @FXML
     private ImageView imagenPerfil;
 
     @FXML
+    private ToggleButton misContenidosButton;
+
+    @FXML
+    private ScrollPane scrollPrincipal;
+    @FXML
+    private AnchorPane root;
+
+    @FXML
     public void initialize() {
-        URL imageUrl = getClass().getResource("/imagenes/imagePerfil.png");
 
-        if (imageUrl != null) {
-            Image image = new Image(imageUrl.toExternalForm());
-            imagenPerfil.setImage(image);
-
-            Platform.runLater(() -> {
-                double centerX = imagenPerfil.getFitWidth() / 2;
-                double centerY = imagenPerfil.getFitHeight() / 2;
-                double radius = Math.min(imagenPerfil.getFitWidth(), imagenPerfil.getFitHeight()) / 2;
-
-                Circle clip = new Circle(centerX, centerY, radius);
-                imagenPerfil.setClip(clip);
-
-            });
-        } else {
-            System.err.println("No se pudo cargar la imagen: /imagenes/imagePerfil.png");
-        }
     }
 
     public void actualizarSaludo(String nombreUsuario) {
@@ -81,4 +151,48 @@ public class InicioController {
         LabelTipo.setText(tipo);
         LabelValoracion.setText("★ " + valoracion);
     }
+
+    @FXML
+    private void irAConfig(ActionEvent event) {
+        try {
+
+            URL configUrl = getClass().getResource("/co/edu/uniquindio/red_social/configuracion.fxml");
+            System.out.println("URL config: " + configUrl);
+            FXMLLoader loader = new FXMLLoader(configUrl);
+            Parent configView = loader.load();
+
+            if (root != null) {
+                root.getChildren().clear();
+                root.getChildren().add(configView);
+            } else {
+                System.err.println("El contenedor principal es null.");
+            }
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    @FXML
+    private void irAChat(ActionEvent event) {
+        try {
+
+            URL configUrl = getClass().getResource("/co/edu/uniquindio/red_social/mensajes.fxml");
+            System.out.println("URL config: " + configUrl);
+            FXMLLoader loader = new FXMLLoader(configUrl);
+            Parent configView = loader.load();
+
+            if (root != null) {
+                root.getChildren().clear();
+                root.getChildren().add(configView);
+            } else {
+                System.err.println("El contenedor principal es null.");
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }

@@ -14,6 +14,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
 
 public class RegistroController {
 
@@ -56,6 +57,7 @@ public class RegistroController {
     @FXML
     private TextField textFieldEmail;
 
+
     @FXML
     private void registrarUsuario(ActionEvent event) {
         // Leer datos
@@ -64,7 +66,6 @@ public class RegistroController {
         String email = textFieldEmail.getText();
         String password = passwordField.getText();
 
-        // Validar campos vacíos (puedes hacerlo opcional)
         if (nombre.isEmpty() || apellido.isEmpty() || email.isEmpty() || password.isEmpty()) {
             labelRegistroValidacion.setText("Por favor, complete todos los campos.");
             return;
@@ -76,16 +77,21 @@ public class RegistroController {
         // Mensaje de éxito
         labelRegistro.setText("¡Registro exitoso!");
 
-        // Cambiar a la vista de inicio (ajusta la ruta si es necesario)
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("src/main/resources/co/edu/uniquindio/red_social/Inicio.fxml"));
-            Parent root = loader.load();
+            URL configUrl = getClass().getResource("/co/edu/uniquindio/red_social/Inicio.fxml");
+            System.out.println("URL config: " + configUrl);
+            FXMLLoader loader = new FXMLLoader(configUrl);
+            Parent inicioView = loader.load();
+
+
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
+
+            Scene scene = new Scene(inicioView);
+            stage.setScene(scene);
             stage.show();
+
         } catch (IOException e) {
             e.printStackTrace();
-            labelRegistro.setText("No se pudo cargar la vista de inicio.");
         }
     }
 }
