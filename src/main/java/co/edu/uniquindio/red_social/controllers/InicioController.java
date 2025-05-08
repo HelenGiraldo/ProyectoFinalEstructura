@@ -46,7 +46,6 @@ public class InicioController {
             Image image = new Image(imageUrl.toExternalForm());
             imagenPerfil.setImage(image);
 
-            // Esperar al layout para obtener el tamaño final
             Platform.runLater(() -> {
                 double centerX = imagenPerfil.getFitWidth() / 2;
                 double centerY = imagenPerfil.getFitHeight() / 2;
@@ -55,7 +54,6 @@ public class InicioController {
                 Circle clip = new Circle(centerX, centerY, radius);
                 imagenPerfil.setClip(clip);
 
-                // Si no se ve bien, puede que debas forzar el tamaño en el FXML o CSS
             });
         } else {
             System.err.println("No se pudo cargar la imagen: /imagenes/imagePerfil.png");

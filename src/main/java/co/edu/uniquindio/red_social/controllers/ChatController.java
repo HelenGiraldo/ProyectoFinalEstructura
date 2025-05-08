@@ -144,8 +144,6 @@ public class ChatController implements Initializable {
         });
 
 
-
-
     }
 
     private void inicializarUsuarios() {
@@ -270,7 +268,7 @@ public class ChatController implements Initializable {
         String busqueda = campoBusqueda.getText().trim();
         if (!busqueda.isEmpty()) {
             campoBusqueda.clear();
-            // Aquí podrías agregar un nuevo usuario según el nombre buscado
+            //Aquí se puede agregar un nuevo usuario, segun el nombre que estemos buscanod
         }
     }
 
