@@ -4,18 +4,17 @@ import java.io.File;
 import java.time.LocalDate;
 
 public abstract class Usuario {
+    protected String id;
     protected String nombre;
     protected String correo;
     protected String contrasena;
-    protected LocalDate fechaNacimiento;
     protected File fotoPerfil;
 
 
-    public Usuario(String nombre, String correo, String contrasena, LocalDate fechaNacimiento, File fotoPerfil) {
+    public Usuario(String nombre, String correo, String contrasena, File fotoPerfil) {
         this.nombre = nombre;
         this.correo = correo;
         this.contrasena = contrasena;
-        this.fechaNacimiento = fechaNacimiento;
         this.fotoPerfil = fotoPerfil;
     }
 
@@ -42,14 +41,6 @@ public abstract class Usuario {
 
     public void setContrasena(String contrasena) {
         this.contrasena = contrasena;
-    }
-
-    public LocalDate getFechaNacimiento() {
-        return fechaNacimiento;
-    }
-
-    public void setFechaNacimiento(LocalDate fechaNacimiento) {
-        this.fechaNacimiento = fechaNacimiento;
     }
 
     public File getFotoPerfil() {

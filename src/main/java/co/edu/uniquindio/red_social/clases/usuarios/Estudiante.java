@@ -1,28 +1,36 @@
 package co.edu.uniquindio.red_social.clases.usuarios;
 
+import co.edu.uniquindio.red_social.clases.contenidos.Publicacion;
+import co.edu.uniquindio.red_social.clases.interfaces.AdministracionContenido;
+import co.edu.uniquindio.red_social.clases.social.Grupo;
+import co.edu.uniquindio.red_social.clases.social.SolicitudAmistad;
 import co.edu.uniquindio.red_social.estructuras.ListaSimplementeEnlazada;
 
 import java.io.File;
-import java.time.LocalDate;
 
-public class Estudiante extends Usuario {
-    private ListaSimplementeEnlazada<Usuario> contactos;
+public class Estudiante extends Usuario implements AdministracionContenido {
+    private ListaSimplementeEnlazada<Estudiante> contactos;
     private ListaSimplementeEnlazada<String> preferencias;
+    private ListaSimplementeEnlazada<SolicitudAmistad> solicitudesRecibidas;
+    private ListaSimplementeEnlazada<Publicacion> publicaciones;
+    private ListaSimplementeEnlazada<Grupo> grupos;
 
-    public Estudiante(String nombre, String correo, String contrasena, LocalDate fechaNacimiento, File fotoPerfil) {
-        super(nombre, correo, contrasena, fechaNacimiento, fotoPerfil);
+    public Estudiante(String nombre, String correo, String contrasena, File fotoPerfil) {
+        super(nombre, correo, contrasena, fotoPerfil);
         this.contactos = new ListaSimplementeEnlazada<>();
         this.preferencias = new ListaSimplementeEnlazada<>();
+        this.solicitudesRecibidas = new ListaSimplementeEnlazada<>();
+        this.publicaciones = new ListaSimplementeEnlazada<>();
     }
 
-    public boolean anadirContacto(Usuario contacto) {
+    public boolean anadirContacto(Estudiante contacto) {
         if (!contactos.contains(contacto)) {
             return contactos.add(contacto);
         }
         return false;
     }
 
-    public boolean eliminarContacto(Usuario contacto) {
+    public boolean eliminarContacto(Estudiante contacto) {
         if (contactos.contains(contacto)) {
             return contactos.remove(contacto);
         }
@@ -44,11 +52,13 @@ public class Estudiante extends Usuario {
         return false;
     }
 
-    public ListaSimplementeEnlazada<Usuario> getContactos() {
+
+
+    public ListaSimplementeEnlazada<Estudiante> getContactos() {
         return contactos;
     }
 
-    public void setContactos(ListaSimplementeEnlazada<Usuario> contactos) {
+    public void setContactos(ListaSimplementeEnlazada<Estudiante> contactos) {
         this.contactos = contactos;
     }
 
@@ -60,13 +70,48 @@ public class Estudiante extends Usuario {
         this.preferencias = preferencias;
     }
 
+    public ListaSimplementeEnlazada<SolicitudAmistad> getSolicitudesRecibidas() {
+        return solicitudesRecibidas;
+    }
+
+    public void setSolicitudesRecibidas(ListaSimplementeEnlazada<SolicitudAmistad> solicitudesRecibidas) {
+        this.solicitudesRecibidas = solicitudesRecibidas;
+    }
+
     @Override
     public String toString() {
         return "Estudiante{" +
                 "nombre='" + nombre + '\'' +
                 ", correo='" + correo + '\'' +
-                ", contrasena='" + contrasena + '\'' +
-                ", fechaNacimiento=" + fechaNacimiento +
+                ", contrasena='" + contrasena +
                 '}';
     }
+
+    public void eliminarSolicitud(SolicitudAmistad solicitud) {
+        if (solicitudesRecibidas.contains(solicitud)) {
+            solicitudesRecibidas.remove(solicitud);
+        }
+    }
+
+    @Override
+    public boolean publicarContenido(Publicacion publicacion) {
+        return false;
+    }
+
+    @Override
+    public boolean eliminarPublicacion(Publicacion publicacion) {
+        return false;
+    }
+
+    @Override
+    public boolean modificarPublicacion(Publicacion publicacionAntigua, Publicacion publicacionNueva) {
+        return false;
+    }
+
+    @Override
+    public void valorarContenido(Publicacion publicacion, int valoracion) {
+
+    }
+
+
 }

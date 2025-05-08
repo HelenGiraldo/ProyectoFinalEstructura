@@ -6,11 +6,12 @@ import java.io.File;
 import java.time.LocalDateTime;
 
 public class Publicacion {
-    String titulo;
-    String descripcion;
-    LocalDateTime fecha;
-    ListaSimplementeEnlazada<Contenido> contenidos;
-    ListaSimplementeEnlazada<Calificacion> calificaciones;
+    private String titulo;
+    private String descripcion;
+    private LocalDateTime fecha;
+    private String id;
+    private ListaSimplementeEnlazada<Contenido> contenidos;
+    private ListaSimplementeEnlazada<Calificacion> calificaciones;
 
     public Publicacion(String titulo, String descripcion, LocalDateTime fecha) {
         this.titulo = titulo;
