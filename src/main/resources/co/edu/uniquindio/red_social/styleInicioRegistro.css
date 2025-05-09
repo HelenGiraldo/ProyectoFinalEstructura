@@ -122,10 +122,24 @@
 }
 
 /* Texto de olvidé mi contraseña */
-.olvidar-contrasena {
+.handle-Olvidaste-Contrasena {
+    -fx-font-size: 11px;
+    -fx-font-family: "Segoe UI", sans-serif;
     -fx-text-fill: #3A7DFF;
-    -fx-font-size: 14px;
     -fx-cursor: hand;
     -fx-padding: 10px;
+}
+
+/* Texto de olvidé mi contraseña */
+.handle-Volver {
+    -fx-font-size: 11px;
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-underline: true;
+    -fx-text-fill: #333333;
+    -fx-cursor: hand;
+    -fx-padding: 10px;
+}
+.handle-Volver:hover {
+    -fx-text-fill: #3A7DFF;
 }
 

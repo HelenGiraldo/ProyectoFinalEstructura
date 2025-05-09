@@ -94,6 +94,12 @@
                   </HBox>
                </children>
             </VBox>
+            <HBox prefHeight="40.0" prefWidth="247.0">
+               <children>
+                  <HBox prefHeight="23.0" prefWidth="106.0" />
+                  <Label fx:id="handleVolver" onMouseClicked="#handleVolver" styleClass="handle-Volver" stylesheets="@styles.css" text="Volver" />
+               </children>
+            </HBox>
          </children>
       </VBox>
    </children>

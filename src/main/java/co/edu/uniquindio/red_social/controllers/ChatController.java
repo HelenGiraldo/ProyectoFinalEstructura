@@ -1,18 +1,23 @@
 package co.edu.uniquindio.red_social.controllers;
 
+import co.edu.uniquindio.red_social.clases.usuarios.PerfilUsuario;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -118,8 +123,13 @@ public class ChatController implements Initializable {
     @FXML
     private VBox userchatListVBox;
 
+    @FXML
+    private AnchorPane root;
+
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        MensajesButton.setSelected(true);
         Platform.runLater(() -> {
             if (imagenPerfil != null) {
                 double radius = imagenPerfil.getFitWidth() / 2;
@@ -127,6 +137,7 @@ public class ChatController implements Initializable {
                 imagenPerfil.setClip(clip);
             }
         });
+
 
         inicializarUsuarios();
         configurarChat();
@@ -142,6 +153,18 @@ public class ChatController implements Initializable {
             scrollPaneContenedorMensajes.layout();
             scrollPaneContenedorMensajes.setVvalue(1.0);
         });
+
+        PerfilUsuario perfil = PerfilUsuario.getInstancia();
+        perfil.imagenPerfilProperty().addListener((obs, oldImg, newImg) -> {
+            if (newImg != null) {
+                imagenPerfil.setImage(newImg);
+            }
+        });
+
+        // Para inicializar desde el comienzo
+        if (perfil.getImagenPerfil() != null) {
+            imagenPerfil.setImage(perfil.getImagenPerfil());
+        }
 
 
     }
@@ -278,5 +301,47 @@ public class ChatController implements Initializable {
         ToggleButton nuevoBoton = new ToggleButton(nombreUsuario);
         configurarBotonUsuario(nuevoBoton, nombreUsuario);
         userchatListVBox.getChildren().add(nuevoBoton);
+    }
+
+    @FXML
+    private void irAConfig(ActionEvent event) {
+        try {
+
+            URL configUrl = getClass().getResource("/co/edu/uniquindio/red_social/configuracion.fxml");
+            System.out.println("URL config: " + configUrl);
+            FXMLLoader loader = new FXMLLoader(configUrl);
+            Parent configView = loader.load();
+
+            if (root != null) {
+                root.getChildren().clear();
+                root.getChildren().add(configView);
+            } else {
+                System.err.println("El contenedor principal es null.");
+            }
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    @FXML
+    private void irAInicio(ActionEvent event) {
+        try {
+
+            URL configUrl = getClass().getResource("/co/edu/uniquindio/red_social/Inicio.fxml");
+            System.out.println("URL config: " + configUrl);
+            FXMLLoader loader = new FXMLLoader(configUrl);
+            Parent configView = loader.load();
+
+            if (root != null) {
+                root.getChildren().clear();
+                root.getChildren().add(configView);
+            } else {
+                System.err.println("El contenedor principal es null.");
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

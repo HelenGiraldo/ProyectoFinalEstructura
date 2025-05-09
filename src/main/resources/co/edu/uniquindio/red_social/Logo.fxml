@@ -27,11 +27,11 @@
          <children>
             <HBox prefHeight="46.0" prefWidth="279.0">
                <children>
-                  <Button fx:id="buttonIniciarSesion" onAction="#irALogin" mnemonicParsing="false" prefHeight="51.0" prefWidth="145.0" styleClass="boton-iniciarSesion" text="Iniciar Sesion" />
+                  <Button fx:id="buttonIniciarSesion" mnemonicParsing="false" onAction="#irALogin" prefHeight="51.0" prefWidth="145.0" styleClass="boton-iniciarSesion" text="Iniciar Sesion" />
                   <HBox prefHeight="46.0" prefWidth="37.0" />
                   <HBox prefHeight="46.0" prefWidth="117.0">
                      <children>
-                        <Button fx:id="buttonRegistro" onAction="#irRegistro" mnemonicParsing="false" prefHeight="46.0" prefWidth="127.0" styleClass="boton-registro" text="Registro" />
+                        <Button fx:id="buttonRegistro" mnemonicParsing="false" onAction="#irRegistro" prefHeight="46.0" prefWidth="127.0" styleClass="boton-registro" text="Registro" />
                      </children>
                   </HBox>
                </children>

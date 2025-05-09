@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
@@ -64,12 +65,26 @@
                         </HBox>
                      </children>
                   </VBox>
+                  <VBox prefHeight="30.0" prefWidth="258.0">
+                     <children>
+                        <HBox prefHeight="34.0" prefWidth="146.0">
+                           <children>
+                              <HBox prefHeight="34.0" prefWidth="64.0" />
+                              <Label fx:id="handleOlvidasteContrasena" onMouseClicked="#handleOlvidasteContrasena" prefHeight="34.0" prefWidth="142.0" styleClass="handle-Olvidaste-Contrasena" text="¿Olvidaste tu contraseña?">
+                                 <stylesheets>
+                                    <URL value="@styles.css" />
+                                    <URL value="@styleInicioRegistro.css" />
+                                 </stylesheets></Label>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
                   <VBox prefHeight="25.0" prefWidth="258.0">
                      <children>
-                        <HBox prefHeight="31.0" prefWidth="258.0">
+                        <HBox prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <HBox prefHeight="25.0" prefWidth="76.0" />
-                              <Label fx:id="labelUsuario1" prefHeight="14.0" prefWidth="119.0" styleClass="subtitulo-inicio" stylesheets="@styles.css" text="olvidaste tu contraseña?" onMouseClicked="#handleOlvidasteContrasena" />
+                              <HBox prefHeight="23.0" prefWidth="106.0" />
+                              <Label fx:id="handleVolver" onMouseClicked="#handleVolver" styleClass="handle-Volver" stylesheets="@styles.css" text="Volver" />
                            </children>
                         </HBox>
                      </children>

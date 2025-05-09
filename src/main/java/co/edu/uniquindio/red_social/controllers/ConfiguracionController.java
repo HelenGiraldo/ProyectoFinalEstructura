@@ -1,5 +1,6 @@
 package co.edu.uniquindio.red_social.controllers;
 
+import co.edu.uniquindio.red_social.clases.usuarios.PerfilUsuario;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -8,12 +9,16 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-
 import java.io.IOException;
 import java.net.URL;
+
+import javafx.stage.FileChooser;
+import java.io.File;
+
 
 public class ConfiguracionController {
 
@@ -100,6 +105,52 @@ public class ConfiguracionController {
 
     @FXML
     private AnchorPane root;
+
+    @FXML
+    private void initialize() {
+        configuracionPerfilButton.setSelected(true);
+        PerfilUsuario perfil = PerfilUsuario.getInstancia();
+        perfil.imagenPerfilProperty().addListener((obs, oldImg, newImg) -> {
+            if (newImg != null) {
+                profileImage.setImage(newImg);
+            }
+        });
+
+// Para inicializar desde el comienzo
+        if (perfil.getImagenPerfil() != null) {
+            profileImage.setImage(perfil.getImagenPerfil());
+        }
+
+    }
+
+    @FXML
+    private void guardar(ActionEvent event) throws IOException {
+
+    }
+
+    @FXML
+    private void seleccionarImagen(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Seleccionar Imagen de Perfil");
+
+
+
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Imágenes", "*.png", "*.jpg", "*.jpeg", "*.gif")
+        );
+
+        File file = fileChooser.showOpenDialog(root.getScene().getWindow());
+
+        if (file != null) {
+            String imagePath = file.toURI().toString();
+            Image nuevaImagen = new Image(imagePath);
+            profileImage.setImage(nuevaImagen);
+            PerfilUsuario.getInstancia().setImagenPerfil(nuevaImagen);
+            System.out.println("Imagen seleccionada: " + imagePath);
+        }
+    }
+
+
 
     @FXML
     private void irALogo(ActionEvent event) {

@@ -10,6 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -57,6 +58,27 @@ public class RegistroController {
     @FXML
     private TextField textFieldEmail;
 
+
+    @FXML
+    private void handleVolver(MouseEvent event) {
+        try {
+            URL configUrl = getClass().getResource("/co/edu/uniquindio/red_social/Logo.fxml");
+            System.out.println("URL Logo: " + configUrl);
+            FXMLLoader loader = new FXMLLoader(configUrl);
+            Parent logoView = loader.load();
+
+            // Obtener la ventana actual
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+            // Cambiar la escena
+            Scene scene = new Scene(logoView);
+            stage.setScene(scene);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @FXML
     private void registrarUsuario(ActionEvent event) {

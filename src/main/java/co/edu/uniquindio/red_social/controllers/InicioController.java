@@ -1,5 +1,6 @@
 package co.edu.uniquindio.red_social.controllers;
 
+import co.edu.uniquindio.red_social.clases.usuarios.PerfilUsuario;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -127,6 +128,26 @@ public class InicioController {
 
     @FXML
     public void initialize() {
+        InicioButton.setSelected(true);
+        Platform.runLater(() -> {
+            if (imagenPerfil != null) {
+                double radius = imagenPerfil.getFitWidth() / 2;
+                Circle clip = new Circle(radius, radius, radius);
+                imagenPerfil.setClip(clip);
+            }
+        });
+
+        PerfilUsuario perfil = PerfilUsuario.getInstancia();
+        perfil.imagenPerfilProperty().addListener((obs, oldImg, newImg) -> {
+            if (newImg != null) {
+                imagenPerfil.setImage(newImg);
+            }
+        });
+
+        // Para inicializar desde el comienzo
+        if (perfil.getImagenPerfil() != null) {
+            imagenPerfil.setImage(perfil.getImagenPerfil());
+        }
 
     }
 

@@ -38,9 +38,9 @@
             <VBox prefHeight="322.0" prefWidth="192.0" BorderPane.alignment="CENTER">
                <children>
                   <ToggleButton fx:id="InicioButton" mnemonicParsing="false" onAction="#irAInicio" prefHeight="37.0" prefWidth="161.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Inicio" />
-                  <ToggleButton fx:id="misContenidosButton"  mnemonicParsing="false" prefHeight="43.0" prefWidth="132.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Mis Contenidos" />
+                  <ToggleButton fx:id="misContenidosButton" mnemonicParsing="false" prefHeight="43.0" prefWidth="132.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Mis Contenidos" />
                   <ToggleButton fx:id="gruposEstudioButton" mnemonicParsing="false" prefHeight="42.0" prefWidth="151.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Grupos estudio" />
-                  <ToggleButton fx:id="MensajesButton" onAction="#irAChat" mnemonicParsing="false" prefHeight="42.0" prefWidth="161.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Mensajes" />
+                  <ToggleButton fx:id="MensajesButton" mnemonicParsing="false" onAction="#irAChat" prefHeight="42.0" prefWidth="161.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Mensajes" />
                   <ToggleButton fx:id="SugerenciasButton" mnemonicParsing="false" prefHeight="38.0" prefWidth="159.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Sugerencias" />
                   <ToggleButton fx:id="SolicitudesDeAyudaButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="160.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Solicitudes de ayuda" />
                   <ToggleButton fx:id="configuracionPerfilButton" mnemonicParsing="false" prefHeight="39.0" prefWidth="161.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Configuracion perfil" />
@@ -128,7 +128,7 @@
                                           <HBox prefHeight="52.0" prefWidth="35.0" />
                                           <HBox prefHeight="52.0" prefWidth="135.0">
                                              <children>
-                                                <Button fx:id="buttonCambiarImagen" mnemonicParsing="false" prefHeight="40.0" prefWidth="106.0" styleClass="boton-cambiar-imagen" stylesheets="@stylesConfig.css" text="cambiar imagen" />
+                                                <Button fx:id="buttonCambiarImagen" mnemonicParsing="false" onAction="#seleccionarImagen" prefHeight="40.0" prefWidth="106.0" styleClass="boton-cambiar-imagen" stylesheets="@stylesConfig.css" text="cambiar imagen" />
                                              </children>
                                           </HBox>
                                        </children>
@@ -136,12 +136,16 @@
                                  </children>
                               </VBox>
                               <VBox prefHeight="45.0" prefWidth="199.0" />
-                              <VBox prefHeight="46.0" prefWidth="199.0">
+                              <VBox prefHeight="45.0" prefWidth="186.0">
                                  <children>
-                                    <HBox prefHeight="100.0" prefWidth="200.0">
+                                    <HBox prefHeight="45.0" prefWidth="174.0">
                                        <children>
-                                          <HBox prefHeight="45.0" prefWidth="98.0" />
-                                          <Button fx:id="buttonCerrarSesion"  onAction="#irALogo" mnemonicParsing="false" styleClass="boton-cerrar-sesion" text="Cerrar Sesion" />
+                                          <HBox prefHeight="44.0" prefWidth="7.0" />
+                                          <HBox prefHeight="45.0" prefWidth="98.0">
+                                             <children>
+                                                <Button fx:id="buttonGuardar" mnemonicParsing="false" onAction="#guardar" prefHeight="29.0" prefWidth="74.0" styleClass="boton-guardar" text="Guardar" />
+                                             </children></HBox>
+                                          <Button fx:id="buttonCerrarSesion1" mnemonicParsing="false" onAction="#irALogo" styleClass="boton-cerrar-sesion" text="Cerrar Sesion" />
                                        </children>
                                     </HBox>
                                  </children>
