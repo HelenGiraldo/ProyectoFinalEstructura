@@ -1,11 +1,15 @@
 package co.edu.uniquindio.red_social.clases.contenidos;
 
+import co.edu.uniquindio.red_social.estructuras.ListaSimplementeEnlazada;
+
 import java.io.File;
-import java.time.LocalDateTime;
 
 public class Contenido implements Comparable<Contenido> {
-    String tipoContenido;
-    File contenido;
+    private String tipoContenido;
+    private File contenido;
+    private String id;
+    private String calificacionPromedio;
+    private ListaSimplementeEnlazada<Calificacion> calificaciones;
 
     public Contenido(String tipoContenido, File contenido) {
         this.tipoContenido = tipoContenido;

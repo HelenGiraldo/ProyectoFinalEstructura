@@ -1,16 +1,17 @@
 package co.edu.uniquindio.red_social.clases.interfaces;
 
+import co.edu.uniquindio.red_social.clases.social.Grupo;
 import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
 import co.edu.uniquindio.red_social.clases.usuarios.Usuario;
 
 public interface AdministracionGrupo {
     public boolean crearGrupo(String nombreGrupo, String descripcion, String tipoGrupo);
 
-    public boolean eliminarGrupo(String nombreGrupo);
+    public boolean eliminarGrupo(Grupo nombreGrupo);
 
-    public boolean modificarGrupo(String nombreGrupo, String nuevoNombre, String nuevaDescripcion, String nuevoTipoGrupo);
+    public boolean modificarGrupo(Grupo grupoAntiguo, Grupo grupoNuevo);
 
-    public boolean agregarMiembro(String nombreGrupo, Estudiante miembro);
+    public boolean agregarMiembro(Grupo grupo, Estudiante miembro);
 
-    public boolean eliminarMiembro(String nombreGrupo, Estudiante miembro);
+    public boolean eliminarMiembro(Grupo grupo, Estudiante miembro);
 }

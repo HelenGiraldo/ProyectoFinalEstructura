@@ -3,8 +3,7 @@ module co.edu.uniquindio.red_social {
     requires javafx.fxml;
     requires java.sql;
 
-    requires java.desktop;
-
+    requires jakarta.mail;
 
 
 
