@@ -1,5 +1,6 @@
 package co.edu.uniquindio.red_social.clases.contenidos;
 
+import co.edu.uniquindio.red_social.clases.usuarios.Usuario;
 import co.edu.uniquindio.red_social.estructuras.ListaSimplementeEnlazada;
 
 import java.io.File;
@@ -9,16 +10,20 @@ public class Publicacion {
     private String titulo;
     private String descripcion;
     private LocalDateTime fecha;
+    private Usuario usuario;
     private String id;
+    private double calificacionPromedio;
     private ListaSimplementeEnlazada<Contenido> contenidos;
     private ListaSimplementeEnlazada<Calificacion> calificaciones;
 
-    public Publicacion(String titulo, String descripcion, LocalDateTime fecha) {
+    public Publicacion(String titulo, String descripcion, LocalDateTime fecha, Usuario usuario) {
         this.titulo = titulo;
         this.descripcion = descripcion;
         this.fecha = fecha;
+        this.usuario = usuario;
         this.contenidos = new ListaSimplementeEnlazada<>();
         this.calificaciones = new ListaSimplementeEnlazada<>();
+        this.calificacionPromedio = 0.0;
     }
 
     public boolean agregarContenido(String tipoContenido, File contenido){
@@ -26,6 +31,23 @@ public class Publicacion {
         contenidos.add(nuevoContenido);
         return true;
     }
+
+    public boolean eliminarContenido(Contenido contenido){
+        if (contenidos.contains(contenido)) {
+            return contenidos.remove(contenido);
+        }
+        return false;
+    }
+
+    public boolean calificar(Calificacion calificacion){
+        if (!calificaciones.contains(calificacion)) {
+            calificaciones.add(calificacion);
+            calificacionPromedio = (calificacionPromedio * (calificaciones.size()-1) + calificacion.getValoracion()) / calificaciones.size();
+        }
+        return false;
+    }
+
+
 
     public String getTitulo() {
         return titulo;
@@ -73,5 +95,29 @@ public class Publicacion {
 
     public void setCalificaciones(ListaSimplementeEnlazada<Calificacion> calificaciones) {
         this.calificaciones = calificaciones;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public double getCalificacionPromedio() {
+        return calificacionPromedio;
+    }
+
+    public void setCalificacionPromedio(double calificacionPromedio) {
+        this.calificacionPromedio = calificacionPromedio;
     }
 }

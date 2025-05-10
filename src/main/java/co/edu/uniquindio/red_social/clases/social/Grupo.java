@@ -12,7 +12,6 @@ public class Grupo {
     private String id;
     private ListaSimplementeEnlazada<Publicacion> publicaciones;
     private ListaSimplementeEnlazada<Estudiante> miembros;
-    private ListaSimplementeEnlazada<Estudiante> moderadores;
 
     public Grupo(String descripcion, String nombre, boolean publico) {
         this.publicaciones = new ListaSimplementeEnlazada<>();
@@ -20,7 +19,6 @@ public class Grupo {
         this.nombre = nombre;
         this.publico = publico;
         this.miembros = new ListaSimplementeEnlazada<>();
-        this.moderadores = new ListaSimplementeEnlazada<>();
     }
 
     public boolean agregarMiembro( Estudiante miembro) {
@@ -36,16 +34,16 @@ public class Grupo {
         return false;
     }
 
-    public boolean agregarModerador( Estudiante moderador) {
-        if (!moderadores.contains(moderador)) {
-            return moderadores.add(moderador);
+    public boolean agregarPublicacion(Publicacion publicacion) {
+        if (!publicaciones.contains(publicacion)) {
+            return publicaciones.add(publicacion);
         }
         return false;
     }
 
-    public boolean eliminarModerador( Estudiante moderador) {
-        if (moderadores.contains(moderador)) {
-            return moderadores.remove(moderador);
+    public boolean eliminarPublicacion(Publicacion publicacion) {
+        if (publicaciones.contains(publicacion)) {
+            return publicaciones.remove(publicacion);
         }
         return false;
     }
@@ -80,14 +78,6 @@ public class Grupo {
 
     public void setMiembros(ListaSimplementeEnlazada<Estudiante> miembros) {
         this.miembros = miembros;
-    }
-
-    public ListaSimplementeEnlazada<Estudiante> getModeradores() {
-        return moderadores;
-    }
-
-    public void setModeradores(ListaSimplementeEnlazada<Estudiante> moderadores) {
-        this.moderadores = moderadores;
     }
 
     public boolean isPublico() {

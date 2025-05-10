@@ -1,9 +1,10 @@
 package co.edu.uniquindio.red_social.clases.interfaces;
 
 import co.edu.uniquindio.red_social.clases.contenidos.Publicacion;
+import co.edu.uniquindio.red_social.clases.social.Grupo;
 
 public interface AdministracionContenido {
-    public boolean publicarContenido(Publicacion publicacion);
+    public boolean publicarContenido(Publicacion publicacion, Grupo grupo);
 
     public boolean eliminarPublicacion(Publicacion publicacion);
 

@@ -8,8 +8,6 @@ public class Contenido implements Comparable<Contenido> {
     private String tipoContenido;
     private File contenido;
     private String id;
-    private String calificacionPromedio;
-    private ListaSimplementeEnlazada<Calificacion> calificaciones;
 
     public Contenido(String tipoContenido, File contenido) {
         this.tipoContenido = tipoContenido;

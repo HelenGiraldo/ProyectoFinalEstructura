@@ -20,6 +20,9 @@ public class SolicitudAmistad {
         estudianteSolicitante.anadirContacto(estudianteSolicitado);
         estudianteSolicitado.anadirContacto(estudianteSolicitante);
         estudianteSolicitado.eliminarSolicitud(this);
+        Chat chat = new Chat(estudianteSolicitado, estudianteSolicitante);
+        estudianteSolicitado.anadirChat(chat);
+        estudianteSolicitante.anadirChat(chat);
     }
 
     public boolean isEstado() {
