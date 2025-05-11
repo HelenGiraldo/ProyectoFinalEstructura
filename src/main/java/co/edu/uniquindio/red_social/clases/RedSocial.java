@@ -89,13 +89,14 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo 
     }
 
     @Override
-    public boolean crearEstudiante(String nombre, String correo, String contrasena, File fotoPerfil) {
-        Estudiante nuevoEstudiante = new Estudiante(nombre, correo, contrasena, fotoPerfil);
-        if (estudianteExisteCorreo(correo)==null) {
+    public boolean crearEstudiante(String nombre, String apellido, String correo, String contrasena, File fotoPerfil) {
+        Estudiante nuevoEstudiante = new Estudiante(nombre, apellido, correo, contrasena, null);
+        if (estudianteExisteCorreo(correo) == null) {
             return estudiantes.add(nuevoEstudiante);
         }
         return false;
     }
+
 
     @Override
     public boolean eliminarEstudiante(String correo) {
@@ -108,12 +109,13 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo 
 
     @Override
     public boolean modificarEstudiante(Estudiante usuarioAntiguo, Estudiante usuarioNuevo) {
-
         if (estudiantes.contains(usuarioAntiguo)) {
             usuarioAntiguo.setNombre(usuarioNuevo.getNombre());
-            usuarioAntiguo.setCorreo(usuarioNuevo.getCorreo());
+            usuarioAntiguo.setEmail(usuarioNuevo.getEmail());
             usuarioAntiguo.setContrasena(usuarioNuevo.getContrasena());
-            usuarioAntiguo.setFotoPerfil(usuarioNuevo.getFotoPerfil());
+            // Accede al método heredado de Usuario para obtener la imagen de perfil
+            usuarioAntiguo.setImagenPerfil(usuarioNuevo.getImagenPerfil());
+
             return true;
         }
         return false;
@@ -126,7 +128,7 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo 
         Iterator<Estudiante> iterator = estudiantes.iterator();
         while (iterator.hasNext()) {
             Estudiante estudiante = iterator.next();
-            if (estudiante.getCorreo().equals(correo)) {
+            if (estudiante.getEmail().equals(correo)) {
                 return estudiante;
             }
         }

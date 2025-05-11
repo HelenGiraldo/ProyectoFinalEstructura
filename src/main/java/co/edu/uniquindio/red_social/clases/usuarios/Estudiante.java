@@ -15,8 +15,8 @@ public class Estudiante extends Usuario implements AdministracionContenido {
     private ListaSimplementeEnlazada<Publicacion> publicaciones;
     private ListaSimplementeEnlazada<Grupo> grupos;
 
-    public Estudiante(String nombre, String correo, String contrasena, File fotoPerfil) {
-        super(nombre, correo, contrasena, fotoPerfil);
+    public Estudiante(String nombre, String apellido, String email, String contrasena, File fotoPerfil) {
+        super(nombre, apellido, email, contrasena, fotoPerfil);
         this.contactos = new ListaSimplementeEnlazada<>();
         this.preferencias = new ListaSimplementeEnlazada<>();
         this.solicitudesRecibidas = new ListaSimplementeEnlazada<>();
@@ -81,11 +81,13 @@ public class Estudiante extends Usuario implements AdministracionContenido {
     @Override
     public String toString() {
         return "Estudiante{" +
-                "nombre='" + nombre + '\'' +
-                ", correo='" + correo + '\'' +
-                ", contrasena='" + contrasena +
+                "nombre='" + getNombre() + '\'' +
+                ", apellido='" + getApellido() + '\'' +
+                ", email='" + getEmail() + '\'' +
+                ", contrasena='" + getContrasena() + '\'' +
                 '}';
     }
+
 
     public void eliminarSolicitud(SolicitudAmistad solicitud) {
         if (solicitudesRecibidas.contains(solicitud)) {

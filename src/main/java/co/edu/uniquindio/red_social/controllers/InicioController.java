@@ -1,6 +1,7 @@
 package co.edu.uniquindio.red_social.controllers;
 
 import co.edu.uniquindio.red_social.clases.usuarios.PerfilUsuario;
+import co.edu.uniquindio.red_social.clases.usuarios.Usuario;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -9,7 +10,9 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -18,6 +21,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.IOException;
@@ -126,9 +130,33 @@ public class InicioController {
     @FXML
     private AnchorPane root;
 
+    private Usuario usuario;
+
+
+    public void inicializarUsuario(Usuario usuario) {
+        this.usuario = usuario;
+
+        // Guardar el usuario en el singleton
+        PerfilUsuario.getInstancia().setUsuarioActual(usuario);
+
+        // Cargar imagen si está disponible
+        if (usuario.getImagenPerfil() != null) {
+            Image imagen = new Image(usuario.getImagenPerfil().toURI().toString());
+            imagenPerfil.setImage(imagen);
+            PerfilUsuario.getInstancia().setImagenPerfil(imagen);
+        }
+
+        // Actualizar saludo o información en la vista
+        actualizarSaludo();
+    }
+
+
+
+
     @FXML
     public void initialize() {
         InicioButton.setSelected(true);
+
         Platform.runLater(() -> {
             if (imagenPerfil != null) {
                 double radius = imagenPerfil.getFitWidth() / 2;
@@ -138,22 +166,34 @@ public class InicioController {
         });
 
         PerfilUsuario perfil = PerfilUsuario.getInstancia();
+
         perfil.imagenPerfilProperty().addListener((obs, oldImg, newImg) -> {
             if (newImg != null) {
                 imagenPerfil.setImage(newImg);
             }
         });
 
-        // Para inicializar desde el comienzo
+        // Mostrar imagen actual si ya existe
         if (perfil.getImagenPerfil() != null) {
             imagenPerfil.setImage(perfil.getImagenPerfil());
         }
 
+        actualizarSaludo(); // Saludo se basa en el usuario actual
     }
 
-    public void actualizarSaludo(String nombreUsuario) {
-        TextFieldSaludo.setText("Hola, " + nombreUsuario);
+
+
+
+    public void actualizarSaludo() {
+        Usuario usuario = PerfilUsuario.getUsuarioActual();
+        if (usuario != null) {
+            TextFieldSaludo.setText("¡Hola, " + usuario.getNombre() + "!");
+        } else {
+            System.out.println("No hay usuario actual en PerfilUsuario");
+            TextFieldSaludo.setText("¡Hola!");
+        }
     }
+
 
     public void scrollSuaveAbajo() {
         Timeline timeline = new Timeline();
@@ -176,24 +216,19 @@ public class InicioController {
     @FXML
     private void irAConfig(ActionEvent event) {
         try {
-
-            URL configUrl = getClass().getResource("/co/edu/uniquindio/red_social/configuracion.fxml");
-            System.out.println("URL config: " + configUrl);
-            FXMLLoader loader = new FXMLLoader(configUrl);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/Configuracion.fxml"));
             Parent configView = loader.load();
 
-            if (root != null) {
-                root.getChildren().clear();
-                root.getChildren().add(configView);
-            } else {
-                System.err.println("El contenedor principal es null.");
-            }
-
+            Scene scene = new Scene(configView);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
     @FXML
     private void irAChat(ActionEvent event) {
         try {

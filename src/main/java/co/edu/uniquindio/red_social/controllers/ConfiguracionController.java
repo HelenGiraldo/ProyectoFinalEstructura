@@ -107,8 +107,7 @@ public class ConfiguracionController {
     private AnchorPane root;
 
     @FXML
-    private void initialize() {
-        configuracionPerfilButton.setSelected(true);
+    public void initialize() {
         PerfilUsuario perfil = PerfilUsuario.getInstancia();
         perfil.imagenPerfilProperty().addListener((obs, oldImg, newImg) -> {
             if (newImg != null) {
@@ -116,12 +115,12 @@ public class ConfiguracionController {
             }
         });
 
-// Para inicializar desde el comienzo
+        // Inicializar la imagen si ya está configurada
         if (perfil.getImagenPerfil() != null) {
             profileImage.setImage(perfil.getImagenPerfil());
         }
-
     }
+
 
     @FXML
     private void guardar(ActionEvent event) throws IOException {
@@ -198,24 +197,28 @@ public class ConfiguracionController {
     @FXML
     private void irAInicio(ActionEvent event) {
         try {
-
+            // Obtener la URL de la vista a cargar
             URL configUrl = getClass().getResource("/co/edu/uniquindio/red_social/Inicio.fxml");
-            System.out.println("URL config: " + configUrl);
+            if (configUrl == null) {
+                throw new IOException("Vista no encontrada");
+            }
+
+            // Cargar la vista
             FXMLLoader loader = new FXMLLoader(configUrl);
             Parent configView = loader.load();
 
+            // Asegúrate de que root no es null
             if (root != null) {
-                root.getChildren().clear();
-                root.getChildren().add(configView);
+                root.getChildren().clear();  // Limpiar la vista actual
+                root.getChildren().add(configView);  // Agregar la nueva vista
             } else {
                 System.err.println("El contenedor principal es null.");
             }
-
-
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 
 
 

@@ -6,14 +6,18 @@ import javafx.scene.image.Image;
 
 public class PerfilUsuario {
 
-    private static final PerfilUsuario instancia = new PerfilUsuario();
-
+    private static PerfilUsuario instancia = new PerfilUsuario();
     private final ObjectProperty<Image> imagenPerfil = new SimpleObjectProperty<>();
+    private static Usuario usuarioActual;
 
     private PerfilUsuario() {}
 
     public static PerfilUsuario getInstancia() {
         return instancia;
+    }
+
+    public ObjectProperty<Image> imagenPerfilProperty() {
+        return imagenPerfil;
     }
 
     public Image getImagenPerfil() {
@@ -24,7 +28,11 @@ public class PerfilUsuario {
         this.imagenPerfil.set(imagen);
     }
 
-    public ObjectProperty<Image> imagenPerfilProperty() {
-        return imagenPerfil;
+    public static Usuario getUsuarioActual() {
+        return usuarioActual;
+    }
+
+    public static void setUsuarioActual(Usuario usuario) {
+        usuarioActual = usuario;
     }
 }

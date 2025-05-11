@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@styleInicioRegistro.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.red_social.controllers.RegistroController">
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@styleInicioRegistro.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.red_social.controllers.RegistroController">
    <children>
       <VBox fx:id="cardTransparente" layoutX="24.0" layoutY="15.0" prefHeight="365.0" prefWidth="298.0" styleClass="card-transparente" stylesheets="@styleLogin.css">
          <children>
@@ -76,7 +76,7 @@
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
                   <HBox prefHeight="150.0" prefWidth="54.0" />
-                  <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="imagenPerfil" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@imagenes/imagePerfil.png" />
                      </image>
@@ -89,7 +89,7 @@
                   <HBox prefHeight="107.0" prefWidth="247.0">
                      <children>
                         <HBox prefHeight="49.0" prefWidth="54.0" />
-                        <Button fx:id="elegirImagen" mnemonicParsing="false" prefHeight="44.0" prefWidth="155.0" styleClass="boton-elegir-imagen" stylesheets="@styleLogin.css" text="Elegir Imagen" />
+                        <Button fx:id="elegirImagen" mnemonicParsing="false" onAction="#seleccionarImagen" prefHeight="44.0" prefWidth="155.0" styleClass="boton-elegir-imagen" stylesheets="@styleLogin.css" text="Elegir Imagen" />
                      </children>
                   </HBox>
                </children>
