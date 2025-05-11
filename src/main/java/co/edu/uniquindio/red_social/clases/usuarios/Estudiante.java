@@ -223,9 +223,10 @@ public class Estudiante extends Usuario implements AdministracionContenido {
     @Override
     public String toString() {
         return "Estudiante{" +
-                "nombre='" + nombre + '\'' +
-                ", correo='" + correo + '\'' +
-                ", contrasena='" + contrasena +
+                "nombre='" + getNombre() + '\'' +
+                ", apellido='" + getApellido() + '\'' +
+                ", email='" + getEmail() + '\'' +
+                ", contrasena='" + getContrasena() + '\'' +
                 '}';
     }
 
