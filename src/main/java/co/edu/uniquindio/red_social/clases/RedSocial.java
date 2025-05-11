@@ -99,9 +99,8 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo 
 
 
     @Override
-    public boolean eliminarEstudiante(String correo) {
-        Estudiante estudiante = estudianteExisteCorreo(correo);
-        if (estudiante != null) {
+    public boolean eliminarEstudiante(Estudiante estudiante) {
+        if (estudiantes.contains(estudiante)) {
             return estudiantes.remove(estudiante);
         }
         return false;
