@@ -13,9 +13,9 @@ public class UsuarioRegistrado {
     }
 
     // Método para buscar un usuario por su email
-    public static Usuario buscarUsuarioPorEmail(String email) {
+    public static Usuario buscarUsuarioPorEmail(String correo) {
         for (Usuario usuario : usuariosRegistrados) {
-            if (usuario.getEmail().equals(email)) {
+            if (usuario.getCorreo().equals(correo)) {
                 return usuario;
             }
         }

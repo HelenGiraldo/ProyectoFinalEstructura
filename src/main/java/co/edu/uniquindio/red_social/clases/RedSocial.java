@@ -110,10 +110,10 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo 
     public boolean modificarEstudiante(Estudiante usuarioAntiguo, Estudiante usuarioNuevo) {
         if (estudiantes.contains(usuarioAntiguo)) {
             usuarioAntiguo.setNombre(usuarioNuevo.getNombre());
-            usuarioAntiguo.setEmail(usuarioNuevo.getEmail());
+            usuarioAntiguo.setCorreo(usuarioNuevo.getCorreo());
             usuarioAntiguo.setContrasena(usuarioNuevo.getContrasena());
             // Accede al método heredado de Usuario para obtener la imagen de perfil
-            usuarioAntiguo.setImagenPerfil(usuarioNuevo.getImagenPerfil());
+            usuarioAntiguo.setFotoPerfil(usuarioNuevo.getFotoPerfil());
 
             return true;
         }
@@ -127,7 +127,7 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo 
         Iterator<Estudiante> iterator = estudiantes.iterator();
         while (iterator.hasNext()) {
             Estudiante estudiante = iterator.next();
-            if (estudiante.getEmail().equals(correo)) {
+            if (estudiante.getCorreo().equals(correo)) {
                 return estudiante;
             }
         }

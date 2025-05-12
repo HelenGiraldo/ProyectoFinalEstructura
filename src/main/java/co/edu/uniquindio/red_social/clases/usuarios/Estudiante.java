@@ -247,7 +247,8 @@ public class Estudiante extends Usuario implements AdministracionContenido {
         return "Estudiante{" +
                 "nombre='" + getNombre() + '\'' +
                 ", apellido='" + getApellido() + '\'' +
-                ", email='" + getEmail() + '\'' +
+                "contrasena='" + getContrasena() + '\'' +
+                ", email='" + getCorreo() + '\'' +
                 ", contrasena='" + getContrasena() + '\'' +
                 '}';
     }
