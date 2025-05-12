@@ -3,7 +3,6 @@ package co.edu.uniquindio.red_social.controllers;
 import co.edu.uniquindio.red_social.clases.usuarios.PerfilUsuario;
 import co.edu.uniquindio.red_social.clases.usuarios.Usuario;
 import co.edu.uniquindio.red_social.clases.usuarios.UsuarioRegistrado;
-import co.edu.uniquindio.red_social.util.Email;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -98,9 +97,9 @@ public class LoginController {
     @FXML
     private void handleVolver(MouseEvent event) {
         try {
-            // Cargar la vista del logo o de inicio
+            // Cargar la vista del logo
             URL logoUrl = getClass().getResource("/co/edu/uniquindio/red_social/logo.fxml");
-            System.out.println("URL logo: " + logoUrl);  // Asegúrate de que la ruta sea correcta
+            System.out.println("URL logo: " + logoUrl);
             FXMLLoader loader = new FXMLLoader(logoUrl);
             Parent logoView = loader.load();
 
@@ -125,7 +124,7 @@ public class LoginController {
             FXMLLoader loader = new FXMLLoader(configUrl);
             Parent inicioView = loader.load();
 
-            // PASO CLAVE: obtener controlador y pasarle el usuario
+
             InicioController controller = loader.getController();
             controller.inicializarUsuario((Usuario) PerfilUsuario.getInstancia().getUsuarioActual());
 

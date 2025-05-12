@@ -254,7 +254,7 @@ public class InicioController {
     private void irAContenidos(ActionEvent event) {
         try {
 
-            URL configUrl = getClass().getResource("/co/edu/uniquindio/red_social/configuracion.fxml");
+            URL configUrl = getClass().getResource("/co/edu/uniquindio/red_social/TusContenidos.fxml");
             System.out.println("URL Logo: " + configUrl);
             FXMLLoader loader = new FXMLLoader(configUrl);
             Parent configView = loader.load();
