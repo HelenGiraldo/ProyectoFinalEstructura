@@ -1,25 +1,24 @@
 package co.edu.uniquindio.red_social.clases.usuarios;
 
 import java.io.File;
+import java.time.LocalDate;
 
-public class Usuario {
-
+public abstract class Usuario {
+    protected String id;
     protected String nombre;
-    protected String apellido;
-    protected String email;
+    protected String correo;
     protected String contrasena;
-    protected File imagenPerfil;
+    protected File fotoPerfil;
 
-    // Constructor
-    public Usuario(String nombre, String apellido, String email, String contrasena, File imagenPerfil) {
+
+    public Usuario(String nombre, String correo, String contrasena, File fotoPerfil) {
         this.nombre = nombre;
-        this.apellido = apellido;
-        this.email = email;
+        this.correo = correo;
         this.contrasena = contrasena;
-        this.imagenPerfil = imagenPerfil;
+        this.fotoPerfil = fotoPerfil;
     }
 
-    // Métodos getter y setter
+
     public String getNombre() {
         return nombre;
     }
@@ -28,20 +27,12 @@ public class Usuario {
         this.nombre = nombre;
     }
 
-    public String getApellido() {
-        return apellido;
+    public String getCorreo() {
+        return correo;
     }
 
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    public void setCorreo(String correo) {
+        this.correo = correo;
     }
 
     public String getContrasena() {
@@ -52,11 +43,11 @@ public class Usuario {
         this.contrasena = contrasena;
     }
 
-    public File getImagenPerfil() {
-        return imagenPerfil;
+    public File getFotoPerfil() {
+        return fotoPerfil;
     }
 
-    public void setImagenPerfil(File imagenPerfil) {
-        this.imagenPerfil = imagenPerfil;
+    public void setFotoPerfil(File fotoPerfil) {
+        this.fotoPerfil = fotoPerfil;
     }
 }

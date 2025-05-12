@@ -242,8 +242,40 @@ public class ArbolBinario<T extends Comparable<T>> {
         recorrerInorden().show();
     }
 
+    public BNodo<T> getRaiz() {
+        return raiz;
+    }
 
+    public void setRaiz(BNodo<T> raiz) {
+        this.raiz = raiz;
+    }
 
+    public void setPeso(int peso) {
+        this.peso = peso;
+    }
+
+    //-------------------- Metodos solo para adaptar a la logica------------
+
+    public boolean add(T valor) {
+        insertar(valor);
+        return true;
+    }
+
+    public boolean remove(T valor) {
+        if (contiene(valor)) {
+            eliminar(valor);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean contains(T valor) {
+        return contiene(valor);
+    }
+
+    public void clear() {
+        borrarArbol();
+    }
 /*
     public void mostrarInorden(BNodo<T> nodo) {
         if (nodo != null) {

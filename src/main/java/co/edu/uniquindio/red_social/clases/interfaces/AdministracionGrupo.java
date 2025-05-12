@@ -5,9 +5,9 @@ import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
 import co.edu.uniquindio.red_social.clases.usuarios.Usuario;
 
 public interface AdministracionGrupo {
-    public boolean crearGrupo(String nombreGrupo, String descripcion, String tipoGrupo);
+    public boolean crearGrupo(String nombreGrupo, String descripcion, String tipoGrupo, boolean publico);
 
-    public boolean eliminarGrupo(Grupo nombreGrupo);
+    public boolean eliminarGrupo(Grupo grupo);
 
     public boolean modificarGrupo(Grupo grupoAntiguo, Grupo grupoNuevo);
 
