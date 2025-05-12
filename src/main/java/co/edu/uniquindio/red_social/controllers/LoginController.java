@@ -71,22 +71,24 @@ public class LoginController {
 
     @FXML
     private void handleOlvidasteContrasena(MouseEvent event) {
-        String correoDestino = textFieldEmail.getText().trim(); // Tomar el correo que escribieron en el campo
-        if (correoDestino.isEmpty()) {
-            datosIncorrectosLabel.setText("Por favor ingrese su correo para recuperar la contraseña.");
-            return;
-        }
-
         try {
-            // Enviar el correo
-            Email.sendEmail(correoDestino, "Recuperación de contraseña", "Este es tu enlace para recuperar la contraseña: [aquí iría el enlace o instrucciones]");
-            datosIncorrectosLabel.setText("Correo de recuperación enviado a " + correoDestino);
-            System.out.println("Correo de recuperación enviado.");
-        } catch (Exception e) {
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("co/edu/uniquindio/red_social/controllers/RecuperarController.java"));
+            Parent root = loader.load();
+
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.setTitle("Recuperar Contraseña");
+            stage.show();
+
+        } catch (IOException e) {
             e.printStackTrace();
-            datosIncorrectosLabel.setText("No se pudo enviar el correo. Intente más tarde.");
+            datosIncorrectosLabel.setText("No se pudo cargar la interfaz de recuperación.");
         }
     }
+
 
     @FXML
     private void handleVolver(MouseEvent event) {

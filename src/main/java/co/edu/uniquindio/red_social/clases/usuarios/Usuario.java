@@ -4,11 +4,11 @@ import java.io.File;
 
 public class Usuario {
 
-    private String nombre;
-    private String apellido;
-    private String email;
-    private String contrasena;
-    private File imagenPerfil;
+    protected String nombre;
+    protected String apellido;
+    protected String email;
+    protected String contrasena;
+    protected File imagenPerfil;
 
     // Constructor
     public Usuario(String nombre, String apellido, String email, String contrasena, File imagenPerfil) {

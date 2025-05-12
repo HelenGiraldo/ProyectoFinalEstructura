@@ -18,8 +18,8 @@ public class Estudiante extends Usuario implements AdministracionContenido {
     private ListaSimplementeEnlazada<Grupo> grupos;
     private ListaSimplementeEnlazada<Chat> chats;
 
-    public Estudiante(String nombre, String correo, String contrasena, File fotoPerfil) {
-        super(nombre, correo, contrasena, fotoPerfil);
+    public Estudiante(String nombre, String apellido, String email, String contrasena, File fotoPerfil) {
+        super(nombre, apellido, email, contrasena, fotoPerfil);
         this.contactos = new ListaSimplementeEnlazada<>();
         this.preferencias = new ListaSimplementeEnlazada<>();
         this.solicitudesRecibidas = new ListaSimplementeEnlazada<>();

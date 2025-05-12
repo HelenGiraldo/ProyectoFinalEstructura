@@ -142,11 +142,11 @@ public class RegistroController {
         // Cambiar de escena a Logo.fxml
         try {
             // Cargar la vista Login
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("co/edu/uniquindio/red_social/controllers/LoginController.java"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("co/edu/uniquindio/red_social/Login.fxml"));
             Parent root = loader.load();
 
             // Obtener la escena actual
-            Stage stage = (Stage) handleRegistrarse.getScene().getWindow(); // Suponiendo que tienes un botón btnRegistrar
+            Stage stage = (Stage) handleRegistrarse.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
 
