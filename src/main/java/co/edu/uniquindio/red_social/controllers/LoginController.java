@@ -10,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 import javafx.event.ActionEvent;
@@ -72,22 +73,26 @@ public class LoginController {
     @FXML
     private void handleOlvidasteContrasena(MouseEvent event) {
         try {
-
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("co/edu/uniquindio/red_social/Recuperar.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/Recuperar.fxml"));
             Parent root = loader.load();
 
+            // Crear una nueva ventana (Stage)
+            Stage popupStage = new Stage();
+            popupStage.setScene(new Scene(root));
+            popupStage.setTitle("Recuperar Contraseña");
 
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.setTitle("Recuperar Contraseña");
-            stage.show();
+            // Configurar como ventana modal
+            popupStage.initModality(Modality.WINDOW_MODAL);
+            popupStage.initOwner(((Node) event.getSource()).getScene().getWindow());
+
+            popupStage.show();
 
         } catch (IOException e) {
             e.printStackTrace();
             datosIncorrectosLabel.setText("No se pudo cargar la interfaz de recuperación.");
         }
     }
+
 
 
     @FXML
