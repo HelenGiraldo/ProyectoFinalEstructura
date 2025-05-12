@@ -73,7 +73,7 @@ public class LoginController {
     private void handleOlvidasteContrasena(MouseEvent event) {
         try {
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("co/edu/uniquindio/red_social/controllers/RecuperarController.java"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("co/edu/uniquindio/red_social/Recuperar.fxml"));
             Parent root = loader.load();
 
 
