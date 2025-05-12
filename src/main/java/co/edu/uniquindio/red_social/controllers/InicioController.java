@@ -250,5 +250,27 @@ public class InicioController {
         }
     }
 
+    @FXML
+    private void irAContenidos(ActionEvent event) {
+        try {
+
+            URL configUrl = getClass().getResource("/co/edu/uniquindio/red_social/configuracion.fxml");
+            System.out.println("URL Logo: " + configUrl);
+            FXMLLoader loader = new FXMLLoader(configUrl);
+            Parent configView = loader.load();
+
+            if (root != null) {
+                root.getChildren().clear();
+                root.getChildren().add(configView);
+            } else {
+                System.err.println("El contenedor principal es null.");
+            }
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }
