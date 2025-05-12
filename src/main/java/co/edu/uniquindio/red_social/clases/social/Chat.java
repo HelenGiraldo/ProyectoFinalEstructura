@@ -13,8 +13,6 @@ public class Chat {
         this.mensajes = new ListaSimplementeEnlazada<>();
         this.miembros.add(estudiante);
         this.miembros.add(estudiante2);
-        estudiante.anadirChat(this);
-        estudiante2.anadirChat(this);
     }
 
     public Chat() {
@@ -24,6 +22,7 @@ public class Chat {
 
     public boolean agregarMiembro(Estudiante miembro) {
         if (!miembros.contains(miembro)) {
+            miembro.anadirChat(this);
             return miembros.add(miembro);
         }
         return false;
@@ -31,6 +30,7 @@ public class Chat {
 
     public boolean eliminarMiembro(Estudiante miembro) {
         if (miembros.contains(miembro)) {
+            miembro.eliminarChat(this);
             return miembros.remove(miembro);
         }
         return false;
@@ -41,9 +41,7 @@ public class Chat {
             miembros.getFirst().eliminarChat(this);
             miembros.removeFirst();
         }
-        while(mensajes.isEmpty()) {
-            mensajes.removeFirst();
-        }
+        mensajes.clear();
         return true;
     }
 

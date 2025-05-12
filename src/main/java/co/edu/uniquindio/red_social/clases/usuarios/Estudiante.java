@@ -6,6 +6,8 @@ import co.edu.uniquindio.red_social.clases.interfaces.AdministracionContenido;
 import co.edu.uniquindio.red_social.clases.social.Chat;
 import co.edu.uniquindio.red_social.clases.social.Grupo;
 import co.edu.uniquindio.red_social.clases.social.SolicitudAmistad;
+import co.edu.uniquindio.red_social.estructuras.ArbolBinario;
+import co.edu.uniquindio.red_social.estructuras.BNodo;
 import co.edu.uniquindio.red_social.estructuras.ListaSimplementeEnlazada;
 
 import java.io.File;
@@ -14,16 +16,16 @@ public class Estudiante extends Usuario implements AdministracionContenido {
     private ListaSimplementeEnlazada<Estudiante> contactos;
     private ListaSimplementeEnlazada<String> preferencias;
     private ListaSimplementeEnlazada<SolicitudAmistad> solicitudesRecibidas;
-    private ListaSimplementeEnlazada<Publicacion> publicaciones;
+    private ArbolBinario<Publicacion> publicaciones;
     private ListaSimplementeEnlazada<Grupo> grupos;
     private ListaSimplementeEnlazada<Chat> chats;
 
-    public Estudiante(String nombre, String correo, String contrasena, File fotoPerfil) {
-        super(nombre, correo, contrasena, fotoPerfil);
+    public Estudiante(String nombre,String apellido, String correo, String contrasena, File fotoPerfil) {
+        super(nombre,apellido, correo, contrasena, fotoPerfil);
         this.contactos = new ListaSimplementeEnlazada<>();
         this.preferencias = new ListaSimplementeEnlazada<>();
         this.solicitudesRecibidas = new ListaSimplementeEnlazada<>();
-        this.publicaciones = new ListaSimplementeEnlazada<>();
+        this.publicaciones = new ArbolBinario<>();
         this.grupos = new ListaSimplementeEnlazada<>();
         this.chats = new ListaSimplementeEnlazada<>();
     }
@@ -47,7 +49,7 @@ public class Estudiante extends Usuario implements AdministracionContenido {
 
     public boolean anadirPreferencia(String preferencia) {
         if (!preferencias.contains(preferencia)) {
-           return  preferencias.add(preferencia);
+            return  preferencias.add(preferencia);
         }
         return false;
     }
@@ -154,6 +156,25 @@ public class Estudiante extends Usuario implements AdministracionContenido {
         return false;
     }
 
+    public void eliminarPublicacionGrupo(Grupo grupo) {
+        eliminarPublicacionesDeGrupo(publicaciones.getRaiz(), grupo);
+    }
+
+    private void eliminarPublicacionesDeGrupo(BNodo<Publicacion> nodo, Grupo grupo) {
+        if (nodo == null) {
+            return;
+        }
+
+        // Primero procesamos los hijos (postorden para evitar problemas)
+        eliminarPublicacionesDeGrupo(nodo.getIzquierdo(), grupo);
+        eliminarPublicacionesDeGrupo(nodo.getDerecho(), grupo);
+
+        // Luego verificamos el nodo actual
+        if (nodo.getValor().getGrupo().equals(grupo)) {
+            // Eliminamos el valor del nodo actual del árbol
+            publicaciones.remove(nodo.getValor());
+        }
+    }
     @Override
     public boolean modificarPublicacion(Publicacion publicacionAntigua, Publicacion publicacionNueva) {
         if(publicaciones.contains(publicacionAntigua)) {
@@ -196,11 +217,12 @@ public class Estudiante extends Usuario implements AdministracionContenido {
         this.solicitudesRecibidas = solicitudesRecibidas;
     }
 
-    public ListaSimplementeEnlazada<Publicacion> getPublicaciones() {
+
+    public ArbolBinario<Publicacion> getPublicaciones() {
         return publicaciones;
     }
 
-    public void setPublicaciones(ListaSimplementeEnlazada<Publicacion> publicaciones) {
+    public void setPublicaciones(ArbolBinario<Publicacion> publicaciones) {
         this.publicaciones = publicaciones;
     }
 
@@ -223,9 +245,10 @@ public class Estudiante extends Usuario implements AdministracionContenido {
     @Override
     public String toString() {
         return "Estudiante{" +
-                "nombre='" + nombre + '\'' +
-                ", correo='" + correo + '\'' +
-                ", contrasena='" + contrasena +
+                "nombre='" + getNombre() + '\'' +
+                ", apellido='" + getApellido() + '\'' +
+                ", email='" + getEmail() + '\'' +
+                ", contrasena='" + getContrasena() + '\'' +
                 '}';
     }
 

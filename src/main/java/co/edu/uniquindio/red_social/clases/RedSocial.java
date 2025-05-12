@@ -1,10 +1,12 @@
 package co.edu.uniquindio.red_social.clases;
 
+import co.edu.uniquindio.red_social.clases.contenidos.Publicacion;
 import co.edu.uniquindio.red_social.clases.interfaces.AdministracionEstudiante;
 import co.edu.uniquindio.red_social.clases.interfaces.AdministracionGrupo;
 import co.edu.uniquindio.red_social.clases.social.Grupo;
 import co.edu.uniquindio.red_social.clases.usuarios.Administrador;
 import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
+import co.edu.uniquindio.red_social.estructuras.ArbolBinario;
 import co.edu.uniquindio.red_social.estructuras.ListaSimplementeEnlazada;
 import co.edu.uniquindio.red_social.util.EstudianteActual;
 
@@ -17,6 +19,7 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo 
     private ListaSimplementeEnlazada<Estudiante> estudiantes;
     private ListaSimplementeEnlazada<Administrador> administradores;
     private ListaSimplementeEnlazada<Grupo> grupos;
+    private ArbolBinario<Publicacion> publicaciones;
 
 
     private static RedSocial redSocial;
@@ -27,6 +30,8 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo 
         this.estudiantes = new ListaSimplementeEnlazada<>();
         this.administradores = new ListaSimplementeEnlazada<>();
         this.claveAdministrador = "admin123";
+        this.grupos = new ListaSimplementeEnlazada<>();
+        this.publicaciones = new ArbolBinario<>();
     }
 
     public static RedSocial getInstance(String nombre) {
@@ -89,13 +94,14 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo 
     }
 
     @Override
-    public boolean crearEstudiante(String nombre, String correo, String contrasena, File fotoPerfil) {
-        Estudiante nuevoEstudiante = new Estudiante(nombre, correo, contrasena, fotoPerfil);
-        if (estudianteExisteCorreo(correo)==null) {
+    public boolean crearEstudiante(String nombre, String apellido, String correo, String contrasena, File fotoPerfil) {
+        Estudiante nuevoEstudiante = new Estudiante(nombre, apellido, correo, contrasena, fotoPerfil);
+        if (estudianteExisteCorreo(correo) == null) {
             return estudiantes.add(nuevoEstudiante);
         }
         return false;
     }
+
 
     @Override
     public boolean eliminarEstudiante(Estudiante estudiante) {
@@ -107,12 +113,13 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo 
 
     @Override
     public boolean modificarEstudiante(Estudiante usuarioAntiguo, Estudiante usuarioNuevo) {
-
         if (estudiantes.contains(usuarioAntiguo)) {
             usuarioAntiguo.setNombre(usuarioNuevo.getNombre());
-            usuarioAntiguo.setCorreo(usuarioNuevo.getCorreo());
+            usuarioAntiguo.setEmail(usuarioNuevo.getEmail());
             usuarioAntiguo.setContrasena(usuarioNuevo.getContrasena());
-            usuarioAntiguo.setFotoPerfil(usuarioNuevo.getFotoPerfil());
+            // Accede al método heredado de Usuario para obtener la imagen de perfil
+            usuarioAntiguo.setImagenPerfil(usuarioNuevo.getImagenPerfil());
+
             return true;
         }
         return false;
@@ -125,7 +132,7 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo 
         Iterator<Estudiante> iterator = estudiantes.iterator();
         while (iterator.hasNext()) {
             Estudiante estudiante = iterator.next();
-            if (estudiante.getCorreo().equals(correo)) {
+            if (estudiante.getEmail().equals(correo)) {
                 return estudiante;
             }
         }
@@ -134,28 +141,38 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo 
 
 
     @Override
-    public boolean crearGrupo(String nombreGrupo, String descripcion, String tipoGrupo) {
-        return false;
+    public boolean crearGrupo(String nombreGrupo, String descripcion, String tipoGrupo, boolean publico) {
+        Grupo nuevoGrupo = new Grupo(nombreGrupo, descripcion, tipoGrupo, publico);
+        if (grupos == null) {
+            grupos = new ListaSimplementeEnlazada<>();
+        }
+        return grupos.add(nuevoGrupo);
     }
 
     @Override
-    public boolean eliminarGrupo(Grupo nombreGrupo) {
-        return false;
+    public boolean eliminarGrupo(Grupo grupo) {
+        grupo.eliminarGrupo();
+        return grupos.remove(grupo);
     }
 
     @Override
     public boolean modificarGrupo(Grupo grupoAntiguo, Grupo grupoNuevo) {
+        if (grupos.contains(grupoAntiguo)) {
+            grupoAntiguo.setNombre(grupoNuevo.getNombre());
+            grupoAntiguo.setDescripcion(grupoNuevo.getDescripcion());
+            return true;
+        }
         return false;
     }
 
     @Override
     public boolean agregarMiembro(Grupo grupo, Estudiante miembro) {
-        return false;
+        return grupo.agregarMiembro(miembro);
     }
 
     @Override
     public boolean eliminarMiembro(Grupo grupo, Estudiante miembro) {
-        return false;
+        return grupo.eliminarMiembro(miembro);
     }
 
     public boolean iniciarSesion(String correo, String contrasena) {
@@ -163,6 +180,20 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo 
         if (estudiante != null && estudiante.getContrasena().equals(contrasena)) {
             EstudianteActual.setUsuarioActual(estudiante);
             return true;
+        }
+        return false;
+    }
+
+    public boolean agregarPublicacion(Publicacion publicacion) {
+        if (!publicaciones.contains(publicacion)) {
+            return publicaciones.add(publicacion);
+        }
+        return false;
+    }
+
+    public boolean eliminarPublicacion(Publicacion publicacion) {
+        if (publicaciones.contains(publicacion)) {
+            return publicaciones.remove(publicacion);
         }
         return false;
     }
