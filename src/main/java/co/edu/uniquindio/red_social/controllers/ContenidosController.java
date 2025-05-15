@@ -125,6 +125,7 @@ public class ContenidosController {
 
 
     private static final ArbolBinario<Contenido> arbolContenidos = new ArbolBinario<>();
+    private static final ListaSimplementeEnlazada<Contenido> listaContenidos = new ListaSimplementeEnlazada<>();
 
     public static ArbolBinario<Contenido> getArbol() {
         return arbolContenidos;
@@ -186,11 +187,15 @@ public class ContenidosController {
 
     public void agregarContenido(Contenido contenido) {
         System.out.println("Archivo adjunto antes de insertar: " + (contenido.getArchivoAdjunto() != null ? contenido.getArchivoAdjunto().getName() : "null"));
+
         arbolContenidos.insertar(contenido);
+        listaContenidos.add(contenido); // Agrega a la lista enlazada
+
         System.out.println("Archivo adjunto después de insertar: " + (contenido.getArchivoAdjunto() != null ? contenido.getArchivoAdjunto().getName() : "null"));
         mostrarContenidoEnVista(contenido);
         actualizarTotalPublicados();
     }
+
 
     private void actualizarTotalPublicados() {
         int total = arbolContenidos.getPeso();
@@ -199,6 +204,14 @@ public class ContenidosController {
             LabelTotalPublicados.setText(String.valueOf(total));
         });
     }
+
+
+
+    public static ListaSimplementeEnlazada<Contenido> getListaContenidos() {
+        return listaContenidos;
+    }
+
+
 
 
     private void mostrarContenidoEnVista(Contenido contenido) {

@@ -71,15 +71,13 @@ public class PublicarController {
 
     @FXML
     private TextField tituloField;
-
     @FXML
     private Label tituloLabel;
-
     @FXML
     private Label archivoAdjuntoLabel;
 
+
     private Stage stage;
-    private File archivoAdjunto;
     private File archivoAdjuntoSeleccionado;
 
 

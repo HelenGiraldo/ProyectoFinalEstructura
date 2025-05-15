@@ -18,6 +18,7 @@ public class Contenido implements Comparable<Contenido> {
     private double calificacionPromedio;
     private File archivoAdjunto;
     private Grupo grupo;
+    private ListaSimplementeEnlazada<Contenido> contenidos;
     private ListaSimplementeEnlazada<Calificacion> calificaciones;
 
     public Contenido(String titulo, String tema, String tipo, String descripcion, double calificacionPromedio) {
@@ -26,6 +27,7 @@ public class Contenido implements Comparable<Contenido> {
         this.tipo = tipo;
         this.descripcion = descripcion;
         this.calificacionPromedio = 0.0;
+        contenidos.add(this);
     }
 
     public Contenido(String tipoContenido, File contenido) {
