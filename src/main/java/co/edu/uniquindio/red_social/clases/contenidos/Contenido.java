@@ -1,5 +1,6 @@
 package co.edu.uniquindio.red_social.clases.contenidos;
 
+import co.edu.uniquindio.red_social.clases.social.Grupo;
 import co.edu.uniquindio.red_social.estructuras.ListaSimplementeEnlazada;
 
 import java.io.File;
@@ -14,15 +15,17 @@ public class Contenido implements Comparable<Contenido> {
     private String tipo;
     private String descripcion;
     private String autor;
-    private double valoracion;
+    private double calificacionPromedio;
     private File archivoAdjunto;
+    private Grupo grupo;
+    private ListaSimplementeEnlazada<Calificacion> calificaciones;
 
-    public Contenido(String titulo, String tema, String tipo, String descripcion, double valoracion) {
+    public Contenido(String titulo, String tema, String tipo, String descripcion, double calificacionPromedio) {
         this.titulo = titulo;
         this.tema = tema;
         this.tipo = tipo;
         this.descripcion = descripcion;
-        this.valoracion = 0.0;
+        this.calificacionPromedio = 0.0;
     }
 
     public Contenido(String tipoContenido, File contenido) {
@@ -48,6 +51,30 @@ public class Contenido implements Comparable<Contenido> {
 
     public String getId() {
         return id;
+    }
+
+    public double getCalificacionPromedio() {
+        return calificacionPromedio;
+    }
+
+    public void setCalificacionPromedio(double calificacionPromedio) {
+        this.calificacionPromedio = calificacionPromedio;
+    }
+
+    public Grupo getGrupo() {
+        return grupo;
+    }
+
+    public void setGrupo(Grupo grupo) {
+        this.grupo = grupo;
+    }
+
+    public ListaSimplementeEnlazada<Calificacion> getCalificaciones() {
+        return calificaciones;
+    }
+
+    public void setCalificaciones(ListaSimplementeEnlazada<Calificacion> calificaciones) {
+        this.calificaciones = calificaciones;
     }
 
     public void setId(String id) {
@@ -82,13 +109,6 @@ public class Contenido implements Comparable<Contenido> {
         this.autor = autor;
     }
 
-    public double getValoracion() {
-        return valoracion;
-    }
-
-    public void setValoracion(double valoracion) {
-        this.valoracion = valoracion;
-    }
 
     public void setTitulo(String titulo) {
         this.titulo = titulo;
@@ -108,6 +128,14 @@ public class Contenido implements Comparable<Contenido> {
 
     public void setArchivoAdjunto(File archivoAdjunto) {
         this.archivoAdjunto = archivoAdjunto;
+    }
+
+    public boolean calificar(Calificacion calificacion){
+        if (!calificaciones.contains(calificacion)) {
+            calificaciones.add(calificacion);
+            calificacionPromedio = (calificacionPromedio * (calificaciones.size()-1) + calificacion.getValoracion()) / calificaciones.size();
+        }
+        return false;
     }
 
     @Override

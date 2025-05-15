@@ -1,6 +1,7 @@
 package co.edu.uniquindio.red_social.clases.social;
 
 import co.edu.uniquindio.red_social.clases.RedSocial;
+import co.edu.uniquindio.red_social.clases.contenidos.Contenido;
 import co.edu.uniquindio.red_social.clases.contenidos.Publicacion;
 import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
 import co.edu.uniquindio.red_social.clases.usuarios.Usuario;
@@ -13,11 +14,11 @@ public class Grupo {
     private String tipoGrupo;
     private boolean publico;
     private String id;
-    private ArbolBinario<Publicacion> publicaciones;
+    private ArbolBinario<Contenido> contenidos;
     private ListaSimplementeEnlazada<Estudiante> miembros;
 
     public Grupo(String nombre,String descripcion, String tipoGrupo, boolean publico) {
-        this.publicaciones = new ArbolBinario<>();
+        this.contenidos = new ArbolBinario<>();
         this.descripcion = descripcion;
         this.tipoGrupo = tipoGrupo;
         this.nombre = nombre;
@@ -41,18 +42,18 @@ public class Grupo {
         return false;
     }
 
-    public boolean agregarPublicacion(Publicacion publicacion) {
-        if (!publicaciones.contains(publicacion)) {
-            RedSocial.getInstance().agregarPublicacion(publicacion);
-            return publicaciones.add(publicacion);
+    public boolean agregarPublicacion(Contenido contenido) {
+        if (!contenidos.contains(contenido)) {
+            RedSocial.getInstance().agregarPublicacion(contenido);
+            return contenidos.add(contenido);
         }
         return false;
     }
 
-    public boolean eliminarPublicacion(Publicacion publicacion) {
-        if (publicaciones.contains(publicacion)) {
-            RedSocial.getInstance().eliminarPublicacion(publicacion);
-            return publicaciones.remove(publicacion);
+    public boolean eliminarPublicacion(Contenido contenido) {
+        if (contenidos.contains(contenido)) {
+            RedSocial.getInstance().eliminarPublicacion(contenido);
+            return contenidos.remove(contenido);
         }
         return false;
     }
@@ -63,8 +64,8 @@ public class Grupo {
         }
 
         RedSocial redSocial = RedSocial.getInstance();
-        for(Publicacion publicacion : publicaciones.recorrerInorden()){
-            redSocial.eliminarPublicacion(publicacion);
+        for(Contenido contenido : contenidos.recorrerInorden()){
+            redSocial.eliminarPublicacion(contenido);
         }
 
         for(Estudiante miembro : miembros){
@@ -72,7 +73,7 @@ public class Grupo {
         }
 
         miembros.clear();
-        publicaciones.clear();
+        contenidos.clear();
     }
 
     public String getNombre() {
@@ -91,12 +92,12 @@ public class Grupo {
         this.descripcion = descripcion;
     }
 
-    public ArbolBinario<Publicacion> getPublicaciones() {
-        return publicaciones;
+    public ArbolBinario<Contenido> getContenidos() {
+        return contenidos;
     }
 
-    public void setPublicaciones(ArbolBinario<Publicacion> publicaciones) {
-        this.publicaciones = publicaciones;
+    public void setContenidos(ArbolBinario<Contenido> contenidos) {
+        this.contenidos = contenidos;
     }
 
     public ListaSimplementeEnlazada<Estudiante> getMiembros() {

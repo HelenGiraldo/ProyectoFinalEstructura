@@ -1,5 +1,6 @@
 package co.edu.uniquindio.red_social.clases;
 
+import co.edu.uniquindio.red_social.clases.contenidos.Contenido;
 import co.edu.uniquindio.red_social.clases.contenidos.Publicacion;
 import co.edu.uniquindio.red_social.clases.interfaces.AdministracionEstudiante;
 import co.edu.uniquindio.red_social.clases.interfaces.AdministracionGrupo;
@@ -19,7 +20,7 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo 
     private ListaSimplementeEnlazada<Estudiante> estudiantes;
     private ListaSimplementeEnlazada<Administrador> administradores;
     private ListaSimplementeEnlazada<Grupo> grupos;
-    private ArbolBinario<Publicacion> publicaciones;
+    private ArbolBinario<Contenido> contenidos;
 
 
     private static RedSocial redSocial;
@@ -31,7 +32,7 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo 
         this.administradores = new ListaSimplementeEnlazada<>();
         this.claveAdministrador = "admin123";
         this.grupos = new ListaSimplementeEnlazada<>();
-        this.publicaciones = new ArbolBinario<>();
+        this.contenidos = new ArbolBinario<>();
     }
 
     public static RedSocial getInstance(String nombre) {
@@ -184,16 +185,16 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo 
         return false;
     }
 
-    public boolean agregarPublicacion(Publicacion publicacion) {
-        if (!publicaciones.contains(publicacion)) {
-            return publicaciones.add(publicacion);
+    public boolean agregarPublicacion(Contenido contenido) {
+        if (!contenidos.contains(contenido)) {
+            return contenidos.add(contenido);
         }
         return false;
     }
 
-    public boolean eliminarPublicacion(Publicacion publicacion) {
-        if (publicaciones.contains(publicacion)) {
-            return publicaciones.remove(publicacion);
+    public boolean eliminarPublicacion(Contenido contenido) {
+        if (contenidos.contains(contenido)) {
+            return contenidos.remove(contenido);
         }
         return false;
     }

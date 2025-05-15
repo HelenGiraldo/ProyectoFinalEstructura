@@ -59,7 +59,7 @@ public class TarjetaContenidoController {
         autorLabel.setText(contenido.getAutor());
         descripcionLabel.setText(contenido.getDescripcion());
         tipoLabel.setText(contenido.getTipo());
-        valoracionLabel.setText("★ " + contenido.getValoracion());
+        valoracionLabel.setText("★ " + contenido.getCalificacionPromedio());
 
         File archivo = contenido.getArchivoAdjunto();
 
@@ -97,7 +97,7 @@ public class TarjetaContenidoController {
         autorLabel.setText(contenido.getAutor());
         descripcionLabel.setText(contenido.getDescripcion());
         tipoLabel.setText(contenido.getTipo());
-        valoracionLabel.setText("★ " + contenido.getValoracion());
+        valoracionLabel.setText("★ " + contenido.getCalificacionPromedio());
         totalPublicadosLabel.setText("Total Publicados: " + totalPublicados);
 
         if (contenido.getArchivoAdjunto() != null) {

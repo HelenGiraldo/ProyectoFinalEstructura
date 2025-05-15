@@ -1,6 +1,7 @@
 package co.edu.uniquindio.red_social.clases.usuarios;
 
 import co.edu.uniquindio.red_social.clases.contenidos.Calificacion;
+import co.edu.uniquindio.red_social.clases.contenidos.Contenido;
 import co.edu.uniquindio.red_social.clases.contenidos.Publicacion;
 import co.edu.uniquindio.red_social.clases.interfaces.AdministracionContenido;
 import co.edu.uniquindio.red_social.clases.social.Chat;
@@ -16,7 +17,7 @@ public class Estudiante extends Usuario implements AdministracionContenido {
     private ListaSimplementeEnlazada<Estudiante> contactos;
     private ListaSimplementeEnlazada<String> preferencias;
     private ListaSimplementeEnlazada<SolicitudAmistad> solicitudesRecibidas;
-    private ArbolBinario<Publicacion> publicaciones;
+    private ArbolBinario<Contenido> contenidos;
     private ListaSimplementeEnlazada<Grupo> grupos;
     private ListaSimplementeEnlazada<Chat> chats;
 
@@ -25,7 +26,7 @@ public class Estudiante extends Usuario implements AdministracionContenido {
         this.contactos = new ListaSimplementeEnlazada<>();
         this.preferencias = new ListaSimplementeEnlazada<>();
         this.solicitudesRecibidas = new ListaSimplementeEnlazada<>();
-        this.publicaciones = new ArbolBinario<>();
+        this.contenidos = new ArbolBinario<>();
         this.grupos = new ListaSimplementeEnlazada<>();
         this.chats = new ListaSimplementeEnlazada<>();
     }
@@ -135,21 +136,21 @@ public class Estudiante extends Usuario implements AdministracionContenido {
 
 
     @Override
-    public boolean publicarContenido(Publicacion publicacion, Grupo grupo) {
+    public boolean publicarContenido(Contenido contenido, Grupo grupo) {
         if(grupos.contains(grupo)){
-            publicaciones.add(publicacion);
-            grupo.agregarPublicacion(publicacion);
+            contenidos.add(contenido);
+            grupo.agregarPublicacion(contenido);
             return true;
         }
         return false;
     }
 
     @Override
-    public boolean eliminarPublicacion(Publicacion publicacion) {
-        if(publicaciones.contains(publicacion)) {
-            publicaciones.remove(publicacion);
+    public boolean eliminarPublicacion(Contenido contenido) {
+        if(contenidos.contains(contenido)) {
+            contenidos.remove(contenido);
             for (Grupo grupo : grupos) {
-                grupo.eliminarPublicacion(publicacion);
+                grupo.eliminarPublicacion(contenido);
             }
             return true;
         }
@@ -157,10 +158,10 @@ public class Estudiante extends Usuario implements AdministracionContenido {
     }
 
     public void eliminarPublicacionGrupo(Grupo grupo) {
-        eliminarPublicacionesDeGrupo(publicaciones.getRaiz(), grupo);
+        eliminarPublicacionesDeGrupo(contenidos.getRaiz(), grupo);
     }
 
-    private void eliminarPublicacionesDeGrupo(BNodo<Publicacion> nodo, Grupo grupo) {
+    private void eliminarPublicacionesDeGrupo(BNodo<Contenido> nodo, Grupo grupo) {
         if (nodo == null) {
             return;
         }
@@ -172,23 +173,23 @@ public class Estudiante extends Usuario implements AdministracionContenido {
         // Luego verificamos el nodo actual
         if (nodo.getValor().getGrupo().equals(grupo)) {
             // Eliminamos el valor del nodo actual del árbol
-            publicaciones.remove(nodo.getValor());
+            contenidos.remove(nodo.getValor());
         }
     }
     @Override
-    public boolean modificarPublicacion(Publicacion publicacionAntigua, Publicacion publicacionNueva) {
-        if(publicaciones.contains(publicacionAntigua)) {
-            publicacionAntigua.setTitulo(publicacionNueva.getTitulo());
-            publicacionAntigua.setContenido(publicacionNueva.getContenido());
-            publicacionAntigua.setDescripcion(publicacionNueva.getDescripcion());
+    public boolean modificarPublicacion(Contenido contenidoAntiguo, Contenido contenidoNuevo) {
+        if(contenidos.contains(contenidoAntiguo)) {
+            contenidoAntiguo.setTitulo(contenidoNuevo.getTitulo());
+            contenidoAntiguo.setContenido(contenidoNuevo.getContenido());
+            contenidoAntiguo.setDescripcion(contenidoNuevo.getDescripcion());
             return true;
         }
         return false;
     }
 
     @Override
-    public void valorarContenido(Publicacion publicacion, int valoracion) {
-        publicacion.calificar(new Calificacion(valoracion,this));
+    public void valorarContenido(Contenido contenido, int valoracion) {
+        contenido.calificar(new Calificacion(valoracion,this));
     }
 
 
@@ -218,12 +219,12 @@ public class Estudiante extends Usuario implements AdministracionContenido {
     }
 
 
-    public ArbolBinario<Publicacion> getPublicaciones() {
-        return publicaciones;
+    public ArbolBinario<Contenido> getContenidos() {
+        return contenidos;
     }
 
-    public void setPublicaciones(ArbolBinario<Publicacion> publicaciones) {
-        this.publicaciones = publicaciones;
+    public void setPublicaciones(ArbolBinario<Contenido> contenidos) {
+        this.contenidos = contenidos;
     }
 
     public ListaSimplementeEnlazada<Grupo> getGrupos() {
