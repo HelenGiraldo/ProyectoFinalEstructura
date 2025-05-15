@@ -1,5 +1,6 @@
 package co.edu.uniquindio.red_social.controllers;
 
+import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
 import co.edu.uniquindio.red_social.clases.usuarios.PerfilUsuario;
 import co.edu.uniquindio.red_social.clases.usuarios.Usuario;
 import co.edu.uniquindio.red_social.clases.usuarios.UsuarioRegistrado;
@@ -38,7 +39,8 @@ public class LoginController {
         String usuarioIngresado = textFieldEmail.getText().trim();
         String contrasenaIngresada = passwordField.getText().trim();
 
-        Usuario usuarioRegistrado = UsuarioRegistrado.buscarUsuarioPorEmail(usuarioIngresado);
+        Estudiante usuarioRegistrado = (Estudiante) UsuarioRegistrado.buscarUsuarioPorEmail(usuarioIngresado);
+
 
         System.out.println("------ INTENTANDO INICIAR SESIÓN ------");
         System.out.println("Email ingresado: " + usuarioIngresado);
@@ -126,7 +128,7 @@ public class LoginController {
 
 
             InicioController controller = loader.getController();
-            controller.inicializarUsuario((Usuario) PerfilUsuario.getInstancia().getUsuarioActual());
+            controller.inicializarUsuario((Estudiante) PerfilUsuario.getInstancia().getUsuarioActual());
 
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene scene = new Scene(inicioView);

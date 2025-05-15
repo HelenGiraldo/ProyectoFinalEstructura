@@ -1,5 +1,6 @@
 package co.edu.uniquindio.red_social.controllers;
 
+import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
 import co.edu.uniquindio.red_social.clases.usuarios.PerfilUsuario;
 import co.edu.uniquindio.red_social.clases.usuarios.Usuario;
 import javafx.animation.Interpolator;
@@ -130,10 +131,10 @@ public class InicioController {
     @FXML
     private AnchorPane root;
 
-    private Usuario usuario;
+    private Estudiante usuario;
 
 
-    public void inicializarUsuario(Usuario usuario) {
+    public void inicializarUsuario(Estudiante usuario) {
         this.usuario = usuario;
 
         // Guardar el usuario en el singleton

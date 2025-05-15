@@ -1,5 +1,7 @@
 package co.edu.uniquindio.red_social.estructuras;
 
+import java.util.function.Consumer;
+
 public class ArbolBinario<T extends Comparable<T>> {
     BNodo<T> raiz;
     private int peso;

@@ -1,25 +1,23 @@
 package co.edu.uniquindio.red_social.clases.usuarios;
 
 import java.io.File;
-import java.time.LocalDate;
 
-public abstract class Usuario {
-    protected String id;
+public class Usuario {
+
     protected String nombre;
     protected String apellido;
-    protected String correo;
+    protected String email;
     protected String contrasena;
-    protected File fotoPerfil;
+    protected File imagenPerfil;
 
 
-    public Usuario(String nombre,String apellido, String correo, String contrasena, File fotoPerfil) {
+    public Usuario(String nombre, String apellido, String email, String contrasena, File imagenPerfil) {
         this.nombre = nombre;
         this.apellido = apellido;
-        this.correo = correo;
+        this.email = email;
         this.contrasena = contrasena;
-        this.fotoPerfil = fotoPerfil;
+        this.imagenPerfil = imagenPerfil;
     }
-
 
     public String getNombre() {
         return nombre;
@@ -32,16 +30,17 @@ public abstract class Usuario {
     public String getApellido() {
         return apellido;
     }
+
     public void setApellido(String apellido) {
         this.apellido = apellido;
     }
 
-    public String getCorreo() {
-        return correo;
+    public String getEmail() {
+        return email;
     }
 
-    public void setCorreo(String correo) {
-        this.correo = correo;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getContrasena() {
@@ -52,11 +51,11 @@ public abstract class Usuario {
         this.contrasena = contrasena;
     }
 
-    public File getFotoPerfil() {
-        return fotoPerfil;
+    public File getImagenPerfil() {
+        return imagenPerfil;
     }
 
-    public void setFotoPerfil(File fotoPerfil) {
-        this.fotoPerfil = fotoPerfil;
+    public void setImagenPerfil(File imagenPerfil) {
+        this.imagenPerfil = imagenPerfil;
     }
 }

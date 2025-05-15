@@ -5,17 +5,17 @@ import java.util.List;
 
 public class UsuarioRegistrado {
 
-    private static List<Usuario> usuariosRegistrados = new ArrayList<>();
+    private static List<Estudiante> usuariosRegistrados = new ArrayList<>();
 
     // Método para registrar un nuevo usuario
-    public static void registrarUsuario(Usuario usuario) {
+    public static void registrarUsuario(Estudiante usuario) {
         usuariosRegistrados.add(usuario);
     }
 
     // Método para buscar un usuario por su email
-    public static Usuario buscarUsuarioPorEmail(String correo) {
-        for (Usuario usuario : usuariosRegistrados) {
-            if (usuario.getCorreo().equals(correo)) {
+    public static Estudiante buscarUsuarioPorEmail(String correo) {
+        for (Estudiante usuario : usuariosRegistrados) {
+            if (usuario.getEmail().equals(correo)) {
                 return usuario;
             }
         }
@@ -23,7 +23,7 @@ public class UsuarioRegistrado {
     }
 
     // Método para obtener la lista de usuarios
-    public static List<Usuario> getUsuariosRegistrados() {
+    public static List<Estudiante> getUsuariosRegistrados() {
         return usuariosRegistrados;
     }
 }

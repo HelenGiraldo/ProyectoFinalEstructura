@@ -1,10 +1,14 @@
 package co.edu.uniquindio.red_social.controllers;
 
+import co.edu.uniquindio.red_social.clases.contenidos.Contenido;
 import co.edu.uniquindio.red_social.clases.usuarios.PerfilUsuario;
+import co.edu.uniquindio.red_social.estructuras.ArbolBinario;
+import co.edu.uniquindio.red_social.estructuras.ListaSimplementeEnlazada;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -22,6 +26,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 
 public class ContenidosController {
 
@@ -119,6 +124,31 @@ public class ContenidosController {
     private VBox vBoxTodosContenidos;
 
 
+    private static final ArbolBinario<Contenido> arbolContenidos = new ArbolBinario<>();
+
+    public static ArbolBinario<Contenido> getArbol() {
+        return arbolContenidos;
+    }
+
+    public void inicializarContenidos(List<Contenido> contenidos) {
+        vBoxTodosContenidos.getChildren().clear(); // Limpia antes de agregar nuevos
+
+        for (Contenido contenido : contenidos) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/TarjetaContenido.fxml"));
+                VBox tarjeta = loader.load();
+                TarjetaContenidoController controller = loader.getController();
+                controller.setContenido(contenido);
+                vBoxTodosContenidos.getChildren().add(tarjeta);
+
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
     @FXML
     private  void  initialize() {
         misContenidosButton.setSelected(true);
@@ -143,11 +173,56 @@ public class ContenidosController {
         if (perfil.getImagenPerfil() != null) {
             imagenPerfil.setImage(perfil.getImagenPerfil());
         }
+        cargarContenidos();
     }
+    private void cargarContenidos() {
+        vBoxTodosContenidos.getChildren().clear();
+        ListaSimplementeEnlazada<Contenido> lista = arbolContenidos.recorrerInorden();
+        for (Contenido contenido : lista) {
+            mostrarContenidoEnVista(contenido);
+        }
+        actualizarTotalPublicados();
+    }
+
+    public void agregarContenido(Contenido contenido) {
+        System.out.println("Archivo adjunto antes de insertar: " + (contenido.getArchivoAdjunto() != null ? contenido.getArchivoAdjunto().getName() : "null"));
+        arbolContenidos.insertar(contenido);
+        System.out.println("Archivo adjunto después de insertar: " + (contenido.getArchivoAdjunto() != null ? contenido.getArchivoAdjunto().getName() : "null"));
+        mostrarContenidoEnVista(contenido);
+        actualizarTotalPublicados();
+    }
+
+    private void actualizarTotalPublicados() {
+        int total = arbolContenidos.getPeso();
+        System.out.println("Total contenidos: " + total);
+        Platform.runLater(() -> {
+            LabelTotalPublicados.setText(String.valueOf(total));
+        });
+    }
+
+
+    private void mostrarContenidoEnVista(Contenido contenido) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/TarjetaContenido.fxml"));
+            VBox tarjeta = loader.load();
+
+            TarjetaContenidoController controller = loader.getController();
+            int total = arbolContenidos.getPeso();
+
+            // Aquí tienes que llamar a setContenido para que la tarjeta se actualice con el contenido
+            controller.setContenido(contenido, total);
+
+            vBoxTodosContenidos.getChildren().add(tarjeta);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     @FXML
     private void irAConfig(ActionEvent event) {
         try {
-
             URL configUrl = getClass().getResource("/co/edu/uniquindio/red_social/configuracion.fxml");
             System.out.println("URL Logo: " + configUrl);
             FXMLLoader loader = new FXMLLoader(configUrl);
@@ -159,16 +234,14 @@ public class ContenidosController {
             } else {
                 System.err.println("El contenedor principal es null.");
             }
-
-
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
     @FXML
     private void irAChat(ActionEvent event) {
         try {
-
             URL configUrl = getClass().getResource("/co/edu/uniquindio/red_social/mensajes.fxml");
             System.out.println("URL config: " + configUrl);
             FXMLLoader loader = new FXMLLoader(configUrl);
@@ -180,8 +253,6 @@ public class ContenidosController {
             } else {
                 System.err.println("El contenedor principal es null.");
             }
-
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -190,20 +261,17 @@ public class ContenidosController {
     @FXML
     private void irAInicio(ActionEvent event) {
         try {
-            // Obtener la URL de la vista a cargar
             URL configUrl = getClass().getResource("/co/edu/uniquindio/red_social/Inicio.fxml");
             if (configUrl == null) {
                 throw new IOException("Vista no encontrada");
             }
 
-            // Cargar la vista
             FXMLLoader loader = new FXMLLoader(configUrl);
             Parent configView = loader.load();
 
-            // Asegúrate de que root no es null
             if (root != null) {
-                root.getChildren().clear();  // Limpiar la vista actual
-                root.getChildren().add(configView);  // Agregar la nueva vista
+                root.getChildren().clear();
+                root.getChildren().add(configView);
             } else {
                 System.err.println("El contenedor principal es null.");
             }
@@ -212,24 +280,20 @@ public class ContenidosController {
         }
     }
 
-
     @FXML
     private void irAEstadistica(ActionEvent event) {
         try {
-            // Obtener la URL de la vista a cargar
-            URL configUrl = getClass().getResource("src/main/resources/co/edu/uniquindio/red_social/Estadisticas.fxml");
+            URL configUrl = getClass().getResource("/co/edu/uniquindio/red_social/Estadisticas.fxml");
             if (configUrl == null) {
                 throw new IOException("Vista no encontrada");
             }
 
-            // Cargar la vista
             FXMLLoader loader = new FXMLLoader(configUrl);
             Parent configView = loader.load();
 
-            // Asegúrate de que root no es null
             if (root != null) {
-                root.getChildren().clear();  // Limpiar la vista actual
-                root.getChildren().add(configView);  // Agregar la nueva vista
+                root.getChildren().clear();
+                root.getChildren().add(configView);
             } else {
                 System.err.println("El contenedor principal es null.");
             }
@@ -245,20 +309,18 @@ public class ContenidosController {
             Parent root = loader.load();
 
             Stage popupStage = new Stage();
+            PublicarController controller = loader.getController();
+            controller.setStage(popupStage);
+            controller.setContenidosController(this);
+
             popupStage.setScene(new Scene(root));
             popupStage.setTitle("Nuevo Contenido");
             popupStage.initModality(Modality.WINDOW_MODAL);
             popupStage.initOwner(((Button) event.getSource()).getScene().getWindow());
-
-            // Pasar el Stage al controlador para poder cerrarlo desde allí
-            PublicarController controller = loader.getController();
-            controller.setStage(popupStage);
-
             popupStage.show();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
 }

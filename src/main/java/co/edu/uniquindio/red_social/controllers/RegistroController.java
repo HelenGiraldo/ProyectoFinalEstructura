@@ -1,5 +1,6 @@
 package co.edu.uniquindio.red_social.controllers;
 
+import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
 import co.edu.uniquindio.red_social.clases.usuarios.PerfilUsuario;
 import co.edu.uniquindio.red_social.clases.usuarios.Usuario;
 import co.edu.uniquindio.red_social.clases.usuarios.UsuarioRegistrado;
@@ -125,13 +126,13 @@ public class RegistroController {
         }
 
         // Crear el nuevo usuario
-        Usuario usuario = new Usuario(nombre, apellido, email, password, archivoImagenSeleccionada);
+        Estudiante estudiante = new Estudiante(nombre, apellido, email, password, archivoImagenSeleccionada);
 
         // Guardar en PerfilUsuario
-        PerfilUsuario.setUsuarioActual(usuario);
+        PerfilUsuario.setUsuarioActual(estudiante);
 
         // Registrar usuario
-        UsuarioRegistrado.registrarUsuario(usuario);
+        UsuarioRegistrado.registrarUsuario(estudiante);
 
         // Mostrar mensaje de éxito
         labelRegistro.setText("¡Registro exitoso!");
@@ -152,7 +153,7 @@ public class RegistroController {
 
             // Si lo necesitas, puedes pasar datos al controlador de Login:
             LoginController loginController = loader.getController();
-            // loginController.setDatosDeUsuario(usuario); // Por ejemplo, si necesitas pasar datos al login
+             //loginController.setDatosDeUsuario(usuario);
 
         } catch (IOException e) {
             e.printStackTrace();

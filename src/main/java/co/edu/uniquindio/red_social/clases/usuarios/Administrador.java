@@ -34,17 +34,18 @@ public class Administrador extends Usuario implements Reporte, AdministracionGru
 
     @Override
     public boolean agregarMiembro(Grupo grupo, Estudiante miembro) {
+
         return redSocial.agregarMiembro(grupo, miembro);
     }
 
     @Override
     public boolean eliminarMiembro(Grupo grupo, Estudiante miembro) {
-        redSocial.eliminarMiembro(grupo, miembro);
+        return redSocial.eliminarMiembro(grupo, miembro);
     }
 
     @Override
     public ListaSimplementeEnlazada<Publicacion> obtenerContenidosMasValorados() {
-
+        return null;
     }
 
     @Override

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:id="TuscontendiosVBox" prefHeight="160.0" prefWidth="309.0" styleClass="card-mini" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.red_social.controllers.TarjetaContenidoController">
+   <children>
+      <HBox prefHeight="23.0" prefWidth="301.0">
+         <children>
+            <HBox prefHeight="23.0" prefWidth="117.0" />
+            <Label fx:id="tituloLabel" prefHeight="17.0" prefWidth="66.0" styleClass="titulo-inicio" stylesheets="@styles.css" text="Publicados" />
+         </children>
+      </HBox>
+      <Label fx:id="totalPublicadosLabel" prefHeight="14.0" prefWidth="345.0" styleClass="subtitulo-inicio" stylesheets="@styles.css" text="5 Publicados" />
+      <HBox prefHeight="20.0" prefWidth="283.0">
+         <children>
+            <HBox prefHeight="73.0" prefWidth="69.0" />
+            <Label fx:id="temaLabel" styleClass="titulo-inicio" text="Resumen Estrcutura de datos" />
+         </children>
+      </HBox>
+      <HBox fx:id="HboxTusContendiosContenido" prefHeight="100.0" prefWidth="289.0" />
+      <VBox fx:id="VBoxTusContenidosContenido" prefHeight="76.0" prefWidth="309.0" />
+      <HBox prefHeight="20.0" prefWidth="301.0" />
+      <HBox prefHeight="38.0" prefWidth="30.0">
+         <children>
+            <Label fx:id="tipoLabel" prefHeight="15.0" prefWidth="327.0" styleClass="label-tipo" stylesheets="@styles.css" text="PDF" />
+         </children>
+      </HBox>
+      <Label fx:id="valoracionLabel" styleClass="label-valoracion" text="★ 4.7" />
+      <VBox prefHeight="30.0" prefWidth="289.0">
+         <children>
+            <Label fx:id="descripcionLabel" prefHeight="46.0" prefWidth="289.0" text="-" />
+         </children>
+      </VBox>
+      <HBox fx:id="HboxTusContendiosContenido1" prefHeight="35.0" prefWidth="289.0">
+         <children>
+            <Label fx:id="autorLabel" prefHeight="27.0" prefWidth="24.0" styleClass="subtitulo-inicio" stylesheets="@styles.css" text="autor" />
+         </children>
+      </HBox>
+      <HBox prefHeight="35.0" prefWidth="289.0">
+         <children>
+            <Label fx:id="archivoAdjuntoLabel" prefHeight="14.0" prefWidth="294.0" styleClass="subtitulo-inicio" stylesheets="@styles.css" text="no hay archivo adjunto " />
+         </children>
+      </HBox>
+   </children>
+</VBox>
