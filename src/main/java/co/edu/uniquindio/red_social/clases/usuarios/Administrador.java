@@ -1,11 +1,11 @@
 package co.edu.uniquindio.red_social.clases.usuarios;
 
 import co.edu.uniquindio.red_social.clases.RedSocial;
-import co.edu.uniquindio.red_social.clases.contenidos.Publicacion;
 import co.edu.uniquindio.red_social.clases.interfaces.AdministracionGrupo;
 import co.edu.uniquindio.red_social.clases.interfaces.Reporte;
 import co.edu.uniquindio.red_social.clases.social.Grupo;
 import co.edu.uniquindio.red_social.estructuras.ListaSimplementeEnlazada;
+import co.edu.uniquindio.red_social.clases.contenidos.Contenido;
 
 import java.io.File;
 
@@ -44,7 +44,7 @@ public class Administrador extends Usuario implements Reporte, AdministracionGru
     }
 
     @Override
-    public ListaSimplementeEnlazada<Publicacion> obtenerContenidosMasValorados() {
+    public ListaSimplementeEnlazada<Contenido> obtenerContenidosMasValorados() {
         return null;
     }
 

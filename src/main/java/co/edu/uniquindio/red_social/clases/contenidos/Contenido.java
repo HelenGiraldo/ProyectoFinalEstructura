@@ -1,6 +1,7 @@
 package co.edu.uniquindio.red_social.clases.contenidos;
 
 import co.edu.uniquindio.red_social.clases.social.Grupo;
+import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
 import co.edu.uniquindio.red_social.estructuras.ListaSimplementeEnlazada;
 
 import java.io.File;
@@ -8,31 +9,32 @@ import java.io.File;
 
 public class Contenido implements Comparable<Contenido> {
     private String tipoContenido;
-    private File contenido;
     private String id;
     private String titulo;
     private String tema;
-    private String tipo;
     private String descripcion;
-    private String autor;
+    private Estudiante autor;
     private double calificacionPromedio;
-    private File archivoAdjunto;
+    private File contenido;
     private Grupo grupo;
-    private ListaSimplementeEnlazada<Contenido> contenidos;
     private ListaSimplementeEnlazada<Calificacion> calificaciones;
 
-    public Contenido(String titulo, String tema, String tipo, String descripcion, double calificacionPromedio) {
+    public Contenido(String tipoContenido, String titulo, String tema, String descripcion, Estudiante autor, File archivoAdjunto, Grupo grupo) {
+        this.tipoContenido = tipoContenido;
         this.titulo = titulo;
         this.tema = tema;
-        this.tipo = tipo;
         this.descripcion = descripcion;
-        this.calificacionPromedio = 0.0;
-        contenidos.add(this);
+        this.autor = autor;
+        this.contenido = archivoAdjunto;
+        this.grupo = grupo;
     }
 
-    public Contenido(String tipoContenido, File contenido) {
-        this.tipoContenido = tipoContenido;
-        this.contenido = contenido;
+    public Estudiante getAutor() {
+        return autor;
+    }
+
+    public void setAutor(Estudiante autor) {
+        this.autor = autor;
     }
 
     public String getTipoContenido() {
@@ -87,13 +89,6 @@ public class Contenido implements Comparable<Contenido> {
         this.tema = tema;
     }
 
-    public String getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
 
     public String getDescripcion() {
         return descripcion;
@@ -103,18 +98,10 @@ public class Contenido implements Comparable<Contenido> {
         this.descripcion = descripcion;
     }
 
-    public String getAutor() {
-        return autor;
-    }
-
-    public void setAutor(String autor) {
-        this.autor = autor;
-    }
-
-
     public void setTitulo(String titulo) {
         this.titulo = titulo;
     }
+
 
     public File getContenido() {
         return contenido;
@@ -122,14 +109,6 @@ public class Contenido implements Comparable<Contenido> {
 
     public void setContenido(File contenido) {
         this.contenido = contenido;
-    }
-
-    public File getArchivoAdjunto() {
-        return archivoAdjunto;
-    }
-
-    public void setArchivoAdjunto(File archivoAdjunto) {
-        this.archivoAdjunto = archivoAdjunto;
     }
 
     public boolean calificar(Calificacion calificacion){

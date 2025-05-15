@@ -1,6 +1,7 @@
 package co.edu.uniquindio.red_social.controllers;
 
 import co.edu.uniquindio.red_social.clases.contenidos.Contenido;
+import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
 import co.edu.uniquindio.red_social.clases.usuarios.PerfilUsuario;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
@@ -71,13 +72,15 @@ public class PublicarController {
 
     @FXML
     private TextField tituloField;
+
     @FXML
     private Label tituloLabel;
+
     @FXML
     private Label archivoAdjuntoLabel;
 
-
     private Stage stage;
+    private File archivoAdjunto;
     private File archivoAdjuntoSeleccionado;
 
 
@@ -141,8 +144,8 @@ public class PublicarController {
             return;
         }
 
-        Contenido nuevoContenido = new Contenido(titulo, tema, tipo, descripcion, 0);
-        nuevoContenido.setArchivoAdjunto(archivoAdjuntoSeleccionado);
+        Contenido nuevoContenido = new Contenido(tipo, titulo, tema, descripcion, (Estudiante) PerfilUsuario.getUsuarioActual(), archivoAdjunto, null);
+        nuevoContenido.setContenido(archivoAdjuntoSeleccionado);
 
         if (contenidosController != null) {
             contenidosController.agregarContenido(nuevoContenido);

@@ -56,19 +56,19 @@ public class TarjetaContenidoController {
 
     public void setContenido(Contenido contenido) {
         tituloLabel.setText(contenido.getTitulo());
-        autorLabel.setText(contenido.getAutor());
+        autorLabel.setText(contenido.getAutor().getNombre() + " " + contenido.getAutor().getApellido());
         descripcionLabel.setText(contenido.getDescripcion());
-        tipoLabel.setText(contenido.getTipo());
+        tipoLabel.setText(contenido.getTipoContenido());
         valoracionLabel.setText("★ " + contenido.getCalificacionPromedio());
 
-        File archivo = contenido.getArchivoAdjunto();
+        File archivo = contenido.getContenido();
 
         if (archivo != null && archivo.exists()) {
             archivoAdjuntoLabel.setText("Archivo: " + archivo.getName());
 
             archivoAdjuntoLabel.setOnMouseClicked(event -> {
                 try {
-                    java.awt.Desktop.getDesktop().open(archivo);
+                    Desktop.getDesktop().open(archivo);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -94,17 +94,17 @@ public class TarjetaContenidoController {
 
     public void setContenido(Contenido contenido, int totalPublicados) {
         tituloLabel.setText(contenido.getTitulo());
-        autorLabel.setText(contenido.getAutor());
+        autorLabel.setText(contenido.getAutor().getNombre() + " " + contenido.getAutor().getApellido());
         descripcionLabel.setText(contenido.getDescripcion());
-        tipoLabel.setText(contenido.getTipo());
+        tipoLabel.setText(contenido.getTipoContenido());
         valoracionLabel.setText("★ " + contenido.getCalificacionPromedio());
         totalPublicadosLabel.setText("Total Publicados: " + totalPublicados);
 
-        if (contenido.getArchivoAdjunto() != null) {
-            archivoAdjuntoLabel.setText(contenido.getArchivoAdjunto().getName());
+        if (contenido.getContenido() != null) {
+            archivoAdjuntoLabel.setText(contenido.getContenido().getName());
 
             archivoAdjuntoLabel.setOnMouseClicked(event -> {
-                abrirArchivoAdjunto(contenido.getArchivoAdjunto());
+                abrirArchivoAdjunto(contenido.getContenido());
             });
         } else {
             archivoAdjuntoLabel.setText("Sin archivo adjunto");
