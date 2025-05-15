@@ -186,12 +186,18 @@ public class ContenidosController {
     }
 
     public void agregarContenido(Contenido contenido) {
-        System.out.println("Archivo adjunto antes de insertar: " + (contenido.getArchivoAdjunto() != null ? contenido.getArchivoAdjunto().getName() : "null"));
+        System.out.println(">>> Agregando contenido: " + contenido.getTitulo());
 
         arbolContenidos.insertar(contenido);
-        listaContenidos.add(contenido); // Agrega a la lista enlazada
+        listaContenidos.add(contenido);
 
-        System.out.println("Archivo adjunto después de insertar: " + (contenido.getArchivoAdjunto() != null ? contenido.getArchivoAdjunto().getName() : "null"));
+        // Imprimir todos los contenidos
+        System.out.println(">>> Contenidos actuales en lista enlazada:");
+        for (int i = 0; i < listaContenidos.size(); i++) {
+            Contenido c = listaContenidos.get(i);
+            System.out.println("- " + c.getTitulo() + " | Calificaciones: " + (c.getCalificaciones() != null ? c.getCalificaciones().size() : 0));
+        }
+
         mostrarContenidoEnVista(contenido);
         actualizarTotalPublicados();
     }

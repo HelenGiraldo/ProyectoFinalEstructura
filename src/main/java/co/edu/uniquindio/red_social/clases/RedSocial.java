@@ -1,7 +1,6 @@
 package co.edu.uniquindio.red_social.clases;
 
 import co.edu.uniquindio.red_social.clases.contenidos.Contenido;
-import co.edu.uniquindio.red_social.clases.contenidos.Publicacion;
 import co.edu.uniquindio.red_social.clases.interfaces.AdministracionEstudiante;
 import co.edu.uniquindio.red_social.clases.interfaces.AdministracionGrupo;
 import co.edu.uniquindio.red_social.clases.social.Grupo;

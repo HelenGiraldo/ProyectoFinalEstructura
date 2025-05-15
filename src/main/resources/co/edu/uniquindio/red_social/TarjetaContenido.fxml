@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="TuscontendiosVBox" prefHeight="160.0" prefWidth="309.0" styleClass="card-mini" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.red_social.controllers.TarjetaContenidoController">
+<VBox fx:id="TuscontendiosVBox" prefHeight="188.0" prefWidth="309.0" styleClass="card-mini" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.red_social.controllers.TarjetaContenidoController">
    <children>
       <HBox prefHeight="23.0" prefWidth="301.0">
          <children>
@@ -20,7 +20,10 @@
          </children>
       </HBox>
       <HBox fx:id="HboxTusContendiosContenido" prefHeight="100.0" prefWidth="289.0" />
-      <VBox fx:id="VBoxTusContenidosContenido" prefHeight="76.0" prefWidth="309.0" />
+      <VBox fx:id="VBoxTusContenidosContenido" prefHeight="76.0" prefWidth="309.0">
+         <children>
+            <Label fx:id="grupoLabel" prefHeight="14.0" prefWidth="345.0" styleClass="subtitulo-inicio" stylesheets="@styles.css" text="grupo" />
+         </children></VBox>
       <HBox prefHeight="20.0" prefWidth="301.0" />
       <HBox prefHeight="38.0" prefWidth="30.0">
          <children>

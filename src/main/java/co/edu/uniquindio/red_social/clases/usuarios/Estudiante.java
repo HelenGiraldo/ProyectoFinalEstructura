@@ -2,7 +2,6 @@ package co.edu.uniquindio.red_social.clases.usuarios;
 
 import co.edu.uniquindio.red_social.clases.contenidos.Calificacion;
 import co.edu.uniquindio.red_social.clases.contenidos.Contenido;
-import co.edu.uniquindio.red_social.clases.contenidos.Publicacion;
 import co.edu.uniquindio.red_social.clases.interfaces.AdministracionContenido;
 import co.edu.uniquindio.red_social.clases.social.Chat;
 import co.edu.uniquindio.red_social.clases.social.Grupo;

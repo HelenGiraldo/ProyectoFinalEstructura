@@ -19,6 +19,7 @@ public class Contenido implements Comparable<Contenido> {
     private Grupo grupo;
     private ListaSimplementeEnlazada<Calificacion> calificaciones;
 
+
     public Contenido(String tipoContenido, String titulo, String tema, String descripcion, Estudiante autor, File archivoAdjunto, Grupo grupo) {
         this.tipoContenido = tipoContenido;
         this.titulo = titulo;
@@ -27,6 +28,7 @@ public class Contenido implements Comparable<Contenido> {
         this.autor = autor;
         this.contenido = archivoAdjunto;
         this.grupo = grupo;
+        this.calificaciones = new ListaSimplementeEnlazada<>();
     }
 
     public Estudiante getAutor() {
@@ -114,10 +116,12 @@ public class Contenido implements Comparable<Contenido> {
     public boolean calificar(Calificacion calificacion){
         if (!calificaciones.contains(calificacion)) {
             calificaciones.add(calificacion);
-            calificacionPromedio = (calificacionPromedio * (calificaciones.size()-1) + calificacion.getValoracion()) / calificaciones.size();
+            calificacionPromedio = (calificacionPromedio * (calificaciones.size() - 1) + calificacion.getValoracion()) / calificaciones.size();
+            return true;
         }
         return false;
     }
+
 
     @Override
     public int compareTo(Contenido otro) {
