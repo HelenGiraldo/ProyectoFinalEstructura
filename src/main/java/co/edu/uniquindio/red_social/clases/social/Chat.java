@@ -5,42 +5,19 @@ import co.edu.uniquindio.red_social.estructuras.ListaSimplementeEnlazada;
 
 public class Chat {
     private String id;
-    private ListaSimplementeEnlazada<Estudiante> miembros;
+    private Estudiante estudiante;
+    private Estudiante estudiante2;
     private ListaSimplementeEnlazada<Mensaje> mensajes;
 
     public Chat(Estudiante estudiante, Estudiante estudiante2) {
-        this.miembros = new ListaSimplementeEnlazada<>();
         this.mensajes = new ListaSimplementeEnlazada<>();
-        this.miembros.add(estudiante);
-        this.miembros.add(estudiante2);
-    }
-
-    public Chat() {
-        this.miembros = new ListaSimplementeEnlazada<>();
-        this.mensajes = new ListaSimplementeEnlazada<>();
-    }
-
-    public boolean agregarMiembro(Estudiante miembro) {
-        if (!miembros.contains(miembro)) {
-            miembro.anadirChat(this);
-            return miembros.add(miembro);
-        }
-        return false;
-    }
-
-    public boolean eliminarMiembro(Estudiante miembro) {
-        if (miembros.contains(miembro)) {
-            miembro.eliminarChat(this);
-            return miembros.remove(miembro);
-        }
-        return false;
+        this.estudiante = estudiante;
+        this.estudiante2 = estudiante2;
     }
 
     public boolean eliminarChat() {
-        while(miembros.isEmpty()) {
-            miembros.getFirst().eliminarChat(this);
-            miembros.removeFirst();
-        }
+        estudiante.eliminarChat(this);
+        estudiante2.eliminarChat(this);
         mensajes.clear();
         return true;
     }
@@ -64,12 +41,20 @@ public class Chat {
         this.id = id;
     }
 
-    public ListaSimplementeEnlazada<Estudiante> getMiembros() {
-        return miembros;
+    public Estudiante getEstudiante() {
+        return estudiante;
     }
 
-    public void setMiembros(ListaSimplementeEnlazada<Estudiante> miembros) {
-        this.miembros = miembros;
+    public void setEstudiante(Estudiante estudiante) {
+        this.estudiante = estudiante;
+    }
+
+    public Estudiante getEstudiante2() {
+        return estudiante2;
+    }
+
+    public void setEstudiante2(Estudiante estudiante2) {
+        this.estudiante2 = estudiante2;
     }
 
     public ListaSimplementeEnlazada<Mensaje> getMensajes() {

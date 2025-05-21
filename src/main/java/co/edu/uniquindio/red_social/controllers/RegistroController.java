@@ -1,9 +1,9 @@
 package co.edu.uniquindio.red_social.controllers;
 
+import co.edu.uniquindio.red_social.clases.RedSocial;
 import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
 import co.edu.uniquindio.red_social.clases.usuarios.PerfilUsuario;
 import co.edu.uniquindio.red_social.clases.usuarios.Usuario;
-import co.edu.uniquindio.red_social.clases.usuarios.UsuarioRegistrado;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -92,20 +92,25 @@ public class RegistroController {
 
     @FXML
     private void handleVolver(MouseEvent event) {
-        try {
-            URL configUrl = getClass().getResource("/co/edu/uniquindio/red_social/Logo.fxml");
-            FXMLLoader loader = new FXMLLoader(configUrl);
-            Parent logoView = loader.load();
+        cambiarEscenaLogin();
+    }
 
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene scene = new Scene(logoView);
-            stage.setScene(scene);
+    public void cambiarEscenaLogin() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/Login.fxml"));
+            Parent newRoot = loader.load();
+
+            // Obtener la ventana actual (stage)
+            Stage stage = (Stage) handleVolver.getScene().getWindow();
+            Scene newScene = new Scene(newRoot);
+            stage.setScene(newScene);
             stage.show();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 
     @FXML
     private void registrarUsuario(ActionEvent event) {
@@ -125,39 +130,21 @@ public class RegistroController {
             return;
         }
 
-        // Crear el nuevo usuario
-        Estudiante estudiante = new Estudiante(nombre, apellido, email, password, archivoImagenSeleccionada);
 
-        // Guardar en PerfilUsuario
-        PerfilUsuario.setUsuarioActual(estudiante);
 
         // Registrar usuario
-        UsuarioRegistrado.registrarUsuario(estudiante);
+        RedSocial redSocial = RedSocial.getInstance();
+        Estudiante estudiante= redSocial.crearEstudiante(nombre, apellido, email, password, archivoImagenSeleccionada);
 
+        PerfilUsuario.setUsuarioActual(estudiante);
         // Mostrar mensaje de éxito
         labelRegistro.setText("¡Registro exitoso!");
 
-        // Limpiar imagen para siguientes registros
         PerfilUsuario.getInstancia().setImagenPerfil(null);
 
-        // Cambiar de escena a Logo.fxml
-        try {
-            // Cargar la vista Login
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("co/edu/uniquindio/red_social/Login.fxml"));
-            Parent root = loader.load();
+        cambiarEscenaLogin();
 
-            // Obtener la escena actual
-            Stage stage = (Stage) handleRegistrarse.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
 
-            // Si lo necesitas, puedes pasar datos al controlador de Login:
-            LoginController loginController = loader.getController();
-             //loginController.setDatosDeUsuario(usuario);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
 

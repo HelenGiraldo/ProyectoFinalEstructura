@@ -1,5 +1,7 @@
 package co.edu.uniquindio.red_social;
 
+import co.edu.uniquindio.red_social.clases.RedSocial;
+import co.edu.uniquindio.red_social.data_base.UtilSQL;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -18,6 +20,9 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
+        RedSocial red = RedSocial.getInstance("Think Together");
+        UtilSQL.obtenerEstudiantes();
+        red.getEstudiantes().show();
         launch();
     }
 }

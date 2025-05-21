@@ -7,8 +7,8 @@ import java.io.File;
 
 public interface AdministracionAdministrador {
 
-    public boolean crearAdministrador(String nombre, String correo, String contrasena, File fotoPerfil);
+    public Administrador crearAdministrador(String nombre, String apellido, String correo, String contrasena, File fotoPerfil);
     public boolean eliminarAdministrador(Administrador administrador);
-    public boolean modificarEstudiante(Estudiante usuarioAntiguo, Estudiante usuarioNuevo);
-    public Estudiante estudianteExisteCorreo(String correo);
+    public boolean modificarAdministrador(Administrador usuarioAntiguo, Administrador usuarioNuevo);
+    public Administrador administradorExisteCorreo(String correo);
 }

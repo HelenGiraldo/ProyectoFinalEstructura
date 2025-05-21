@@ -145,6 +145,7 @@ public class PublicarController {
         }
 
         Contenido nuevoContenido = new Contenido(tipo, titulo, tema, descripcion, (Estudiante) PerfilUsuario.getUsuarioActual(), archivoAdjunto, null);
+        ((Estudiante) PerfilUsuario.getUsuarioActual()).publicarContenido(nuevoContenido,null);
         nuevoContenido.setContenido(archivoAdjuntoSeleccionado);
 
         if (contenidosController != null) {

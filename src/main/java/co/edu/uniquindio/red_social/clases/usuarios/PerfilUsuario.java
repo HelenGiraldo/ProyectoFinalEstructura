@@ -3,7 +3,10 @@ package co.edu.uniquindio.red_social.clases.usuarios;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.image.Image;
-
+/*
+    * Esta clase es un singleton que representa el perfil del usuario actual.
+    * Contiene la imagen de perfil y el usuario actual.
+ */
 public class PerfilUsuario {
 
     private static PerfilUsuario instancia = new PerfilUsuario();

@@ -1,7 +1,10 @@
 package co.edu.uniquindio.red_social.clases.usuarios;
 
 import java.io.File;
-
+/**
+    * Esta clase representa un usuario en la red social.
+    * Contiene información básica del usuario, como su nombre, apellido, email, contraseña e imagen de perfil.
+ */
 public class Usuario {
 
     protected String nombre;
@@ -18,6 +21,8 @@ public class Usuario {
         this.contrasena = contrasena;
         this.imagenPerfil = imagenPerfil;
     }
+
+    // Getters y Setters
 
     public String getNombre() {
         return nombre;
