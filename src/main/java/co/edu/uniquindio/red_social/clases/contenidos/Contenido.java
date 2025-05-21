@@ -2,6 +2,7 @@ package co.edu.uniquindio.red_social.clases.contenidos;
 
 import co.edu.uniquindio.red_social.clases.social.Grupo;
 import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
+import co.edu.uniquindio.red_social.data_base.UtilSQL;
 import co.edu.uniquindio.red_social.estructuras.ListaSimplementeEnlazada;
 
 import java.io.File;
@@ -19,7 +20,6 @@ public class Contenido implements Comparable<Contenido> {
     private Grupo grupo;
     private ListaSimplementeEnlazada<Calificacion> calificaciones;
 
-
     public Contenido(String tipoContenido, String titulo, String tema, String descripcion, Estudiante autor, File archivoAdjunto, Grupo grupo) {
         this.tipoContenido = tipoContenido;
         this.titulo = titulo;
@@ -28,7 +28,6 @@ public class Contenido implements Comparable<Contenido> {
         this.autor = autor;
         this.contenido = archivoAdjunto;
         this.grupo = grupo;
-        this.calificaciones = new ListaSimplementeEnlazada<>();
     }
 
     public Estudiante getAutor() {
@@ -113,15 +112,46 @@ public class Contenido implements Comparable<Contenido> {
         this.contenido = contenido;
     }
 
+
+
     public boolean calificar(Calificacion calificacion){
+        for(Calificacion c : calificaciones){
+            if(c.getUsuario().getId().equals(calificacion.getUsuario().getId())){
+                eliminarCalificacion(calificacion);
+            }
+        }
         if (!calificaciones.contains(calificacion)) {
             calificaciones.add(calificacion);
-            calificacionPromedio = (calificacionPromedio * (calificaciones.size() - 1) + calificacion.getValoracion()) / calificaciones.size();
+            calificacionPromedio = (calificacionPromedio * (calificaciones.size()-1) + calificacion.getValoracion()) / calificaciones.size();
+            int id = UtilSQL.agregarCalificacion(calificacion);
+            calificacion.setId(String.valueOf(id));
             return true;
         }
         return false;
     }
 
+    public boolean eliminarCalificacion(Calificacion calificacion) {
+        if (calificaciones.contains(calificacion)) {
+            calificaciones.remove(calificacion);
+            UtilSQL.eliminarCalificacion(calificacion.getId());
+            return true;
+        }
+        return false;
+    }
+
+    public boolean agregarCalificacion(Calificacion calificacion) {
+        for(Calificacion c : calificaciones){
+            if(c.getUsuario().getId().equals(calificacion.getUsuario().getId())){
+                eliminarCalificacion(calificacion);
+            }
+        }
+        if (!calificaciones.contains(calificacion)) {
+            calificaciones.add(calificacion);
+            calificacionPromedio = (calificacionPromedio * (calificaciones.size()-1) + calificacion.getValoracion()) / calificaciones.size();
+            return true;
+        }
+        return false;
+    }
 
     @Override
     public int compareTo(Contenido otro) {

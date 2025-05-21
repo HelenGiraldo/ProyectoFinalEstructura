@@ -6,7 +6,7 @@ import java.io.File;
 
 
 public interface AdministracionEstudiante {
-    public boolean crearEstudiante(String nombre, String apellidp, String correo, String contrasena, File fotoPerfil);
+    public Estudiante crearEstudiante(String nombre, String apellidp, String correo, String contrasena, File fotoPerfil);
     public boolean eliminarEstudiante(Estudiante estudiante);
     public boolean modificarEstudiante(Estudiante usuarioAntiguo, Estudiante usuarioNuevo);
     public Estudiante estudianteExisteCorreo(String correo);

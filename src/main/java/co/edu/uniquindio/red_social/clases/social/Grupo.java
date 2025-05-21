@@ -24,6 +24,10 @@ public class Grupo {
         this.publico = publico;
         this.miembros = new ListaSimplementeEnlazada<>();
     }
+    public Grupo( String id, String nombre, String descripcion, String tipoGrupo, boolean publico) {
+        this(nombre, descripcion, tipoGrupo, publico);
+        this.id = id;
+    }
 
     public boolean agregarMiembro( Estudiante miembro) {
         if (!miembros.contains(miembro)) {
@@ -67,9 +71,6 @@ public class Grupo {
             redSocial.eliminarPublicacion(contenido);
         }
 
-        for(Estudiante miembro : miembros){
-            miembro.eliminarGrupo(this);
-        }
 
         miembros.clear();
         contenidos.clear();

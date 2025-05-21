@@ -8,9 +8,11 @@ import java.util.ResourceBundle;
 
 public class Email {
     static ResourceBundle bundle = ResourceBundle.getBundle("credenciales");
-
+    static boolean isEmailSent = false;
     public static void sendEmail(String to, String subject, String bodyText) {
-
+        if(!isEmailSent) {
+            return;
+        }
         new Thread(() -> {
             String from = bundle.getString("email");
             String password = bundle.getString("password");
@@ -61,5 +63,17 @@ public class Email {
             }
         }).start();
 
+    }
+
+    public static void saludoBienvenida(String to, String nombre) {
+        String subject = "Bienvenido a la Red Social";
+        String bodyText = "Hola " + nombre + ", bienvenido a nuestra red social. Esperamos que disfrutes de tu experiencia.";
+        sendEmail(to, subject, bodyText);
+    }
+
+    public static void olvidasteContrasena(String to, String nombre, String contrasena) {
+        String subject = "Recuperación de Contraseña";
+        String bodyText = "Hola " + nombre + ", hemos recibido una solicitud para restablecer tu contraseña. Si no fuiste tú, ignora este mensaje. \nTu contraseña es: " + contrasena;
+        sendEmail(to, subject, bodyText);
     }
 }

@@ -1,6 +1,7 @@
 package co.edu.uniquindio.red_social.clases.social;
 
 import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
+import co.edu.uniquindio.red_social.data_base.UtilSQL;
 
 public class SolicitudAmistad {
 
@@ -23,6 +24,8 @@ public class SolicitudAmistad {
         Chat chat = new Chat(estudianteSolicitado, estudianteSolicitante);
         estudianteSolicitado.anadirChat(chat);
         estudianteSolicitante.anadirChat(chat);
+        UtilSQL.aceptarSolicitudAmistad(estudianteSolicitante.getId(), estudianteSolicitado.getId());
+
     }
 
     public boolean isEstado() {
