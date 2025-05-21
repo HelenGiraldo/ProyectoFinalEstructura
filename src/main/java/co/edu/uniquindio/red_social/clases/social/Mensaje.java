@@ -3,17 +3,21 @@ package co.edu.uniquindio.red_social.clases.social;
 import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Mensaje {
 
     private String mensaje;
-    private LocalDate fecha;
+    private LocalDateTime fecha;
     private Estudiante usuarioRemitente;
+    private String id;
+    private Chat chat;
 
-    public Mensaje(String mensaje, LocalDate fecha, Estudiante usuarioRemitente) {
+    public Mensaje(String mensaje, LocalDateTime fecha, Estudiante usuarioRemitente, Chat chat) {
         this.mensaje = mensaje;
         this.fecha = fecha;
         this.usuarioRemitente = usuarioRemitente;
+        this.chat = chat;
     }
 
     public String getMensaje() {
@@ -24,11 +28,11 @@ public class Mensaje {
         this.mensaje = mensaje;
     }
 
-    public LocalDate getFecha() {
+    public LocalDateTime getFecha() {
         return fecha;
     }
 
-    public void setFecha(LocalDate fecha) {
+    public void setFecha(LocalDateTime fecha) {
         this.fecha = fecha;
     }
 
@@ -38,5 +42,29 @@ public class Mensaje {
 
     public void setUsuarioRemitente(Estudiante usuarioRemitente) {
         this.usuarioRemitente = usuarioRemitente;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Chat getChat() {
+        return chat;
+    }
+
+    public void setChat(Chat chat) {
+        this.chat = chat;
+    }
+
+    @Override
+    public String toString() {
+        return "Mensaje{" +
+                "mensaje='" + mensaje + '\'' +
+                ", usuarioRemitente=" + usuarioRemitente +
+                '}';
     }
 }

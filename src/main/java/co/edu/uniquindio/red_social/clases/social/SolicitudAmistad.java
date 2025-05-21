@@ -23,7 +23,7 @@ public class SolicitudAmistad {
         estudianteSolicitado.eliminarSolicitud(this);
         Chat chat = new Chat(estudianteSolicitado, estudianteSolicitante);
         estudianteSolicitado.anadirChat(chat);
-        estudianteSolicitante.anadirChat(chat);
+        estudianteSolicitante.getChats().add(chat);
         UtilSQL.aceptarSolicitudAmistad(estudianteSolicitante.getId(), estudianteSolicitado.getId());
 
     }

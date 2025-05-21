@@ -1,6 +1,13 @@
 package co.edu.uniquindio.red_social.controllers;
 
+import co.edu.uniquindio.red_social.clases.RedSocial;
+import co.edu.uniquindio.red_social.clases.social.Chat;
+import co.edu.uniquindio.red_social.clases.social.Mensaje;
+import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
 import co.edu.uniquindio.red_social.clases.usuarios.PerfilUsuario;
+import co.edu.uniquindio.red_social.clases.usuarios.Usuario;
+import co.edu.uniquindio.red_social.data_base.UtilSQL;
+import co.edu.uniquindio.red_social.estructuras.ListaSimplementeEnlazada;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,8 +24,16 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class ChatController implements Initializable {
@@ -126,10 +141,18 @@ public class ChatController implements Initializable {
     @FXML
     private AnchorPane root;
 
+    ToggleGroup grupoUsuarios = new ToggleGroup();
+
+    Estudiante estudianteActual = (Estudiante) PerfilUsuario.getUsuarioActual();
+    Chat chatActual;
+    Estudiante remitenteChat;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        // Selecciona el botón de Mensajes como activo
         MensajesButton.setSelected(true);
+
+        // Aplicar clip circular a la imagen de perfil (avatar)
         Platform.runLater(() -> {
             if (imagenPerfil != null) {
                 double radius = imagenPerfil.getFitWidth() / 2;
@@ -138,61 +161,112 @@ public class ChatController implements Initializable {
             }
         });
 
-
+        // Inicializar lista de usuarios para chatear (sidebar)
         inicializarUsuarios();
+
+        // Configurar el área del chat (contenedor de mensajes, etc)
         configurarChat();
+
+        // Configurar otros eventos como botones, envío de mensajes
         configurarEventos();
 
+        // Ajustes del scroll pane para los mensajes
         scrollPaneContenedorMensajes.setFitToWidth(true);
         scrollPaneContenedorMensajes.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
-
+        // Para que el VBox de mensajes ocupe todo el ancho disponible
         contenedorMensajes.setFillWidth(true);
 
+        // Auto-scroll al final cuando se agregan mensajes
         contenedorMensajes.heightProperty().addListener((obs, oldVal, newVal) -> {
             scrollPaneContenedorMensajes.layout();
             scrollPaneContenedorMensajes.setVvalue(1.0);
         });
 
+        // Obtener la instancia singleton del perfil de usuario
         PerfilUsuario perfil = PerfilUsuario.getInstancia();
+
+        // Listener para actualizar la imagen cuando cambie en el singleton
         perfil.imagenPerfilProperty().addListener((obs, oldImg, newImg) -> {
             if (newImg != null) {
                 imagenPerfil.setImage(newImg);
             }
         });
 
-        // Para inicializar desde el comienzo
+        // Inicializar imagen al cargar la vista si ya hay una imagen cargada
         if (perfil.getImagenPerfil() != null) {
             imagenPerfil.setImage(perfil.getImagenPerfil());
         }
-
-
     }
 
     private void inicializarUsuarios() {
-        if (userchatListVBox == null) {
-            System.err.println("Error: userchatListVBox no está inicializado");
-            return;
+        userchatListVBox.getChildren().clear();
+
+        for (Estudiante usuario : RedSocial.getInstance().getEstudiantes()) {
+            if (usuario.getId().equals(estudianteActual.getId())) continue;
+
+            // Crear ToggleButton
+            ToggleButton boton = new ToggleButton();
+            boton.setPrefWidth(112);
+            boton.setPrefHeight(42);
+            boton.setToggleGroup(grupoUsuarios);
+            boton.setUserData(usuario);
+            boton.getStyleClass().add("sidebar-button-chat");
+
+            // Crear ImageView
+            ImageView avatar = new ImageView(new Image(getClass().getResource("/co/edu/uniquindio/red_social/imagenes/imagePerfil.png").toExternalForm()));
+            avatar.setFitWidth(20);
+            avatar.setFitHeight(19);
+            avatar.getStyleClass().add("avatar");
+
+            // Crear Label con nombre del usuario
+            Label nombre = new Label(usuario.getNombre());
+            nombre.setPrefHeight(19);
+            nombre.setPrefWidth(70); // o ajustable
+            nombre.getStyleClass().add("contact-name"); // Negrilla definida en CSS
+
+            // Agrupar imagen + texto en un HBox
+            HBox hbox = new HBox(8, avatar, nombre);
+            hbox.setAlignment(Pos.CENTER_LEFT);
+
+            // Asignar el HBox como gráfico del botón
+            boton.setGraphic(hbox);
+
+            // Asignar evento
+            boton.setOnAction(e -> {
+                if (boton.isSelected()) {
+                    seleccionarUsuario(boton);
+                }
+            });
+
+            userchatListVBox.getChildren().add(boton);
         }
 
-        configurarBotonUsuario(buttonUser2, "User2");
-        configurarBotonUsuario(buttonUser3, "User3");
-
-        if (buttonUser2 != null) {
-            buttonUser2.setSelected(true);
-            seleccionarUsuario(buttonUser2);
+        // Selección inicial automática
+        if (!userchatListVBox.getChildren().isEmpty()) {
+            ToggleButton first = (ToggleButton) userchatListVBox.getChildren().get(0);
+            first.setSelected(true);
+            seleccionarUsuario(first);
         }
     }
 
-    private void configurarBotonUsuario(ToggleButton boton, String nombreUsuario) {
-        if (boton == null) return;
 
-        boton.setUserData(nombreUsuario);
+
+
+    private void configurarBotonUsuario(ToggleButton boton, Estudiante estudiante) {
+        if (boton == null || estudiante == null) return;
+
+        boton.setText(estudiante.getNombre() + " ");
+        boton.setUserData(estudiante);
+
+        boton.setToggleGroup(grupoUsuarios);
+
         boton.setOnAction(e -> {
             if (boton.isSelected()) {
                 seleccionarUsuario(boton);
             }
         });
+
     }
 
     private void configurarChat() {
@@ -216,6 +290,7 @@ public class ChatController implements Initializable {
     private void seleccionarUsuario(ToggleButton botonUsuario) {
         if (botonUsuario == null || userchatListVBox == null) return;
 
+        // Deseleccionar los demás botones
         userchatListVBox.getChildren().forEach(node -> {
             if (node instanceof ToggleButton) {
                 ToggleButton tb = (ToggleButton) node;
@@ -225,17 +300,43 @@ public class ChatController implements Initializable {
             }
         });
 
-        String nombreUsuario = (String) botonUsuario.getUserData();
-        actualizarInterfazUsuario(nombreUsuario);
+        Estudiante receptor = (Estudiante) botonUsuario.getUserData();
+
+        if (receptor == null) return;
+
+        chatActual = null;
+
+        // Buscar chat existente entre estudianteActual y receptor
+        for (Chat chat : estudianteActual.getChats()) {
+            boolean esChatConReceptor =
+                    (chat.getEstudiante().equals(estudianteActual) && chat.getEstudiante2().equals(receptor)) ||
+                            (chat.getEstudiante2().equals(estudianteActual) && chat.getEstudiante().equals(receptor));
+
+            if (esChatConReceptor) {
+                chatActual = chat;
+                break;
+            }
+        }
+
+        // Si no existe chat, crear uno nuevo y agregarlo a la lista de chats
+        if (chatActual == null) {
+            chatActual = new Chat(estudianteActual, receptor);
+            estudianteActual.getChats().add(chatActual);
+        }
+
+        // Actualizar interfaz y cargar mensajes
+        actualizarInterfazUsuario(receptor);
+        cargarMensajes(receptor);
     }
 
-    private void actualizarInterfazUsuario(String nombreUsuario) {
+
+    private void actualizarInterfazUsuario(Estudiante receptor) {
         if (LabelUser2 == null || AvatarCompañero == null || contenedorMensajes == null) {
             System.err.println("Error: Elementos de interfaz no inicializados");
             return;
         }
 
-        LabelUser2.setText(nombreUsuario);
+        LabelUser2.setText(receptor.getNombre() + " ");
 
         try {
             AvatarCompañero.setImage(new Image("/images/default-avatar.png"));
@@ -244,9 +345,6 @@ public class ChatController implements Initializable {
         }
 
         contenedorMensajes.getChildren().clear();
-
-        agregarMensaje("Hola " + nombreUsuario + ", ¿cómo estás?", false);
-        agregarMensaje("Estoy bien, gracias", true);
 
         Platform.runLater(() -> scrollPaneContenedorMensajes.setVvalue(0.0));
     }
@@ -281,6 +379,10 @@ public class ChatController implements Initializable {
         contenedor.setAlignment(esPropio ? Pos.CENTER_RIGHT : Pos.CENTER_LEFT);
 
         contenedorMensajes.getChildren().add(contenedor);
+        Estudiante remitente = (chatActual.getEstudiante().equals(estudianteActual))?
+                estudianteActual: chatActual.getEstudiante2();
+
+        chatActual.enviarMensaje(new Mensaje(texto, LocalDateTime.now(), remitente, chatActual) );
 
     }
 
@@ -295,13 +397,35 @@ public class ChatController implements Initializable {
         }
     }
 
-    public void agregarNuevoUsuario(String nombreUsuario) {
-        if (userchatListVBox == null) return;
 
-        ToggleButton nuevoBoton = new ToggleButton(nombreUsuario);
-        configurarBotonUsuario(nuevoBoton, nombreUsuario);
-        userchatListVBox.getChildren().add(nuevoBoton);
+
+
+    private void cargarMensajes(Estudiante receptor) {
+        contenedorMensajes.getChildren().clear();
+
+        Estudiante emisor = (Estudiante) PerfilUsuario.getInstancia().getUsuarioActual();
+        if (emisor == null || receptor == null) return;
+
+        // Buscar el chat entre el emisor y receptor
+        for (Chat chat : estudianteActual.getChats()) {
+            if ( (chat.getEstudiante().equals(emisor) && chat.getEstudiante2().equals(receptor)) ||
+                    (chat.getEstudiante().equals(receptor) && chat.getEstudiante2().equals(emisor)) ) {
+                chatActual = chat;
+                break;
+            }
+        }
+
+        if (chatActual == null) return;
+
+        ListaSimplementeEnlazada<Mensaje> mensajes = chatActual.getMensajes();
+
+        for (Mensaje mensaje : mensajes) {
+            boolean esPropio = mensaje.getUsuarioRemitente().equals(emisor.getId());
+            agregarMensaje(mensaje.getMensaje(), esPropio);
+        }
     }
+
+
 
     @FXML
     private void irAConfig(ActionEvent event) {

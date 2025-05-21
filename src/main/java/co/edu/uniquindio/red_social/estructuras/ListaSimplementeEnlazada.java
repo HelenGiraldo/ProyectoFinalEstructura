@@ -318,4 +318,16 @@ public class ListaSimplementeEnlazada<T> implements Lista<T>, Iterable<T> {
         return flag;
     }
 
+    public int indexOf(T solicitud) {
+        Nodo<T> current = head;
+        int index = 0;
+        while (current != null) {
+            if (current.getValue().equals(solicitud)) {
+                return index;
+            }
+            current = current.getNext();
+            index++;
+        }
+        return -1;
+    }
 }

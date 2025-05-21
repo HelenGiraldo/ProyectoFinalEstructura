@@ -72,6 +72,8 @@ public class Estudiante extends Usuario implements AdministracionContenido {
             eliminarChat(contacto);
             contacto.eliminarChat(this);
             contacto.getContactos().remove(this);
+            UtilSQL.eliminarRelacionAmistad(id, contacto.getId());
+            eliminarChat(contacto);
             return contactos.remove(contacto);
         }
         return false;
@@ -164,11 +166,14 @@ public class Estudiante extends Usuario implements AdministracionContenido {
      * @return true si se rechazó correctamente, false si no existe
      */
     public void eliminarSolicitud(SolicitudAmistad solicitud) {
-        if (solicitudesRecibidas.contains(solicitud)) {
-            solicitudesRecibidas.remove(solicitud);
-            UtilSQL.eliminarRelacionAmistad(solicitud.getEstudianteSolicitado().getId(), id);
+        int index = solicitudesRecibidas.indexOf(solicitud);
+        if (index != -1) {
+            solicitudesRecibidas.remove(index);
+        } else {
+            System.out.println("Solicitud no encontrada en la lista de solicitudes del estudiante.");
         }
     }
+
 
     /**
      * Añade un grupo a la lista de grupos del estudiante.
@@ -201,6 +206,7 @@ public class Estudiante extends Usuario implements AdministracionContenido {
      */
     public boolean anadirChat(Chat chat) {
         if (!chats.contains(chat)) {
+            UtilSQL.crearChat(chat);
             return chats.add(chat);
         }
         return false;
@@ -213,7 +219,7 @@ public class Estudiante extends Usuario implements AdministracionContenido {
      */
     public boolean eliminarChat(Chat chat) {
         if (chats.contains(chat)) {
-            return chats.remove(chat);
+            return chat.eliminarChat();
         }
         return false;
     }
@@ -225,8 +231,8 @@ public class Estudiante extends Usuario implements AdministracionContenido {
      */
     public boolean eliminarChat(Estudiante estudiante) {
         for (Chat chat : chats) {
-            if (chat.getMiembros().contains(estudiante)) {
-                return chats.remove(chat);
+            if (chat.getEstudiante().equals(estudiante) || chat.getEstudiante2().equals(estudiante)) {
+                return eliminarChat(chat);
             }
         }
         return false;
