@@ -282,9 +282,7 @@ public class ChatController implements Initializable {
             return;
         }
 
-        messageTextField.setOnAction(this::enviarMensaje);
-        sendButton.setOnAction(this::enviarMensaje);
-        botonBuscar.setOnAction(this::buscarUsuario);
+
     }
 
     private void seleccionarUsuario(ToggleButton botonUsuario) {
@@ -350,7 +348,7 @@ public class ChatController implements Initializable {
     }
 
     @FXML
-    private void enviarMensaje(ActionEvent event) {
+    private void enviarMensaje() {
         if (messageTextField == null || contenedorMensajes == null) return;
 
         String texto = messageTextField.getText().trim();
@@ -432,6 +430,94 @@ public class ChatController implements Initializable {
         try {
 
             URL configUrl = getClass().getResource("/co/edu/uniquindio/red_social/configuracion.fxml");
+            System.out.println("URL config: " + configUrl);
+            FXMLLoader loader = new FXMLLoader(configUrl);
+            Parent configView = loader.load();
+
+            if (root != null) {
+                root.getChildren().clear();
+                root.getChildren().add(configView);
+            } else {
+                System.err.println("El contenedor principal es null.");
+            }
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void irAContenidos(ActionEvent event) {
+        try {
+
+            URL configUrl = getClass().getResource("/co/edu/uniquindio/red_social/configuracion.fxml");
+            System.out.println("URL config: " + configUrl);
+            FXMLLoader loader = new FXMLLoader(configUrl);
+            Parent configView = loader.load();
+
+            if (root != null) {
+                root.getChildren().clear();
+                root.getChildren().add(configView);
+            } else {
+                System.err.println("El contenedor principal es null.");
+            }
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void irASolicitudesAyuda(ActionEvent event) {
+        try {
+
+            URL configUrl = getClass().getResource("/co/edu/uniquindio/red_social/solicitudes.fxml");
+            System.out.println("URL config: " + configUrl);
+            FXMLLoader loader = new FXMLLoader(configUrl);
+            Parent configView = loader.load();
+
+            if (root != null) {
+                root.getChildren().clear();
+                root.getChildren().add(configView);
+            } else {
+                System.err.println("El contenedor principal es null.");
+            }
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void irAGruposEstudio(ActionEvent event) {
+        try {
+
+            URL configUrl = getClass().getResource("/co/edu/uniquindio/red_social/gruposEstudio.fxml");
+            System.out.println("URL config: " + configUrl);
+            FXMLLoader loader = new FXMLLoader(configUrl);
+            Parent configView = loader.load();
+
+            if (root != null) {
+                root.getChildren().clear();
+                root.getChildren().add(configView);
+            } else {
+                System.err.println("El contenedor principal es null.");
+            }
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void irASugerencias(ActionEvent event) {
+        try {
+
+            URL configUrl = getClass().getResource("/co/edu/uniquindio/red_social/inicio.fxml");
             System.out.println("URL config: " + configUrl);
             FXMLLoader loader = new FXMLLoader(configUrl);
             Parent configView = loader.load();
