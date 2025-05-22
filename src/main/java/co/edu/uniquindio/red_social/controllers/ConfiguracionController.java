@@ -203,7 +203,7 @@ public class ConfiguracionController {
                 String extension = archivoOriginal.getName().substring(archivoOriginal.getName().lastIndexOf("."));
                 String nombreArchivoNuevo = "imagen_perfil" + estudiante.getId() + extension;
 
-                File destino = new File("src/main/resources/co/edu/uniquindio/red_social/imagenes", nombreArchivoNuevo);
+                File destino = new File("src/main/resources/co/edu/uniquindio/red_social/usuarios/imagenes_perfil", nombreArchivoNuevo);
 
                 // Crear carpeta si no existe
                 if (!destino.getParentFile().exists()) {

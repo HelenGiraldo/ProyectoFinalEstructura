@@ -8,6 +8,8 @@ src/main/resources/sql.properties
 src/main/resources/credenciales.properties
 src/main/java/co/edu/uniquindio/red_social/pruebas
 
+src/main/resources/co/edu/uniquindio/red_social/usuarios/imagenes_perfil
+
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
