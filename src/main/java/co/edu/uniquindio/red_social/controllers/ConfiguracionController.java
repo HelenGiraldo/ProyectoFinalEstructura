@@ -15,6 +15,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
 
 import javafx.stage.FileChooser;
@@ -29,6 +30,15 @@ public class ConfiguracionController {
 
     @FXML
     private ToggleButton MensajesButton;
+
+    @FXML
+    private TextField textFieldAnterior;
+
+    @FXML
+    private HBox hboxContraseñaNueva;
+
+    @FXML
+    private TextField textFieldContraseñaNueva;
 
     @FXML
     private ToggleButton SolicitudesDeAyudaButton;
@@ -91,13 +101,7 @@ public class ConfiguracionController {
     private ImageView profileImage;
 
     @FXML
-    private PasswordField textFieldAnterior;
-
-    @FXML
     private TextField textFieldApellido;
-
-    @FXML
-    private PasswordField textFieldContraseñaNueva;
 
     @FXML
     private TextField textFieldEmail;
@@ -172,7 +176,6 @@ public class ConfiguracionController {
 
         Estudiante estudiante = (Estudiante) PerfilUsuario.getInstancia().getUsuarioActual();
 
-        // Validar la contraseña anterior solo si se quiere cambiar la contraseña
         if (!nuevaContraseña.isBlank()) {
             if (!estudiante.getContrasena().equals(contraseñaAnterior)) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -180,17 +183,53 @@ public class ConfiguracionController {
                 alert.setHeaderText("Contraseña incorrecta");
                 alert.setContentText("La contraseña anterior no coincide. No se realizaron cambios.");
                 alert.showAndWait();
-                return;  // Sale si la contraseña anterior no coincide
+                return;
             }
-            estudiante.setContrasena(nuevaContraseña);  // Cambiar la contraseña porque validó bien
+            estudiante.setContrasena(nuevaContraseña);
         }
 
-        // Actualizar los demás datos sin pedir contraseña
         estudiante.setNombre(nuevoNombre);
         estudiante.setApellido(nuevoApellido);
         estudiante.setEmail(nuevoEmail);
 
-        // Guardar los cambios en la base de datos solo una vez
+        // Procesar la imagen del ImageView
+        Image imagenActual = profileImage.getImage();
+        if (imagenActual != null) {
+            try {
+                URI uri = new URI(imagenActual.getUrl());
+                File archivoOriginal = new File(uri);
+
+                // Ruta de destino en resources
+                String extension = archivoOriginal.getName().substring(archivoOriginal.getName().lastIndexOf("."));
+                String nombreArchivoNuevo = "imagen_perfil" + estudiante.getId() + extension;
+
+                File destino = new File("src/main/resources/co/edu/uniquindio/red_social/imagenes", nombreArchivoNuevo);
+
+                // Crear carpeta si no existe
+                if (!destino.getParentFile().exists()) {
+                    destino.getParentFile().mkdirs();
+                }
+
+                // Copiar archivo
+                java.nio.file.Files.copy(
+                        archivoOriginal.toPath(),
+                        destino.toPath(),
+                        java.nio.file.StandardCopyOption.REPLACE_EXISTING
+                );
+
+                // Guardar la ruta relativa (puedes ajustarla si usas base de datos)
+                estudiante.setImagenPerfil(destino);
+
+                // También actualizar la interfaz con la nueva ruta
+                Image imagenNueva = new Image(destino.toURI().toString());
+                profileImage.setImage(imagenNueva);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.err.println("Error al guardar la imagen del perfil.");
+            }
+        }
+
         actualizarEstudiante(estudiante);
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -199,13 +238,18 @@ public class ConfiguracionController {
         alert.setContentText("Tus datos han sido actualizados correctamente.");
 
         DialogPane dialogPane = alert.getDialogPane();
-        dialogPane.getStylesheets().add(getClass().getResource("/co/edu/uniquindio/red_social/alerta.css").toExternalForm());
+        URL cssUrl = getClass().getResource("/co/edu/uniquindio/red_social/alerta.css");
+        if (cssUrl != null) {
+            dialogPane.getStylesheets().add(cssUrl.toExternalForm());
+        }
         dialogPane.getStyleClass().add("mi-alerta-personalizada");
 
         alert.showAndWait();
 
-        System.out.println("Datos actualizados exitosamente.");
+        System.out.println("Datos guardados correctamente.");
     }
+
+
 
 
 
@@ -216,59 +260,46 @@ public class ConfiguracionController {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Seleccionar Imagen de Perfil");
         fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Imágenes", ".png", ".jpg", ".jpeg", ".gif")
+                new FileChooser.ExtensionFilter("Imágenes", "*.png", "*.jpg", "*.jpeg")
         );
 
-        File archivoSeleccionado = fileChooser.showOpenDialog(root.getScene().getWindow());
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        File archivoSeleccionado = fileChooser.showOpenDialog(stage);
 
         if (archivoSeleccionado != null) {
             try {
-                // Carpeta destino fuera de src, en la raíz del proyecto
                 File carpetaDestino = new File("imagenesPerfil");
                 if (!carpetaDestino.exists()) {
-                    carpetaDestino.mkdirs(); // Crear carpeta si no existe
+                    carpetaDestino.mkdirs();
                 }
 
-                // Obtener estudiante actual
                 Estudiante estudiante = (Estudiante) PerfilUsuario.getInstancia().getUsuarioActual();
                 String extension = archivoSeleccionado.getName().substring(archivoSeleccionado.getName().lastIndexOf("."));
                 String nuevoNombreArchivo = estudiante.getId() + extension;
-
                 File archivoDestino = new File(carpetaDestino, nuevoNombreArchivo);
 
-                // Copiar archivo
                 java.nio.file.Files.copy(
                         archivoSeleccionado.toPath(),
                         archivoDestino.toPath(),
                         java.nio.file.StandardCopyOption.REPLACE_EXISTING
                 );
 
-                // Cargar y mostrar imagen en la interfaz
                 Image nuevaImagen = new Image(archivoDestino.toURI().toString());
-                profileImage.setImage(nuevaImagen);
+                profileImage.setImage(nuevaImagen); // Solo actualiza la vista
 
-                // Guardar ruta relativa (se usará luego para reconstruir ruta con new File)
-                String rutaRelativa = "src/main/resources/co/edu/uniquindio/red_social/usuarios/imagenes_perfil/" + nuevoNombreArchivo;
-                estudiante.setImagenPerfil(new File(rutaRelativa));
-
-                // Actualizar en la base de datos
-                UtilSQL.actualizarEstudiante(estudiante);
-
-                // Actualizar en memoria
-                PerfilUsuario.getInstancia().setImagenPerfil(nuevaImagen);
-
-                // Imprimir ruta relativa (la que se guarda y se usa luego)
-                System.out.println("Imagen guardada en (ruta relativa): " + rutaRelativa);
-
-
+                System.out.println("Imagen cargada: " + archivoDestino.getAbsolutePath());
 
             } catch (Exception e) {
                 e.printStackTrace();
-                Alert alert = new Alert(Alert.AlertType.ERROR, "No se pudo guardar la imagen.");
-                alert.showAndWait();
+                new Alert(Alert.AlertType.ERROR, "No se pudo guardar la imagen.").showAndWait();
             }
         }
     }
+
+
+
+
+
 
 
     @FXML

@@ -1,3 +1,4 @@
+
 package co.edu.uniquindio.red_social.controllers;
 
 import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
@@ -25,6 +26,7 @@ import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
@@ -168,17 +170,21 @@ public class InicioController {
 
         PerfilUsuario perfil = PerfilUsuario.getInstancia();
 
+
         perfil.imagenPerfilProperty().addListener((obs, oldImg, newImg) -> {
             if (newImg != null) {
                 imagenPerfil.setImage(newImg);
             }
         });
 
+        System.out.println("Imagen de perfil: " + perfil.getImagenPerfil());
         // Mostrar imagen actual si ya existe
         if (perfil.getImagenPerfil() != null) {
             imagenPerfil.setImage(perfil.getImagenPerfil());
         }
-
+        File file = PerfilUsuario.getUsuarioActual().getImagenPerfil();
+        Image imagen = new Image(file.toURI().toString());
+        imagenPerfil.setImage(imagen);
         actualizarSaludo(); // Saludo se basa en el usuario actual
     }
 
