@@ -22,6 +22,13 @@ public class App extends Application {
     public static void main(String[] args) {
         RedSocial red = RedSocial.getInstance("Think Together");
         UtilSQL.obtenerEstudiantes();
+        UtilSQL.obtenerGrupos();
+        UtilSQL.obtenerAdministradores();
+        UtilSQL.obtenerPublicaciones();
+        UtilSQL.obtenerTodasLasCalificaciones();
+        UtilSQL.cargarRelacionesAmistad();
+        UtilSQL.cargarMiembrosDeGrupos();
+        UtilSQL.cargarGrupos();
         red.getEstudiantes().show();
         launch();
     }

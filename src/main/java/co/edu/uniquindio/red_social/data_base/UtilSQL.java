@@ -3,14 +3,14 @@ package co.edu.uniquindio.red_social.data_base;
 import co.edu.uniquindio.red_social.clases.RedSocial;
 import co.edu.uniquindio.red_social.clases.contenidos.Calificacion;
 import co.edu.uniquindio.red_social.clases.contenidos.Contenido;
-import co.edu.uniquindio.red_social.clases.social.Grupo;
-import co.edu.uniquindio.red_social.clases.social.SolicitudAmistad;
+import co.edu.uniquindio.red_social.clases.social.*;
 import co.edu.uniquindio.red_social.clases.usuarios.Administrador;
 import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
 import co.edu.uniquindio.red_social.estructuras.ListaSimplementeEnlazada;
 
 import java.io.File;
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
 public class UtilSQL {
@@ -142,7 +142,7 @@ public class UtilSQL {
             return -1;
         }
         int idGenerado = -1;
-        String sql = "INSERT INTO administradores (nombre, apellido, correo, contrasena, imagenPerfil) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO admins (nombre, apellido, correo, contrasena, imagenPerfil) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = DriverManager.getConnection(url, user, password);
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -171,7 +171,7 @@ public class UtilSQL {
         if (!save) {
             return;
         }
-        String sql = "SELECT id, nombre, apellido, correo, contrasena, imagenPerfil FROM administradores";
+        String sql = "SELECT id, nombre, apellido, correo, contrasena, imagenPerfil FROM admins";
 
         try (Connection conn = DriverManager.getConnection(url, user, password);
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -197,7 +197,7 @@ public class UtilSQL {
             return false;
         }
 
-        String sql = "UPDATE administradores SET nombre = ?, apellido = ?, correo = ?, contrasena = ?, imagenPerfil = ? WHERE id = ?";
+        String sql = "UPDATE admins SET nombre = ?, apellido = ?, correo = ?, contrasena = ?, imagenPerfil = ? WHERE id = ?";
         boolean actualizado = false;
 
         try (Connection conn = DriverManager.getConnection(url, user, password);
@@ -226,7 +226,7 @@ public class UtilSQL {
             return false;
         }
 
-        String sql = "DELETE FROM administradores WHERE id = ?";
+        String sql = "DELETE FROM admins WHERE id = ?";
         boolean eliminado = false;
 
         try (Connection conn = DriverManager.getConnection(url, user, password);
@@ -707,6 +707,296 @@ public class UtilSQL {
             throw new RuntimeException("Error al obtener todas las calificaciones", e);
         }
 
+
+    }
+
+    public static int crearChat(Chat chat) {
+        if (!save || chat == null || chat.getEstudiante() == null || chat.getEstudiante2() == null) {
+            return -1;
+        }
+
+        String sql = "INSERT INTO chat (id_usuario1, id_usuario2) VALUES (?, ?)";
+        int idGenerado = -1;
+
+        try (Connection conn = DriverManager.getConnection(url, user, password);
+             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            stmt.setInt(1, Integer.parseInt(chat.getEstudiante().getId()));
+            stmt.setInt(2, Integer.parseInt(chat.getEstudiante2().getId()));
+
+            stmt.executeUpdate();
+
+            ResultSet generatedKeys = stmt.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                idGenerado = generatedKeys.getInt(1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return idGenerado;
+    }
+
+    public static boolean eliminarChat(String idChat) {
+        if (!save || idChat == null) {
+            return false;
+        }
+
+        // First delete all messages in the chat
+        String deleteMessagesSql = "DELETE FROM mensajes WHERE id_chat = ?";
+        String deleteChatSql = "DELETE FROM chat WHERE id = ?";
+
+        try (Connection conn = DriverManager.getConnection(url, user, password)) {
+            // Delete messages first to maintain referential integrity
+            try (PreparedStatement stmt = conn.prepareStatement(deleteMessagesSql)) {
+                stmt.setInt(1, Integer.parseInt(idChat));
+                stmt.executeUpdate();
+            }
+
+            // Then delete the chat
+            try (PreparedStatement stmt = conn.prepareStatement(deleteChatSql)) {
+                stmt.setInt(1, Integer.parseInt(idChat));
+                return stmt.executeUpdate() > 0;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static ListaSimplementeEnlazada<Chat> obtenerTodosLosChats() {
+        ListaSimplementeEnlazada<Chat> lista = new ListaSimplementeEnlazada<>();
+        if (!save) {
+            return null;
+        }
+
+        String sql = "SELECT c.id, c.id_usuario1, c.id_usuario2 FROM chat c";
+
+        try (Connection conn = DriverManager.getConnection(url, user, password);
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                String idChat = rs.getString("id");
+                String idUsuario1 = rs.getString("id_usuario1");
+                String idUsuario2 = rs.getString("id_usuario2");
+
+                Estudiante usuario1 = RedSocial.getInstance().obtenerEstudiantePorId(idUsuario1);
+                Estudiante usuario2 = RedSocial.getInstance().obtenerEstudiantePorId(idUsuario2);
+
+                if (usuario1 != null && usuario2 != null) {
+                    Chat chat = new Chat(usuario1, usuario2);
+                    chat.setId(idChat);
+                    usuario1.getChats().add(chat);
+                    usuario2.getChats().add(chat);
+                    lista.add(chat);
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al obtener todos los chats", e);
+        }
+
+        for (Chat chat : lista) {
+            obtenerMensajesPorChat(chat);
+        }
+        return lista;
+    }
+
+
+
+    public static int enviarMensaje(Mensaje mensaje) {
+        if (!save || mensaje == null || mensaje.getUsuarioRemitente() == null || mensaje.getChat() == null) {
+            return -1;
+        }
+
+        String sql = "INSERT INTO mensaje (mensaje, id_remitente, fecha_evento, chat) VALUES (?, ?, ?, ?)";
+        int idGenerado = -1;
+
+        try (Connection conn = DriverManager.getConnection(url, user, password);
+             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            stmt.setString(1, mensaje.getMensaje());
+            stmt.setInt(2, Integer.parseInt(mensaje.getUsuarioRemitente().getId()));
+            stmt.setObject(3, mensaje.getFecha());
+            stmt.setInt(4, Integer.parseInt(mensaje.getChat().getId()));
+
+            stmt.executeUpdate();
+
+            ResultSet generatedKeys = stmt.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                idGenerado = generatedKeys.getInt(1);
+                mensaje.setId(String.valueOf(idGenerado));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return idGenerado;
+    }
+
+    public static boolean eliminarMensaje(Mensaje mensaje) {
+        if (!save || mensaje == null || mensaje.getId() == null) {
+            return false;
+        }
+
+        String sql = "DELETE FROM mensaje WHERE id = ?";
+
+        try (Connection conn = DriverManager.getConnection(url, user, password);
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, Integer.parseInt(mensaje.getId()));
+            return stmt.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static void obtenerMensajesPorChat(Chat chat) {
+
+
+        if (!save || chat == null || chat.getId() == null) {
+            return;
+        }
+
+        String sql = "SELECT m.id, m.mensaje, m.id_remitente, m.fecha_evento FROM mensaje m WHERE m.chat = ? ORDER BY m.fecha_evento ASC";
+
+        try (Connection conn = DriverManager.getConnection(url, user, password);
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, Integer.parseInt(chat.getId()));
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    String idMensaje = rs.getString("id");
+                    String texto = rs.getString("mensaje");
+                    String idRemitente = rs.getString("id_remitente");
+                    LocalDateTime fecha = rs.getObject("fecha_evento", LocalDateTime.class);
+
+                    Estudiante remitente = RedSocial.getInstance().obtenerEstudiantePorId(idRemitente);
+
+                    if (remitente != null) {
+                        Mensaje mensaje = new Mensaje(texto, fecha, remitente, chat);
+                        mensaje.setId(idMensaje);
+                    }
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al obtener mensajes del chat", e);
+        }
+
+
+    }
+
+    public static int crearSolicitudAyuda(SolicitudAyuda solicitud) {
+        if (!save || solicitud == null || solicitud.getEstudiante() == null) {
+            return -1;
+        }
+
+        String sql = "INSERT INTO solicitudes_ayuda (id_user, estado, mensaje, titulo, prioridad) VALUES (?, ?, ?, ?, ?)";
+        int idGenerado = -1;
+
+        try (Connection conn = DriverManager.getConnection(url, user, password);
+             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            stmt.setInt(1, Integer.parseInt(solicitud.getEstudiante().getId()));
+            stmt.setString(2, solicitud.getEstado());
+            stmt.setString(3, solicitud.getMensaje());
+            stmt.setString(4, solicitud.getTitulo());
+            stmt.setString(5, solicitud.getPrioridad());
+
+            stmt.executeUpdate();
+
+            ResultSet generatedKeys = stmt.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                idGenerado = generatedKeys.getInt(1);
+                solicitud.setId(String.valueOf(idGenerado));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return idGenerado;
+    }
+
+    public static boolean actualizarEstadoSolicitud(String idSolicitud, String nuevoEstado) {
+        if (!save || idSolicitud == null || nuevoEstado == null) {
+            return false;
+        }
+
+        String sql = "UPDATE solicitudes_ayuda SET estado = ? WHERE id = ?";
+
+        try (Connection conn = DriverManager.getConnection(url, user, password);
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, nuevoEstado);
+            stmt.setInt(2, Integer.parseInt(idSolicitud));
+            return stmt.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static boolean eliminarSolicitudAyuda(String idSolicitud) {
+        if (!save || idSolicitud == null) {
+            return false;
+        }
+
+        String sql = "DELETE FROM solicitudes_ayuda WHERE id = ?";
+
+        try (Connection conn = DriverManager.getConnection(url, user, password);
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, Integer.parseInt(idSolicitud));
+            return stmt.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static void obtenerTodasLasSolicitudes() {
+
+        if (!save) {
+            return ;
+        }
+
+        String sql = "SELECT s.id, s.id_user, s.estado, s.mensaje, s.titulo, s.prioridad FROM solicitudes_ayuda s";
+
+        try (Connection conn = DriverManager.getConnection(url, user, password);
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                String id = rs.getString("id");
+                String idUsuario = rs.getString("id_user");
+                String estado = rs.getString("estado");
+                String mensaje = rs.getString("mensaje");
+                String titulo = rs.getString("titulo");
+                String prioridad = rs.getString("prioridad");
+
+                Estudiante estudiante = RedSocial.getInstance().obtenerEstudiantePorId(idUsuario);
+
+                if (estudiante != null) {
+                    SolicitudAyuda solicitud = new SolicitudAyuda(mensaje, estudiante, titulo, prioridad, estado);
+                    solicitud.setId(id);
+                    RedSocial.getInstance().getSolicitudesAyuda().add(solicitud);
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al obtener todas las solicitudes de ayuda", e);
+        }
 
     }
 

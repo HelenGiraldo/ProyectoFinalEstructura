@@ -85,19 +85,23 @@ CREATE TABLE IF NOT EXISTS chat_miembros (
 CREATE TABLE IF NOT EXISTS mensaje (
     id INT NOT NULL AUTO_INCREMENT,
     mensaje VARCHAR(255) NOT NULL,
+    id_remitente INT NOT NULL,
+    fecha_evento DATETIME NOT NULL,
     chat INT NOT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (chat) REFERENCES chat(id)
+    FOREIGN KEY (chat) REFERENCES chat(id),
+    FOREIGN KEY (id_remitente) REFERENCES usuarios(id)
+
 );
 
 CREATE TABLE IF NOT EXISTS amistades (
     id_user1 INT NOT NULL,
     id_user2 INT NOT NULL,
     estado VARCHAR(45) NOT NULL,
-    id_solicitud INT,
+    id_solicitante INT,
     PRIMARY KEY (id_user1, id_user2),
     FOREIGN KEY (id_user1) REFERENCES usuarios(id),
-    FOREIGN KEY (id_user2) REFERENCES usuarios(id),
+    FOREIGN KEY (id_user2) REFERENCES usuarios(id)
 );
 
 
