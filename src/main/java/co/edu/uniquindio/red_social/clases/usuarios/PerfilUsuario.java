@@ -27,8 +27,9 @@ public class PerfilUsuario {
         return imagenPerfil.get();
     }
 
-    public void setImagenPerfil(Image imagen) {
-        this.imagenPerfil.set(imagen);
+    public void setImagenPerfil(Image img) {
+        System.out.println("Set imagenPerfil en PerfilUsuario");
+        imagenPerfil.set(img);
     }
 
     public static Usuario getUsuarioActual() {
@@ -39,3 +40,5 @@ public class PerfilUsuario {
         usuarioActual = usuario;
     }
 }
+
+

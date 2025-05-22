@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.image.Image?>
@@ -38,11 +39,11 @@
             <VBox prefHeight="322.0" prefWidth="192.0" BorderPane.alignment="CENTER">
                <children>
                   <ToggleButton fx:id="InicioButton" mnemonicParsing="false" onAction="#irAInicio" prefHeight="37.0" prefWidth="161.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Inicio" />
-                  <ToggleButton fx:id="misContenidosButton" mnemonicParsing="false" prefHeight="43.0" prefWidth="132.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Mis Contenidos" />
-                  <ToggleButton fx:id="gruposEstudioButton" mnemonicParsing="false" prefHeight="42.0" prefWidth="151.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Grupos estudio" />
+                  <ToggleButton fx:id="misContenidosButton" mnemonicParsing="false" onAction="#irAContenidos" prefHeight="43.0" prefWidth="132.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Mis Contenidos" />
+                  <ToggleButton fx:id="gruposEstudioButton" mnemonicParsing="false" onAction="#irAGruposEstudio" prefHeight="42.0" prefWidth="151.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Grupos estudio" />
                   <ToggleButton fx:id="MensajesButton" mnemonicParsing="false" onAction="#irAChat" prefHeight="42.0" prefWidth="161.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Mensajes" />
-                  <ToggleButton fx:id="SugerenciasButton" mnemonicParsing="false" prefHeight="38.0" prefWidth="159.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Sugerencias" />
-                  <ToggleButton fx:id="SolicitudesDeAyudaButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="160.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Solicitudes de ayuda" />
+                  <ToggleButton fx:id="SugerenciasButton" mnemonicParsing="false" onAction="#irASugerencias" prefHeight="38.0" prefWidth="159.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Sugerencias" />
+                  <ToggleButton fx:id="SolicitudesDeAyudaButton" mnemonicParsing="false" onAction="#irASolicitudesAyuda" prefHeight="40.0" prefWidth="160.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Solicitudes de ayuda" />
                   <ToggleButton fx:id="configuracionPerfilButton" mnemonicParsing="false" prefHeight="39.0" prefWidth="161.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Configuracion perfil" />
                </children>
             </VBox>
@@ -86,15 +87,15 @@
                               </HBox>
                               <HBox prefHeight="30.0" prefWidth="177.0">
                                  <children>
-                                    <TextField fx:id="textFieldAnterior" prefHeight="26.0" prefWidth="177.0" promptText="anterior" styleClass="textfield-config" stylesheets="@stylesConfig.css" />
+                                    <PasswordField fx:id="textFieldAnterior" promptText="anterior" styleClass="textfield-config" stylesheets="@stylesConfig.css" />
                                  </children>
                               </HBox>
-                              <HBox fx:id="labelContraseñaNueva" prefHeight="20.0" prefWidth="177.0">
+                              <HBox prefHeight="20.0" prefWidth="177.0">
                                  <children>
-                                    <Label styleClass="subtitulo-inicio" text="contraseña nueva" />
+                                    <Label fx:id="labelContraseñaNueva" styleClass="subtitulo-inicio" text="contraseña nueva" />
                                  </children>
                               </HBox>
-                              <TextField fx:id="textFieldContraseñaNueva" prefHeight="26.0" prefWidth="169.0" promptText="nueva" styleClass="textfield-config" stylesheets="@stylesConfig.css" />
+                              <PasswordField fx:id="textFieldContraseñaNueva" promptText="nueva" styleClass="textfield-config" stylesheets="@stylesConfig.css" />
                            </children>
                         </VBox>
                      </children>
@@ -145,7 +146,7 @@
                                              <children>
                                                 <Button fx:id="buttonGuardar" mnemonicParsing="false" onAction="#guardar" prefHeight="29.0" prefWidth="74.0" styleClass="boton-guardar" text="Guardar" />
                                              </children></HBox>
-                                          <Button fx:id="buttonCerrarSesion1" mnemonicParsing="false" onAction="#irALogo" styleClass="boton-cerrar-sesion" text="Cerrar Sesion" />
+                                          <Button fx:id="buttonCerrarSesion" mnemonicParsing="false" onAction="#cerrarSesion" styleClass="boton-cerrar-sesion" text="Cerrar Sesion" />
                                        </children>
                                     </HBox>
                                  </children>

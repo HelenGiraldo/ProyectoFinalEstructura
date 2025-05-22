@@ -62,11 +62,11 @@
             <VBox prefHeight="322.0" prefWidth="192.0" BorderPane.alignment="CENTER">
                <children>
                   <ToggleButton fx:id="InicioButton" mnemonicParsing="false" onAction="#irAInicio" prefHeight="37.0" prefWidth="161.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Inicio" />
-                  <ToggleButton fx:id="misContenidosButton" mnemonicParsing="false" prefHeight="43.0" prefWidth="132.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Mis Contenidos" />
-                  <ToggleButton fx:id="gruposEstudioButton" mnemonicParsing="false" prefHeight="42.0" prefWidth="151.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Grupos estudio" />
+                  <ToggleButton fx:id="misContenidosButton" onAction="#irAContenidos" mnemonicParsing="false" prefHeight="43.0" prefWidth="132.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Mis Contenidos" />
+                  <ToggleButton fx:id="gruposEstudioButton" onAction="#irAGruposEstudio" mnemonicParsing="false" prefHeight="42.0" prefWidth="151.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Grupos estudio" />
                   <ToggleButton fx:id="MensajesButton" mnemonicParsing="false" prefHeight="42.0" prefWidth="161.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Mensajes" />
-                  <ToggleButton fx:id="SugerenciasButton" mnemonicParsing="false" prefHeight="38.0" prefWidth="159.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Sugerencias" />
-                  <ToggleButton fx:id="SolicitudesDeAyudaButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="160.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Solicitudes de ayuda" />
+                  <ToggleButton fx:id="SugerenciasButton" onAction="#irASugerencias" mnemonicParsing="false" prefHeight="38.0" prefWidth="159.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Sugerencias" />
+                  <ToggleButton fx:id="SolicitudesDeAyudaButton" onAction="#irASolicitudesAyuda" mnemonicParsing="false" prefHeight="40.0" prefWidth="160.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Solicitudes de ayuda" />
                   <ToggleButton fx:id="configuracionPerfilButton" mnemonicParsing="false" onAction="#irAConfig" prefHeight="39.0" prefWidth="161.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Configuracion perfil" />
                </children>
             </VBox>
@@ -78,7 +78,7 @@
                      <children>
                         <ScrollPane fx:id="scrollPaneChats" fitToHeight="true" fitToWidth="true" prefHeight="322.0" prefWidth="100.0" stylesheets="@styles.css">
                           <content>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0">
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="302.0" prefWidth="97.0">
                                  <children>
                                     <VBox fx:id="userchatListVBox" layoutX="-12.0" layoutY="-9.0" prefHeight="314.0" prefWidth="112.0">
                                        <children>
@@ -133,7 +133,7 @@
                                                       <Image url="@imagenes/imagePerfil.png" />
                                                    </image>
                                                 </ImageView>
-                                                <Label fx:id="LabelUser2" prefHeight="19.0" prefWidth="40.0" styleClass="contact-name" stylesheets="@stylesChat.css" text="User2" />
+                                                <Label fx:id="LabelUser2" prefHeight="19.0" prefWidth="273.0" styleClass="contact-name" stylesheets="@stylesChat.css" text="User2" />
                                              </children>
                                           </HBox>
                                           <VBox fx:id="chatSpace" prefHeight="258.0" prefWidth="264.0">

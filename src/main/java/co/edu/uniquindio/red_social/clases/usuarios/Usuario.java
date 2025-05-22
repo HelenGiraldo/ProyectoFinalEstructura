@@ -12,6 +12,7 @@ public class Usuario {
     protected String email;
     protected String contrasena;
     protected File imagenPerfil;
+    private String rutaImagenPerfil;
 
 
     public Usuario(String nombre, String apellido, String email, String contrasena, File imagenPerfil) {
@@ -57,10 +58,21 @@ public class Usuario {
     }
 
     public File getImagenPerfil() {
+
         return imagenPerfil;
     }
 
     public void setImagenPerfil(File imagenPerfil) {
         this.imagenPerfil = imagenPerfil;
     }
+
+    public String getRutaImagenPerfil() {
+        return rutaImagenPerfil;
+    }
+
+    public void setRutaImagenPerfil(String rutaImagenPerfil) {
+        System.out.println("imagennn: " + rutaImagenPerfil);
+        this.rutaImagenPerfil = rutaImagenPerfil;
+    }
+
 }

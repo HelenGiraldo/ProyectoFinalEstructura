@@ -27,6 +27,7 @@ public class Estudiante extends Usuario implements AdministracionContenido {
     private ListaSimplementeEnlazada<Grupo> grupos;
     private ListaSimplementeEnlazada<Chat> chats;
     private String id;
+    private String rutaImagenPerfil;
 
     public Estudiante(String nombre,String apellido, String correo, String contrasena, File fotoPerfil) {
         super(nombre,apellido, correo, contrasena, fotoPerfil);
@@ -72,8 +73,6 @@ public class Estudiante extends Usuario implements AdministracionContenido {
             eliminarChat(contacto);
             contacto.eliminarChat(this);
             contacto.getContactos().remove(this);
-            UtilSQL.eliminarRelacionAmistad(id, contacto.getId());
-            eliminarChat(contacto);
             return contactos.remove(contacto);
         }
         return false;
@@ -206,7 +205,6 @@ public class Estudiante extends Usuario implements AdministracionContenido {
      */
     public boolean anadirChat(Chat chat) {
         if (!chats.contains(chat)) {
-            UtilSQL.crearChat(chat);
             return chats.add(chat);
         }
         return false;
@@ -219,7 +217,7 @@ public class Estudiante extends Usuario implements AdministracionContenido {
      */
     public boolean eliminarChat(Chat chat) {
         if (chats.contains(chat)) {
-            return chat.eliminarChat();
+            return chats.remove(chat);
         }
         return false;
     }
@@ -232,7 +230,7 @@ public class Estudiante extends Usuario implements AdministracionContenido {
     public boolean eliminarChat(Estudiante estudiante) {
         for (Chat chat : chats) {
             if (chat.getEstudiante().equals(estudiante) || chat.getEstudiante2().equals(estudiante)) {
-                return eliminarChat(chat);
+                return chats.remove(chat);
             }
         }
         return false;
@@ -406,6 +404,13 @@ public class Estudiante extends Usuario implements AdministracionContenido {
 
     public void setId(String id) {
         this.id = id;
+    }
+    public String getRutaImagenPerfil() {
+        return rutaImagenPerfil;
+    }
+
+    public void setRutaImagenPerfil(String rutaImagenPerfil) {
+        this.rutaImagenPerfil = rutaImagenPerfil;
     }
 
     @Override
