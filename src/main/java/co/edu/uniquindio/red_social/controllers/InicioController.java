@@ -135,27 +135,6 @@ public class InicioController {
 
     private Estudiante usuario;
 
-
-    public void inicializarUsuario(Estudiante usuario) {
-        this.usuario = usuario;
-
-        // Guardar el usuario en el singleton
-        PerfilUsuario.getInstancia().setUsuarioActual(usuario);
-
-        // Cargar imagen si está disponible
-        if (usuario.getImagenPerfil() != null) {
-            Image imagen = new Image(usuario.getImagenPerfil().toURI().toString());
-            imagenPerfil.setImage(imagen);
-            PerfilUsuario.getInstancia().setImagenPerfil(imagen);
-        }
-
-        // Actualizar saludo o información en la vista
-        actualizarSaludo();
-    }
-
-
-
-
     @FXML
     public void initialize() {
         InicioButton.setSelected(true);
@@ -189,6 +168,27 @@ public class InicioController {
     }
 
 
+    @FXML
+    public void inicializarUsuario(Estudiante usuario) {
+        this.usuario = usuario;
+
+        // Guardar el usuario en el singleton
+        PerfilUsuario.getInstancia().setUsuarioActual(usuario);
+
+        // Cargar imagen si está disponible
+        if (usuario.getImagenPerfil() != null) {
+            Image imagen = new Image(usuario.getImagenPerfil().toURI().toString());
+            imagenPerfil.setImage(imagen);
+            PerfilUsuario.getInstancia().setImagenPerfil(imagen);
+        }
+
+        // Actualizar saludo o información en la vista
+        actualizarSaludo();
+    }
+
+
+
+
 
 
     public void actualizarSaludo() {
@@ -202,13 +202,6 @@ public class InicioController {
     }
 
 
-    public void scrollSuaveAbajo() {
-        Timeline timeline = new Timeline();
-        KeyValue kv = new KeyValue(scrollPrincipal.vvalueProperty(), 1.0, Interpolator.EASE_BOTH);
-        KeyFrame kf = new KeyFrame(Duration.seconds(1), kv);
-        timeline.getKeyFrames().add(kf);
-        timeline.play();
-    }
 
     public void actualizarGrupoEstudio(String nombreGrupo, String integrantes) {
         LabelGrupoSugerido.setText(nombreGrupo);
@@ -219,6 +212,55 @@ public class InicioController {
         LabelTipo.setText(tipo);
         LabelValoracion.setText("★ " + valoracion);
     }
+    @FXML
+    private void irAChat(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/mensajes.fxml"));
+            Parent configView = loader.load();
+
+            Scene scene = new Scene(configView);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+    @FXML
+    private void irAGruposEstudio(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/gruposEstudio.fxml"));
+            Parent configView = loader.load();
+
+            Scene scene = new Scene(configView);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @FXML
+    private void irASugerencias(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/Configuracion.fxml"));
+            Parent configView = loader.load();
+
+            Scene scene = new Scene(configView);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     @FXML
     private void irAConfig(ActionEvent event) {
@@ -237,10 +279,10 @@ public class InicioController {
     }
 
     @FXML
-    private void irAChat(ActionEvent event) {
+    private void irASolicitudesAyuda(ActionEvent event) {
         try {
 
-            URL configUrl = getClass().getResource("/co/edu/uniquindio/red_social/mensajes.fxml");
+            URL configUrl = getClass().getResource("/co/edu/uniquindio/red_social/solicitudes.fxml");
             System.out.println("URL config: " + configUrl);
             FXMLLoader loader = new FXMLLoader(configUrl);
             Parent configView = loader.load();

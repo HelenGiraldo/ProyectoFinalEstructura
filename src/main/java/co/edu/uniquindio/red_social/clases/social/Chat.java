@@ -37,6 +37,13 @@ public class Chat {
         return false;
     }
 
+    public ListaSimplementeEnlazada<Estudiante> getMiembros() {
+        ListaSimplementeEnlazada<Estudiante> miembros = new ListaSimplementeEnlazada<>();
+        miembros.add(estudiante);
+        miembros.add(estudiante2);
+        return miembros;
+    }
+
     public String getId() {
         return id;
     }

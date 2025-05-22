@@ -1,0 +1,83 @@
+/* Estilo base para todas las cards */
+.card-solicitud {
+    -fx-background-color: #f7f7f7;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 4, 0, 0, 2);
+}
+
+.card-solicitud:hover {
+    -fx-background-color: #eaeaea;
+    -fx-cursor: hand;
+}
+.card-solicitud-muy-urgente {
+    -fx-border-color: rgba(255, 71, 87, 0.6);
+    -fx-border-width: 2px;
+    -fx-background-color: rgba(255, 245, 245, 0.4);
+}
+
+.card-solicitud-urgente {
+    -fx-border-color: rgba(255, 165, 2, 0.6);
+    -fx-border-width: 1.5px;
+    -fx-background-color: rgba(255, 249, 230, 0.4);
+}
+
+.card-solicitud-normal {
+    -fx-border-color: rgba(46, 213, 115, 0.5);
+    -fx-border-width: 1px;
+    -fx-background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Elementos internos */
+.titulo-solicitud {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-wrap-text: true;
+}
+.descripcion-solicitud {
+    -fx-font-size: 14px;
+    -fx-text-fill: #555;
+    -fx-wrap-text: true;
+}
+
+.footer-solicitud {
+    -fx-spacing: 10px;
+    -fx-alignment: center-left;
+}
+
+.badge-prioridad {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-padding: 2px 6px;
+    -fx-background-radius: 10px;
+}
+
+.badge-muy-urgente {
+    -fx-text-fill: white;
+    -fx-background-color: #ff4757;
+}
+
+.badge-urgente {
+    -fx-text-fill: white;
+    -fx-background-color: #ffa502;
+}
+
+.badge-normal {
+    -fx-text-fill: white;
+    -fx-background-color: #2ed573;
+}
+
+.boton-accion {
+    -fx-background-color: rgba(255, 23, 2, 0.67);
+    -fx-text-fill: white;
+    -fx-background-radius: 10px;
+    -fx-padding: 4px 10px;
+    -fx-font-size: 12px;
+    -fx-cursor: hand;
+}
+
+.timestamp {
+    -fx-font-size: 12px;
+    -fx-text-fill: #888;
+}
