@@ -125,6 +125,7 @@ public class ContenidosController {
 
 
     private static final ArbolBinario<Contenido> arbolContenidos = new ArbolBinario<>();
+    private static final ListaSimplementeEnlazada<Contenido> listaContenidos = new ListaSimplementeEnlazada<>();
 
     public static ArbolBinario<Contenido> getArbol() {
         return arbolContenidos;
@@ -185,12 +186,22 @@ public class ContenidosController {
     }
 
     public void agregarContenido(Contenido contenido) {
-        System.out.println("Archivo adjunto antes de insertar: " + (contenido.getContenido() != null ? contenido.getContenido().getName() : "null"));
+        System.out.println(">>> Agregando contenido: " + contenido.getTitulo());
+
         arbolContenidos.insertar(contenido);
-        System.out.println("Archivo adjunto después de insertar: " + (contenido.getContenido() != null ? contenido.getContenido().getName() : "null"));
+        listaContenidos.add(contenido);
+
+        // Imprimir todos los contenidos
+        System.out.println(">>> Contenidos actuales en lista enlazada:");
+        for (int i = 0; i < listaContenidos.size(); i++) {
+            Contenido c = listaContenidos.get(i);
+            System.out.println("- " + c.getTitulo() + " | Calificaciones: " + (c.getCalificaciones() != null ? c.getCalificaciones().size() : 0));
+        }
+
         mostrarContenidoEnVista(contenido);
         actualizarTotalPublicados();
     }
+
 
     private void actualizarTotalPublicados() {
         int total = arbolContenidos.getPeso();
@@ -199,6 +210,14 @@ public class ContenidosController {
             LabelTotalPublicados.setText(String.valueOf(total));
         });
     }
+
+
+
+    public static ListaSimplementeEnlazada<Contenido> getListaContenidos() {
+        return listaContenidos;
+    }
+
+
 
 
     private void mostrarContenidoEnVista(Contenido contenido) {
