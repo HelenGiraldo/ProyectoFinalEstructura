@@ -106,7 +106,6 @@ public class RegistroController {
 
     @FXML
     private void registrarUsuario(ActionEvent event) {
-        // Leer datos
         String nombre = nombreField.getText();
         String apellido = apellidoField.getText();
         String email = textFieldEmail.getText();
@@ -117,7 +116,7 @@ public class RegistroController {
             return;
         }
 
-        if (imagenPerfil == null) {
+        if (imagenPerfil.getImage() == null) {
             labelRegistroValidacion.setText("Debe seleccionar una imagen de perfil.");
             return;
         }
@@ -128,22 +127,17 @@ public class RegistroController {
         RedSocial redSocial = RedSocial.getInstance();
         Estudiante estudiante= redSocial.crearEstudiante(nombre, apellido, email, password, new File("src/main/resources/co/edu/uniquindio/red_social/imagenes/imagePerfil.png"));
 
-        Image imagenActual = imagenPerfil.getImage();
-        if (imagenActual != null) {
+        if (archivoImagenSeleccionada != null) {
             try {
-                URI uri = new URI(imagenActual.getUrl());
-                File archivoOriginal = new File(uri);
+
+                File archivoOriginal = archivoImagenSeleccionada;
 
                 // Ruta de destino en resources
                 String extension = archivoOriginal.getName().substring(archivoOriginal.getName().lastIndexOf("."));
                 String nombreArchivoNuevo = "imagen_perfil" + estudiante.getId() + extension;
 
-                File destino = new File("src/main/resources/co/edu/uniquindio/red_social/usuarios/imagenes_perfil", nombreArchivoNuevo);
-
-                // Crear carpeta si no existe
-                if (!destino.getParentFile().exists()) {
-                    destino.getParentFile().mkdirs();
-                }
+                File destino = new File("src/main/resources/co/edu/uniquindio/red_social/usuarios/imagenes_perfil/", nombreArchivoNuevo);
+                System.out.println("Ruta de destino: " + destino.getPath());
 
                 // Copiar archivo
                 java.nio.file.Files.copy(
@@ -167,7 +161,6 @@ public class RegistroController {
         // Mostrar mensaje de éxito
         labelRegistro.setText("¡Registro exitoso!");
         UtilSQL.actualizarEstudiante(estudiante);
-        PerfilUsuario.getInstancia().setImagenPerfil(null);
 
         cambiarEscenaLogin();
 
@@ -186,11 +179,14 @@ public class RegistroController {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         File archivoSeleccionado = fileChooser.showOpenDialog(stage);
 
-
-        imagenPerfil.setImage(new Image(archivoSeleccionado.toURI().toString()));
-                System.out.println("Imagen cargada: " + archivoSeleccionado.toURI().toString());
-
-
-
+        if (archivoSeleccionado != null) {
+            Image imagen = new Image(archivoSeleccionado.toURI().toString());
+            imagenPerfil.setImage(imagen);
+            archivoImagenSeleccionada = archivoSeleccionado;
+            System.out.println("Imagen cargada: " + archivoSeleccionado.toURI().toString());
+        } else {
+            System.out.println("Selección de imagen cancelada.");
+        }
     }
+
 }

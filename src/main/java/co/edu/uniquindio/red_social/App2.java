@@ -6,7 +6,6 @@ import co.edu.uniquindio.red_social.clases.social.Mensaje;
 import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
 import co.edu.uniquindio.red_social.data_base.UtilSQL;
 
-import java.io.File;
 import java.time.LocalDateTime;
 
 public class App2 {
@@ -29,10 +28,8 @@ public class App2 {
 
         Estudiante estudiante = red.getEstudiantes().get(1);
         Estudiante estudiante2 = red.getEstudiantes().get(2);
-        estudiante.enviarSolicitud(estudiante2);
-        estudiante2.aceptarSolicitud(estudiante2.getSolicitudesRecibidas().getFirst());
-        estudiante.getContactos().show();
-        estudiante2.getChats().show();
+
+
         Chat chat = estudiante.getChats().getFirst();
         chat.enviarMensaje(new Mensaje("Hola", LocalDateTime.now(), estudiante, chat));
 

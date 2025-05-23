@@ -802,6 +802,7 @@ public class UtilSQL {
         for (Chat chat : lista) {
             obtenerMensajesPorChat(chat);
         }
+
         return lista;
     }
 

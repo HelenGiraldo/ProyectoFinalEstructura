@@ -29,6 +29,7 @@ public class App extends Application {
         UtilSQL.cargarRelacionesAmistad();
         UtilSQL.cargarMiembrosDeGrupos();
         UtilSQL.cargarGrupos();
+        UtilSQL.obtenerTodosLosChats();
         red.getEstudiantes().show();
         launch();
     }
