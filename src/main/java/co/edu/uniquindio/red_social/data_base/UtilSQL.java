@@ -30,7 +30,7 @@ public class UtilSQL {
 
         try (Connection conn = DriverManager.getConnection(url, user, password);
 
-                // Crear un PreparedStatement para la inserción
+             // Crear un PreparedStatement para la inserción
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             // Establecer los valores de los parámetros
@@ -66,16 +66,16 @@ public class UtilSQL {
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
 
-                while (rs.next()) {
-                    String id = rs.getString("id");
-                    String nombre = rs.getString("nombre");
-                    String apellido = rs.getString("apellido");
-                    String correo = rs.getString("correo");
-                    String contrasena = rs.getString("contrasena");
-                    File imagenPerfil = new File(rs.getString("imagenPerfil"));
+            while (rs.next()) {
+                String id = rs.getString("id");
+                String nombre = rs.getString("nombre");
+                String apellido = rs.getString("apellido");
+                String correo = rs.getString("correo");
+                String contrasena = rs.getString("contrasena");
+                File imagenPerfil = new File(rs.getString("imagenPerfil"));
 
-                    RedSocial.getInstance().crearEstudiante(id, nombre, apellido, correo, contrasena, imagenPerfil);
-                }
+                RedSocial.getInstance().crearEstudiante(id, nombre, apellido, correo, contrasena, imagenPerfil);
+            }
 
         }catch (SQLException e) {
             throw new RuntimeException(e);
@@ -1002,5 +1002,3 @@ public class UtilSQL {
     }
 
 }
-
-

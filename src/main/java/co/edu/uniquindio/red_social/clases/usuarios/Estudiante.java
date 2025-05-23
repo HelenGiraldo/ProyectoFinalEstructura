@@ -229,12 +229,24 @@ public class Estudiante extends Usuario implements AdministracionContenido {
      */
     public boolean eliminarChat(Estudiante estudiante) {
         for (Chat chat : chats) {
-            if (chat.getEstudiante().equals(estudiante) || chat.getEstudiante2().equals(estudiante)) {
+            if (chat.getEstudiante().equals(estudiante) ||
+                    (chat.getEstudiante2() != null && chat.getEstudiante2().equals(estudiante))) {
                 return chats.remove(chat);
             }
         }
         return false;
     }
+
+    public Chat obtenerChat(Estudiante otro) {
+        for (Chat chat : this.getChats()) {
+            if (chat.getEstudiante().equals(otro) || chat.getEstudiante2().equals(otro)) {
+                return chat;
+            }
+        }
+        return null; // Si no existe un chat con ese estudiante
+    }
+
+
 
 
     /**

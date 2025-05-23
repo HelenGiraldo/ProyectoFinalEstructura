@@ -26,6 +26,8 @@ public class App2 {
         System.out.println(red.getEstudiantes().size());
         System.out.println("---------------------------------");
 
+
+
         Estudiante estudiante = red.getEstudiantes().get(1);
         Estudiante estudiante2 = red.getEstudiantes().get(2);
 
