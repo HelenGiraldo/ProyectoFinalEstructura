@@ -76,6 +76,10 @@ public class Grupo {
         contenidos.clear();
     }
 
+    public boolean puedeUnirse(Estudiante estudiante) {
+        return publico && !miembros.contains(estudiante);
+    }
+
     public String getNombre() {
         return nombre;
     }

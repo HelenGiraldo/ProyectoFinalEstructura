@@ -70,7 +70,7 @@
                         <HBox prefHeight="34.0" prefWidth="146.0">
                            <children>
                               <HBox prefHeight="34.0" prefWidth="64.0" />
-                              <Label fx:id="handleOlvidasteContrasena" onMouseClicked="#handleOlvidasteContrasena" prefHeight="34.0" prefWidth="142.0" styleClass="handle-Olvidaste-Contrasena" text="¿Olvidaste tu contraseña?">
+                              <Label fx:id="handleOlvidasteContrasena" onMouseClicked="#handleOlvidasteContrasena" prefHeight="20.0" prefWidth="142.0" styleClass="handle-Olvidaste-Contrasena" text="¿Olvidaste tu contraseña?">
                                  <stylesheets>
                                     <URL value="@styles.css" />
                                     <URL value="@styleInicioRegistro.css" />
@@ -81,15 +81,24 @@
                   </VBox>
                   <VBox prefHeight="25.0" prefWidth="258.0">
                      <children>
-                        <HBox prefHeight="100.0" prefWidth="200.0">
+                        <HBox prefHeight="21.0" prefWidth="258.0">
                            <children>
-                              <HBox prefHeight="23.0" prefWidth="106.0" />
+                              <HBox prefHeight="23.0" prefWidth="106.0">
+                                 <children>
+                                    <Label fx:id="handleEresAdmin" onMouseClicked="#handleEresAdmin" prefHeight="34.0" prefWidth="99.0" styleClass="handle-Admin" text="¿eres admin?">
+                                       <stylesheets>
+                                          <URL value="@styles.css" />
+                                          <URL value="@styleInicioRegistro.css" />
+                                       </stylesheets>
+                                    </Label>
+                                 </children></HBox>
+                              <HBox prefHeight="34.0" prefWidth="103.0" />
                               <Label fx:id="handleVolver" onMouseClicked="#handleVolver" styleClass="handle-Volver" stylesheets="@styles.css" text="Volver" />
                            </children>
                         </HBox>
                      </children>
                   </VBox>
-                  <VBox prefHeight="19.0" prefWidth="258.0">
+                  <VBox prefHeight="32.0" prefWidth="258.0">
                      <children>
                         <Label fx:id="datosIncorrectosLabel" />
                      </children></VBox>

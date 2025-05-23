@@ -20,6 +20,97 @@ public class UtilSQL {
     static String password = bundle.getString("password");
     static boolean save = true;
 
+
+    public static boolean estaActivoComoAdmin(Estudiante e) {
+        if (e == null || e.getId() == null || e.getId().equals("-1")) {
+            return false;
+        }
+
+        String sql = """
+        SELECT u.id, u.nombre, u.apellido, u.correo, u.imagenPerfil, a.activo
+        FROM usuarios u
+        INNER JOIN admins a ON u.id = a.id
+        WHERE u.correo = ? AND u.contrasena = ? AND a.activo = 1
+    """;
+
+        try (Connection conn = DriverManager.getConnection(url, user, password);
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, e.getEmail());       // CORREO en parámetro 1
+            stmt.setString(2, e.getContrasena());  // CONTRASEÑA en parámetro 2
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    boolean activo = rs.getBoolean("activo");
+
+                    return activo;
+                }
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return false;
+    }
+
+
+    public static boolean convertirEstudianteAAdmin(Estudiante e) {
+        if (!save) {
+            System.out.println("Save está en false, no se procede.");
+            return false;
+        }
+        if (e == null || e.getId() == null || e.getId().equals("-1")) {
+            System.out.println("Estudiante inválido");
+            return false;
+        }
+
+        try (Connection conn = DriverManager.getConnection(url, user, password)) {
+            conn.setAutoCommit(false); // iniciar transacción
+
+            String sqlInsertAdmin = "INSERT INTO admins (id, nombre, apellido, correo, contrasena, imagenPerfil) VALUES (?, ?, ?, ?, ?, ?)";
+            try (PreparedStatement stmtInsertAdmin = conn.prepareStatement(sqlInsertAdmin)) {
+                stmtInsertAdmin.setString(1, e.getId());
+                stmtInsertAdmin.setString(2, e.getNombre());
+                stmtInsertAdmin.setString(3, e.getApellido());
+                stmtInsertAdmin.setString(4, e.getEmail());
+                stmtInsertAdmin.setString(5, e.getContrasena());
+                stmtInsertAdmin.setString(6, e.getImagenPerfil() != null ? e.getImagenPerfil().getPath() : null);
+
+                int filasInsertadas = stmtInsertAdmin.executeUpdate();
+                System.out.println("Filas insertadas admins: " + filasInsertadas);
+                if (filasInsertadas == 0) {
+                    conn.rollback();
+                    System.out.println("Rollback: no insertó en admins");
+                    return false;
+                }
+            }
+
+            String sqlDeleteUsuario = "DELETE FROM usuarios WHERE id = ?";
+            try (PreparedStatement stmtDeleteUsuario = conn.prepareStatement(sqlDeleteUsuario)) {
+                stmtDeleteUsuario.setString(1, e.getId());
+                int filasEliminadas = stmtDeleteUsuario.executeUpdate();
+                System.out.println("Filas eliminadas usuarios: " + filasEliminadas);
+                if (filasEliminadas == 0) {
+                    conn.rollback();
+                    System.out.println("Rollback: no eliminó de usuarios");
+                    return false;
+                }
+            }
+
+            conn.commit();
+            System.out.println("Transacción exitosa");
+            return true;
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
+
+
+
     public static int insertarEstudiante(Estudiante e) {
         if (!save){
             return -1;
@@ -244,9 +335,37 @@ public class UtilSQL {
         return eliminado;
     }
 
-    public static void cargarGrupos(){
-        String sql = "SELECT id, nombre, descripcion FROM grupos";
+    public static void cargarGrupos() {
+        if (!save) {
+            return;
+        }
+
+        String sql = "SELECT id, nombre, descripcion, tipo, publico FROM grupos";
+
+        try (Connection conn = DriverManager.getConnection(url, user, password);
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                String id = rs.getString("id");
+                String nombre = rs.getString("nombre");
+                String descripcion = rs.getString("descripcion");
+                String tipo = rs.getString("tipo");
+                boolean publico = rs.getBoolean("publico");
+
+                // Usar el método existente de RedSocial para crear el grupo
+                RedSocial.getInstance().crearGrupo(id, nombre, descripcion, tipo, publico);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al cargar grupos", e);
+        }
+
+        // Cargar también las relaciones de miembros
+        cargarMiembrosDeGrupos();
     }
+
+
 
     public static void cargarRelacionesAmistad() {
         String sql = "SELECT id_user1, id_user2, estado, id_solicitante FROM amistades";
@@ -526,6 +645,7 @@ public class UtilSQL {
             throw new RuntimeException("Error al eliminar usuario del grupo", e);
         }
     }
+
 
 
     public static int agregarPublicacion(Contenido contenido) {

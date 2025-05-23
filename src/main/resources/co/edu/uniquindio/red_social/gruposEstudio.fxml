@@ -115,7 +115,7 @@
                                                       <Button fx:id="buttonMisGrupos" mnemonicParsing="false" onAction="#irAMisGrupos" prefHeight="29.0" prefWidth="85.0" styleClass="button-Estadisticas" stylesheets="@styleTusContenidos.css" text="Mis grupos" />
                                                    </children>
                                                 </HBox>
-                                                <Button fx:id="buttonUnirse" mnemonicParsing="false" styleClass="boton-guardar" stylesheets="@stylesConfig.css" text="unirse" />
+                                                <Button fx:id="buttonUnirse" onAction="#unirseAGrupo" mnemonicParsing="false" styleClass="boton-guardar" stylesheets="@stylesConfig.css" text="unirse" />
                                              </children>
                                           </HBox>
                                        </children>

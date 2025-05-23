@@ -10,14 +10,21 @@ CREATE TABLE IF NOT EXISTS usuarios (
                                         imagenPerfil VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS admins (
-                                      id INT AUTO_INCREMENT PRIMARY KEY,
-                                      nombre VARCHAR(50) NOT NULL,
-                                      apellido VARCHAR(50) NOT NULL,
-                                      correo VARCHAR(100) UNIQUE NOT NULL,
-                                      contrasena VARCHAR(255) NOT NULL,
-                                      imagenPerfil VARCHAR(255) NOT NULL
+
+
+CREATE TABLE admins (
+                        id INT PRIMARY KEY,
+                        nombre VARCHAR(50) NOT NULL,
+                        apellido VARCHAR(50) NOT NULL,
+                        correo VARCHAR(100) UNIQUE NOT NULL,
+                        contrasena VARCHAR(255) NOT NULL,
+                        imagenPerfil VARCHAR(255) NOT NULL,
+                        activo TINYINT(1) NOT NULL DEFAULT 1,
+                        FOREIGN KEY (id) REFERENCES usuarios(id) ON DELETE CASCADE
 );
+
+
+
 
 CREATE TABLE IF NOT EXISTS grupos (
                                       id INT AUTO_INCREMENT PRIMARY KEY,
@@ -115,3 +122,4 @@ CREATE TABLE IF NOT EXISTS solicitudes_ayuda (
                                                  PRIMARY KEY (id),
                                                  FOREIGN KEY (id_user) REFERENCES usuarios(id)
 );
+

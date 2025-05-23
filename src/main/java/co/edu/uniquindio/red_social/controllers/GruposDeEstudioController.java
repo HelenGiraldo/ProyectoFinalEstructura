@@ -1,5 +1,12 @@
 package co.edu.uniquindio.red_social.controllers;
 
+import co.edu.uniquindio.red_social.clases.RedSocial;
+import co.edu.uniquindio.red_social.clases.social.Grupo;
+import co.edu.uniquindio.red_social.clases.usuarios.Administrador;
+import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
+import co.edu.uniquindio.red_social.clases.usuarios.Usuario;
+import co.edu.uniquindio.red_social.data_base.UtilSQL;
+import co.edu.uniquindio.red_social.estructuras.ListaSimplementeEnlazada;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -153,9 +160,56 @@ public class GruposDeEstudioController {
 
     }
 
+    private Estudiante usuarioActual;
+    private Grupo grupoActual;
+
     @FXML
     private void initialize() {
         gruposEstudioButton.setSelected(true);
+    }
+
+    private void cargarGrupo(){
+        if (usuarioActual == null) return;
+
+        userchatListVBox.getChildren().clear();
+
+        UtilSQL.obtenerGrupos();
+
+        ListaSimplementeEnlazada<Grupo> grupos = RedSocial.getInstance().getGrupos();
+
+        for (int i = 0; i < grupos.size(); i++) {
+            Grupo grupo = grupos.get(i);
+
+            ToggleButton grupoButton = new ToggleButton(grupo.getNombre());
+            grupoButton.setPrefWidth(112);
+            grupoButton.getStyleClass().add("sidebar-button-chat");
+
+            grupoButton.setOnAction(e -> {
+                grupoActual = grupo;
+                grupoActualLabel.setText(grupo.getNombre());
+                // Aquí puedes cargar el contenido del grupo seleccionado
+            });
+
+            userchatListVBox.getChildren().add(grupoButton);
+
+        }
+
+
+    }
+
+
+    @FXML
+    private void unirseAGrupo(ActionEvent event) {
+        if (grupoActual != null && usuarioActual != null) {
+            grupoActual.agregarMiembro(usuarioActual);
+            UtilSQL.agregarUsuarioAGrupo(usuarioActual.getId(), grupoActual.getId());
+            System.out.println(usuarioActual.getNombre() + " se unió al grupo " + grupoActual.getNombre());
+        }
+    }
+
+    public void setUsuarioActual(Estudiante estudiante) {
+        this.usuarioActual = estudiante;
+        cargarGrupo();
     }
 
     @FXML

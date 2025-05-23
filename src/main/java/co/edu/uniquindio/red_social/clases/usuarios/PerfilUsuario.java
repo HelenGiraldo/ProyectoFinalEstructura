@@ -14,7 +14,7 @@ public class PerfilUsuario {
 
     private static PerfilUsuario instancia = new PerfilUsuario();
     private final ObjectProperty<Image> imagenPerfil = new SimpleObjectProperty<>();
-    private static Estudiante usuarioActual;
+    private static Usuario usuarioActual;
 
     private PerfilUsuario() {}
 
@@ -48,7 +48,7 @@ public class PerfilUsuario {
         return usuarioActual;
     }
 
-    public static void setUsuarioActual(Estudiante usuario) {
+    public static void setUsuarioActual(Usuario usuario) {
         usuarioActual = usuario;
     }
 }

@@ -480,6 +480,41 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo,
         return null;
     }
 
+    public boolean estaActivoComoAdmin(Estudiante e) {
+        return UtilSQL.estaActivoComoAdmin(e);
+    }
+
+    public boolean agregarAdministrador(Administrador admin) {
+        int idGenerado = UtilSQL.insertarAdministrador(admin);
+        if (idGenerado > 0) {
+            admin.setId(String.valueOf(idGenerado));
+            return administradores.add(admin);
+        }
+        return false;
+    }
+
+
+    public boolean convertirEstudianteAAdmin(Estudiante e) {
+        boolean exito = UtilSQL.convertirEstudianteAAdmin(e);
+        if (!exito) return false;
+
+        eliminarEstudiante(e);  // elimina de la lista interna estudiantes
+
+        Administrador admin = new Administrador(
+                e.getId(),
+                e.getNombre(),
+                e.getApellido(),
+                e.getEmail(),
+                e.getContrasena(),
+                e.getImagenPerfil()
+        );
+
+        return agregarAdministrador(admin); // agrega a la lista interna administradores
+    }
+
+
+
+
     // Getters y Setters
 
 

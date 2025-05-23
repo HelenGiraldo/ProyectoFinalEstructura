@@ -143,3 +143,15 @@
     -fx-text-fill: #3A7DFF;
 }
 
+/* Texto de olvidé mi contraseña */
+.handle-Admin {
+    -fx-font-size: 11px;
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-text-fill: #333333;
+    -fx-cursor: hand;
+    -fx-padding: 10px;
+}
+.handle-Admin:hover {
+    -fx-text-fill: #3A7DFF;
+}
+
