@@ -4,6 +4,7 @@ import co.edu.uniquindio.red_social.clases.RedSocial;
 import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
 import co.edu.uniquindio.red_social.clases.usuarios.PerfilUsuario;
 import co.edu.uniquindio.red_social.clases.usuarios.Usuario;
+import co.edu.uniquindio.red_social.data_base.UtilSQL;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,6 +22,7 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
 
 public class RegistroController {
@@ -77,17 +79,7 @@ public class RegistroController {
 
     @FXML
     private void initialize() {
-        PerfilUsuario perfil = PerfilUsuario.getInstancia();
-        perfil.imagenPerfilProperty().addListener((obs, oldImg, newImg) -> {
-            if (newImg != null) {
-                imagenPerfil.setImage(newImg);
-            }
-        });
 
-        // Para inicializar desde el comienzo
-        if (perfil.getImagenPerfil() != null) {
-            imagenPerfil.setImage(perfil.getImagenPerfil());
-        }
     }
 
     @FXML
@@ -114,7 +106,6 @@ public class RegistroController {
 
     @FXML
     private void registrarUsuario(ActionEvent event) {
-        // Leer datos
         String nombre = nombreField.getText();
         String apellido = apellidoField.getText();
         String email = textFieldEmail.getText();
@@ -125,7 +116,7 @@ public class RegistroController {
             return;
         }
 
-        if (archivoImagenSeleccionada == null) {
+        if (imagenPerfil.getImage() == null) {
             labelRegistroValidacion.setText("Debe seleccionar una imagen de perfil.");
             return;
         }
@@ -134,13 +125,42 @@ public class RegistroController {
 
         // Registrar usuario
         RedSocial redSocial = RedSocial.getInstance();
-        Estudiante estudiante= redSocial.crearEstudiante(nombre, apellido, email, password, archivoImagenSeleccionada);
+        Estudiante estudiante= redSocial.crearEstudiante(nombre, apellido, email, password, new File("src/main/resources/co/edu/uniquindio/red_social/imagenes/imagePerfil.png"));
 
+        if (archivoImagenSeleccionada != null) {
+            try {
+
+                File archivoOriginal = archivoImagenSeleccionada;
+
+                // Ruta de destino en resources
+                String extension = archivoOriginal.getName().substring(archivoOriginal.getName().lastIndexOf("."));
+                String nombreArchivoNuevo = "imagen_perfil" + estudiante.getId() + extension;
+
+                File destino = new File("src/main/resources/co/edu/uniquindio/red_social/usuarios/imagenes_perfil/", nombreArchivoNuevo);
+                System.out.println("Ruta de destino: " + destino.getPath());
+
+                // Copiar archivo
+                java.nio.file.Files.copy(
+                        archivoOriginal.toPath(),
+                        destino.toPath(),
+                        java.nio.file.StandardCopyOption.REPLACE_EXISTING
+                );
+
+                // Guardar la ruta relativa (puedes ajustarla si usas base de datos)
+                estudiante.setImagenPerfil(destino);
+
+                // También actualizar la interfaz con la nueva ruta
+                Image imagenNueva = new Image(destino.toURI().toString());
+                imagenPerfil.setImage(imagenNueva);
+            } catch (Exception e) {
+                e.printStackTrace();
+                labelRegistroValidacion.setText("Error al guardar la imagen de perfil.");
+            }
+        }
         PerfilUsuario.setUsuarioActual(estudiante);
         // Mostrar mensaje de éxito
         labelRegistro.setText("¡Registro exitoso!");
-
-        PerfilUsuario.getInstancia().setImagenPerfil(null);
+        UtilSQL.actualizarEstudiante(estudiante);
 
         cambiarEscenaLogin();
 
@@ -148,26 +168,25 @@ public class RegistroController {
     }
 
 
-        @FXML
+    @FXML
     private void seleccionarImagen(ActionEvent event) {
-
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Seleccionar Imagen de Perfil");
-
         fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Imágenes", "*.png", "*.jpg", "*.jpeg", "*.gif")
+                new FileChooser.ExtensionFilter("Imágenes", "*.png", "*.jpg", "*.jpeg")
         );
 
-        File file = fileChooser.showOpenDialog(root.getScene().getWindow());
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        File archivoSeleccionado = fileChooser.showOpenDialog(stage);
 
-        if (file != null) {
-            archivoImagenSeleccionada = file; // GUARDAR archivo original
-            String imagePath = file.toURI().toString();
-            Image nuevaImagen = new Image(imagePath);
-            imagenPerfil.setImage(nuevaImagen);
-            PerfilUsuario.getInstancia().setImagenPerfil(nuevaImagen);
-            System.out.println("Imagen seleccionada: " + imagePath);
+        if (archivoSeleccionado != null) {
+            Image imagen = new Image(archivoSeleccionado.toURI().toString());
+            imagenPerfil.setImage(imagen);
+            archivoImagenSeleccionada = archivoSeleccionado;
+            System.out.println("Imagen cargada: " + archivoSeleccionado.toURI().toString());
+        } else {
+            System.out.println("Selección de imagen cancelada.");
         }
-
     }
+
 }

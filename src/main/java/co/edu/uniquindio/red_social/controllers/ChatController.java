@@ -1,6 +1,7 @@
 package co.edu.uniquindio.red_social.controllers;
 
 import co.edu.uniquindio.red_social.clases.RedSocial;
+import co.edu.uniquindio.red_social.clases.interfaces.ChatObserver;
 import co.edu.uniquindio.red_social.clases.social.Chat;
 import co.edu.uniquindio.red_social.clases.social.Mensaje;
 import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
@@ -36,7 +37,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class ChatController implements Initializable {
+public class ChatController implements Initializable , ChatObserver {
 
     // Elementos FXML
     @FXML
@@ -197,12 +198,17 @@ public class ChatController implements Initializable {
         if (perfil.getImagenPerfil() != null) {
             imagenPerfil.setImage(perfil.getImagenPerfil());
         }
+
+        estudianteActual.getChats().show();
+        System.out.println(chatActual);
+        cagarMensajesChat(chatActual);
+
     }
 
     private void inicializarUsuarios() {
         userchatListVBox.getChildren().clear();
 
-        for (Estudiante usuario : RedSocial.getInstance().getEstudiantes()) {
+        for (Estudiante usuario : estudianteActual.getContactos()) {
             if (usuario.getId().equals(estudianteActual.getId())) continue;
 
             // Crear ToggleButton
@@ -281,14 +287,11 @@ public class ChatController implements Initializable {
             System.err.println("Error: Elementos para eventos no inicializados");
             return;
         }
-
-        messageTextField.setOnAction(this::enviarMensaje);
-        sendButton.setOnAction(this::enviarMensaje);
-        botonBuscar.setOnAction(this::buscarUsuario);
     }
 
     private void seleccionarUsuario(ToggleButton botonUsuario) {
         if (botonUsuario == null || userchatListVBox == null) return;
+
 
         // Deseleccionar los demás botones
         userchatListVBox.getChildren().forEach(node -> {
@@ -301,32 +304,36 @@ public class ChatController implements Initializable {
         });
 
         Estudiante receptor = (Estudiante) botonUsuario.getUserData();
-
         if (receptor == null) return;
 
-        chatActual = null;
+        // Buscar o crear el chat
+        chatActual = obtenerOCrearChat(receptor);
 
-        // Buscar chat existente entre estudianteActual y receptor
+        // 2. Registrar este controller como observer del nuevo chat
+        if (chatActual != null) {
+            chatActual.addObserver(this);
+            chatObservadoActual = chatActual;
+        }
+        chatActual.getMensajes().show();
+
+        // Actualizar interfaz
+        actualizarInterfazUsuario(receptor);
+        cargarMensajes(receptor);
+        cagarMensajesChat(chatActual);
+    }
+
+    private Chat obtenerOCrearChat(Estudiante receptor) {
+        // Buscar chat existente
         for (Chat chat : estudianteActual.getChats()) {
-            boolean esChatConReceptor =
-                    (chat.getEstudiante().equals(estudianteActual) && chat.getEstudiante2().equals(receptor)) ||
-                            (chat.getEstudiante2().equals(estudianteActual) && chat.getEstudiante().equals(receptor));
-
-            if (esChatConReceptor) {
-                chatActual = chat;
-                break;
+            if (chat.contieneUsuarios(estudianteActual, receptor)) {
+                return chat;
             }
         }
 
-        // Si no existe chat, crear uno nuevo y agregarlo a la lista de chats
-        if (chatActual == null) {
-            chatActual = new Chat(estudianteActual, receptor);
-            estudianteActual.getChats().add(chatActual);
-        }
-
-        // Actualizar interfaz y cargar mensajes
-        actualizarInterfazUsuario(receptor);
-        cargarMensajes(receptor);
+        // Si no existe, crear uno nuevo
+        Chat nuevoChat = new Chat(estudianteActual, receptor);
+        estudianteActual.getChats().add(nuevoChat);
+        return nuevoChat;
     }
 
 
@@ -363,6 +370,9 @@ public class ChatController implements Initializable {
                 scrollPaneContenedorMensajes.setVvalue(1.0);
             });
         }
+
+        chatActual.enviarMensaje(new Mensaje(texto, LocalDateTime.now(), estudianteActual, chatActual) );
+
     }
 
     private void agregarMensaje(String texto, boolean esPropio) {
@@ -379,10 +389,6 @@ public class ChatController implements Initializable {
         contenedor.setAlignment(esPropio ? Pos.CENTER_RIGHT : Pos.CENTER_LEFT);
 
         contenedorMensajes.getChildren().add(contenedor);
-        Estudiante remitente = (chatActual.getEstudiante().equals(estudianteActual))?
-                estudianteActual: chatActual.getEstudiante2();
-
-        chatActual.enviarMensaje(new Mensaje(texto, LocalDateTime.now(), remitente, chatActual) );
 
     }
 
@@ -393,7 +399,6 @@ public class ChatController implements Initializable {
         String busqueda = campoBusqueda.getText().trim();
         if (!busqueda.isEmpty()) {
             campoBusqueda.clear();
-            //Aquí se puede agregar un nuevo usuario, segun el nombre que estemos buscanod
         }
     }
 
@@ -422,6 +427,14 @@ public class ChatController implements Initializable {
         for (Mensaje mensaje : mensajes) {
             boolean esPropio = mensaje.getUsuarioRemitente().equals(emisor.getId());
             agregarMensaje(mensaje.getMensaje(), esPropio);
+        }
+    }
+
+
+    private void cagarMensajesChat(Chat chat){
+        chat.getMensajes().show();
+        for(Mensaje mensaje: chat.getMensajes()){
+            agregarMensaje(mensaje.getMensaje(), mensaje.getUsuarioRemitente().equals(estudianteActual));
         }
     }
 
@@ -467,5 +480,36 @@ public class ChatController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private Chat chatObservadoActual = null;
+
+    @Override
+    public void update() {
+        Platform.runLater(() -> {
+            if (chatActual != null && chatObservadoActual != null && chatActual.equals(chatObservadoActual)) {
+                cargarMensajes(chatActual.getOtroUsuario(estudianteActual));
+            }
+        });
+    }
+
+    @FXML
+    private void irAContenidos(ActionEvent event) {
+        // Lógica para ir a contenidos
+    }
+
+    @FXML
+    private void irAGruposEstudio(ActionEvent event) {
+        // Lógica para ir a contenidos
+    }
+
+    @FXML
+    private void irASugerencias(ActionEvent event) {
+        // Lógica para ir a contenidos
+    }
+
+    @FXML
+    private void irASolicitudesAyuda(ActionEvent event) {
+        // Lógica para ir a contenidos
     }
 }
