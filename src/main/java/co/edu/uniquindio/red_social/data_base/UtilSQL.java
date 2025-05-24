@@ -980,7 +980,6 @@ public class UtilSQL {
 
     public static void obtenerMensajesPorChat(Chat chat) {
 
-
         if (!save || chat == null || chat.getId() == null) {
             return;
         }
@@ -1004,6 +1003,7 @@ public class UtilSQL {
                     if (remitente != null) {
                         Mensaje mensaje = new Mensaje(texto, fecha, remitente, chat);
                         mensaje.setId(idMensaje);
+                        chat.getMensajes().add(mensaje);
                     }
                 }
             }

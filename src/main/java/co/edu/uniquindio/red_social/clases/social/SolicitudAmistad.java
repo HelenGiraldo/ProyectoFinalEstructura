@@ -25,7 +25,8 @@ public class SolicitudAmistad {
         estudianteSolicitado.anadirChat(chat);
         estudianteSolicitante.getChats().add(chat);
         UtilSQL.aceptarSolicitudAmistad(estudianteSolicitante.getId(), estudianteSolicitado.getId());
-
+        int id = UtilSQL.crearChat(chat);
+        chat.setId(String.valueOf(id));
     }
 
     public boolean isEstado() {

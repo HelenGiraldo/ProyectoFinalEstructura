@@ -63,8 +63,11 @@ public class Mensaje {
     @Override
     public String toString() {
         return "Mensaje{" +
-                "mensaje='" + mensaje + '\'' +
-                ", usuarioRemitente=" + usuarioRemitente +
+                "chat=" + chat.getId() +
+                ", id='" + id + '\'' +
+                ", usuarioRemitente=" + usuarioRemitente.getNombre() +
+                ", fecha=" + fecha +
+                ", mensaje='" + mensaje + '\'' +
                 '}';
     }
 }

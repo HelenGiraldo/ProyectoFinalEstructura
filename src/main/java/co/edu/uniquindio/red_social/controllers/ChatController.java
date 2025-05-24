@@ -22,11 +22,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -37,7 +39,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class ChatController implements Initializable , ChatObserver {
+
+public class ChatController implements  ChatObserver {
 
     // Elementos FXML
     @FXML
@@ -146,21 +149,30 @@ public class ChatController implements Initializable , ChatObserver {
 
     Estudiante estudianteActual = (Estudiante) PerfilUsuario.getUsuarioActual();
     Chat chatActual;
-    Estudiante remitenteChat;
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        // Selecciona el botón de Mensajes como activo
+    @FXML
+    public void initialize() {
+
         MensajesButton.setSelected(true);
 
-        // Aplicar clip circular a la imagen de perfil (avatar)
-        Platform.runLater(() -> {
-            if (imagenPerfil != null) {
-                double radius = imagenPerfil.getFitWidth() / 2;
-                Circle clip = new Circle(radius, radius, radius);
-                imagenPerfil.setClip(clip);
-            }
-        });
+
+        if (imagenPerfil != null) {
+            double radius = imagenPerfil.getFitWidth() / 2;
+            Circle clip = new Circle(radius, radius, radius);
+            imagenPerfil.setClip(clip);
+        }
+
+        if(estudianteActual.getChats().isEmpty()) {
+
+            return;
+        }
+        agregarMensaje("Hola", false);
+        agregarMensaje("Estudiante", true);
+        agregarMensaje("texto1",false);
+        agregarMensaje("texto2",false);
+        agregarMensaje("texto3",false);
+        agregarMensaje("texto3",true);
+        agregarMensaje("texto4",false);
 
         // Inicializar lista de usuarios para chatear (sidebar)
         inicializarUsuarios();
@@ -171,8 +183,6 @@ public class ChatController implements Initializable , ChatObserver {
         // Configurar otros eventos como botones, envío de mensajes
         configurarEventos();
 
-        // Ajustes del scroll pane para los mensajes
-        scrollPaneContenedorMensajes.setFitToWidth(true);
         scrollPaneContenedorMensajes.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
         // Para que el VBox de mensajes ocupe todo el ancho disponible
@@ -187,21 +197,12 @@ public class ChatController implements Initializable , ChatObserver {
         // Obtener la instancia singleton del perfil de usuario
         PerfilUsuario perfil = PerfilUsuario.getInstancia();
 
-        // Listener para actualizar la imagen cuando cambie en el singleton
-        perfil.imagenPerfilProperty().addListener((obs, oldImg, newImg) -> {
-            if (newImg != null) {
-                imagenPerfil.setImage(newImg);
-            }
-        });
-
         // Inicializar imagen al cargar la vista si ya hay una imagen cargada
         if (perfil.getImagenPerfil() != null) {
             imagenPerfil.setImage(perfil.getImagenPerfil());
         }
 
-        estudianteActual.getChats().show();
-        System.out.println(chatActual);
-        cagarMensajesChat(chatActual);
+
 
     }
 
@@ -209,7 +210,7 @@ public class ChatController implements Initializable , ChatObserver {
         userchatListVBox.getChildren().clear();
 
         for (Estudiante usuario : estudianteActual.getContactos()) {
-            if (usuario.getId().equals(estudianteActual.getId())) continue;
+            if (usuario.equals(estudianteActual)) continue;
 
             // Crear ToggleButton
             ToggleButton boton = new ToggleButton();
@@ -219,17 +220,29 @@ public class ChatController implements Initializable , ChatObserver {
             boton.setUserData(usuario);
             boton.getStyleClass().add("sidebar-button-chat");
 
-            // Crear ImageView
-            ImageView avatar = new ImageView(new Image(getClass().getResource("/co/edu/uniquindio/red_social/imagenes/imagePerfil.png").toExternalForm()));
-            avatar.setFitWidth(20);
-            avatar.setFitHeight(19);
-            avatar.getStyleClass().add("avatar");
+            String rutaOriginal = usuario.getImagenPerfil().toString(); // "src\\main\\resources\\co\\edu\\uniquindio\\...\\imagen_perfil2.jpg"
+            String rutaClasspath = rutaOriginal.replace("\\", "/").replace("src/main/resources/", "");
+
+            if (!rutaClasspath.startsWith("/")) {
+                rutaClasspath = "/" + rutaClasspath;
+            }
+
+            URL url = getClass().getResource(rutaClasspath);
+            ImageView avatar = null;
+            if (url != null) {
+                avatar = new ImageView(new Image(url.toExternalForm()));
+                avatar.setFitWidth(20);
+                avatar.setFitHeight(19);
+                avatar.getStyleClass().add("avatar");
+            } else {
+                System.err.println("No se encontró la imagen en: " + rutaClasspath);
+            }
 
             // Crear Label con nombre del usuario
             Label nombre = new Label(usuario.getNombre());
             nombre.setPrefHeight(19);
-            nombre.setPrefWidth(70); // o ajustable
-            nombre.getStyleClass().add("contact-name"); // Negrilla definida en CSS
+            nombre.setPrefWidth(70);
+            nombre.getStyleClass().add("contact-name");
 
             // Agrupar imagen + texto en un HBox
             HBox hbox = new HBox(8, avatar, nombre);
@@ -248,7 +261,7 @@ public class ChatController implements Initializable , ChatObserver {
             userchatListVBox.getChildren().add(boton);
         }
 
-        // Selección inicial automática
+
         if (!userchatListVBox.getChildren().isEmpty()) {
             ToggleButton first = (ToggleButton) userchatListVBox.getChildren().get(0);
             first.setSelected(true);
@@ -256,44 +269,20 @@ public class ChatController implements Initializable , ChatObserver {
         }
     }
 
-
-
-
-    private void configurarBotonUsuario(ToggleButton boton, Estudiante estudiante) {
-        if (boton == null || estudiante == null) return;
-
-        boton.setText(estudiante.getNombre() + " ");
-        boton.setUserData(estudiante);
-
-        boton.setToggleGroup(grupoUsuarios);
-
-        boton.setOnAction(e -> {
-            if (boton.isSelected()) {
-                seleccionarUsuario(boton);
-            }
-        });
-
-    }
-
     private void configurarChat() {
         contenedorMensajes.setSpacing(10);
         contenedorMensajes.setPadding(new Insets(10));
-        scrollPaneContenedorMensajes.setFitToWidth(true);
 
     }
 
     private void configurarEventos() {
         if (messageTextField == null || sendButton == null || botonBuscar == null) {
             System.err.println("Error: Elementos para eventos no inicializados");
-            return;
         }
     }
 
     private void seleccionarUsuario(ToggleButton botonUsuario) {
         if (botonUsuario == null || userchatListVBox == null) return;
-
-
-        // Deseleccionar los demás botones
         userchatListVBox.getChildren().forEach(node -> {
             if (node instanceof ToggleButton) {
                 ToggleButton tb = (ToggleButton) node;
@@ -309,16 +298,10 @@ public class ChatController implements Initializable , ChatObserver {
         // Buscar o crear el chat
         chatActual = obtenerOCrearChat(receptor);
 
-        // 2. Registrar este controller como observer del nuevo chat
-        if (chatActual != null) {
-            chatActual.addObserver(this);
-            chatObservadoActual = chatActual;
-        }
+
         chatActual.getMensajes().show();
 
-        // Actualizar interfaz
         actualizarInterfazUsuario(receptor);
-        cargarMensajes(receptor);
         cagarMensajesChat(chatActual);
     }
 
@@ -344,9 +327,11 @@ public class ChatController implements Initializable , ChatObserver {
         }
 
         LabelUser2.setText(receptor.getNombre() + " ");
-
         try {
-            AvatarCompañero.setImage(new Image("/images/default-avatar.png"));
+
+            AvatarCompañero.setImage(new Image(receptor.getImagenPerfil().toURI().toString()));
+
+
         } catch (Exception e) {
             System.err.println("Error cargando imagen de avatar: " + e.getMessage());
         }
@@ -364,11 +349,7 @@ public class ChatController implements Initializable , ChatObserver {
         if (!texto.isEmpty()) {
             agregarMensaje(texto, true);
 
-            Platform.runLater(() -> {
-                messageTextField.clear();
-                messageTextField.requestFocus();
-                scrollPaneContenedorMensajes.setVvalue(1.0);
-            });
+
         }
 
         chatActual.enviarMensaje(new Mensaje(texto, LocalDateTime.now(), estudianteActual, chatActual) );
@@ -378,18 +359,25 @@ public class ChatController implements Initializable , ChatObserver {
     private void agregarMensaje(String texto, boolean esPropio) {
         if (contenedorMensajes == null) return;
 
+        Platform.runLater(() -> {
+            messageTextField.clear();
+            messageTextField.requestFocus();
+            scrollPaneContenedorMensajes.setVvalue(1.0);
+        });
+
         Label mensaje = new Label(texto);
-        mensaje.getStyleClass().add(esPropio ? "message-bubble-user" : "message-bubble");
+        mensaje.getStyleClass().add(esPropio ? "message-bubble" : "message-bubble-user");
         mensaje.setWrapText(true);
-        mensaje.setMaxWidth(300);
         mensaje.setPadding(new Insets(8, 12, 8, 12));
 
         HBox contenedor = new HBox(mensaje);
         contenedor.setPadding(new Insets(5));
+
+        // Aquí está el cambio importante - usar setAlignment en el HBox
+        HBox.setHgrow(mensaje, Priority.ALWAYS);  // Esto permite que el mensaje ocupe todo el espacio disponible
         contenedor.setAlignment(esPropio ? Pos.CENTER_RIGHT : Pos.CENTER_LEFT);
 
         contenedorMensajes.getChildren().add(contenedor);
-
     }
 
     @FXML
@@ -432,6 +420,8 @@ public class ChatController implements Initializable , ChatObserver {
 
 
     private void cagarMensajesChat(Chat chat){
+        agregarMensaje("prueba", false);
+        agregarMensaje("Prueba2", true);
         chat.getMensajes().show();
         for(Mensaje mensaje: chat.getMensajes()){
             agregarMensaje(mensaje.getMensaje(), mensaje.getUsuarioRemitente().equals(estudianteActual));
@@ -482,15 +472,9 @@ public class ChatController implements Initializable , ChatObserver {
         }
     }
 
-    private Chat chatObservadoActual = null;
-
     @Override
     public void update() {
-        Platform.runLater(() -> {
-            if (chatActual != null && chatObservadoActual != null && chatActual.equals(chatObservadoActual)) {
-                cargarMensajes(chatActual.getOtroUsuario(estudianteActual));
-            }
-        });
+        cagarMensajesChat(chatActual);
     }
 
     @FXML
@@ -510,6 +494,6 @@ public class ChatController implements Initializable , ChatObserver {
 
     @FXML
     private void irASolicitudesAyuda(ActionEvent event) {
-        // Lógica para ir a contenidos
+        chatActual.getMensajes().show();
     }
 }

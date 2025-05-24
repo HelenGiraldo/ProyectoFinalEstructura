@@ -62,11 +62,11 @@
             <VBox prefHeight="322.0" prefWidth="192.0" BorderPane.alignment="CENTER">
                <children>
                   <ToggleButton fx:id="InicioButton" mnemonicParsing="false" onAction="#irAInicio" prefHeight="37.0" prefWidth="161.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Inicio" />
-                  <ToggleButton fx:id="misContenidosButton" onAction="#irAContenidos" mnemonicParsing="false" prefHeight="43.0" prefWidth="132.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Mis Contenidos" />
-                  <ToggleButton fx:id="gruposEstudioButton" onAction="#irAGruposEstudio" mnemonicParsing="false" prefHeight="42.0" prefWidth="151.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Grupos estudio" />
+                  <ToggleButton fx:id="misContenidosButton" mnemonicParsing="false" onAction="#irAContenidos" prefHeight="43.0" prefWidth="132.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Mis Contenidos" />
+                  <ToggleButton fx:id="gruposEstudioButton" mnemonicParsing="false" onAction="#irAGruposEstudio" prefHeight="42.0" prefWidth="151.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Grupos estudio" />
                   <ToggleButton fx:id="MensajesButton" mnemonicParsing="false" prefHeight="42.0" prefWidth="161.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Mensajes" />
-                  <ToggleButton fx:id="SugerenciasButton" onAction="#irASugerencias" mnemonicParsing="false" prefHeight="38.0" prefWidth="159.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Sugerencias" />
-                  <ToggleButton fx:id="SolicitudesDeAyudaButton" onAction="#irASolicitudesAyuda" mnemonicParsing="false" prefHeight="40.0" prefWidth="160.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Solicitudes de ayuda" />
+                  <ToggleButton fx:id="SugerenciasButton" mnemonicParsing="false" onAction="#irASugerencias" prefHeight="38.0" prefWidth="159.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Sugerencias" />
+                  <ToggleButton fx:id="SolicitudesDeAyudaButton" mnemonicParsing="false" onAction="#irASolicitudesAyuda" prefHeight="40.0" prefWidth="160.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Solicitudes de ayuda" />
                   <ToggleButton fx:id="configuracionPerfilButton" mnemonicParsing="false" onAction="#irAConfig" prefHeight="39.0" prefWidth="161.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Configuracion perfil" />
                </children>
             </VBox>
@@ -82,34 +82,8 @@
                                  <children>
                                     <VBox fx:id="userchatListVBox" layoutX="-12.0" layoutY="-9.0" prefHeight="314.0" prefWidth="112.0">
                                        <children>
-                                          <ToggleButton fx:id="buttonUser2" mnemonicParsing="false" prefHeight="42.0" prefWidth="112.0" styleClass="sidebar-button-chat" stylesheets="@stylesChat.css">
-                                             <graphic>
-                                                <HBox fx:id="HboxAvatarNombre1">
-                                                   <children>
-                                                      <ImageView fx:id="AvatarCompañero1" fitHeight="19.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" styleClass="avatar">
-                                                         <image>
-                                                            <Image url="@imagenes/imagePerfil.png" />
-                                                         </image>
-                                                      </ImageView>
-                                                      <Label fx:id="LabelUser2chat" prefHeight="19.0" prefWidth="48.0" styleClass="contact-name" stylesheets="@stylesChat.css" text="User2" />
-                                                   </children>
-                                                </HBox>
-                                             </graphic>
-                                          </ToggleButton>
-                                          <ToggleButton fx:id="buttonUser3" mnemonicParsing="false" prefHeight="42.0" prefWidth="112.0" styleClass="sidebar-button-chat" stylesheets="@stylesChat.css">
-                                             <graphic>
-                                                <HBox fx:id="HboxAvatarNombre2">
-                                                   <children>
-                                                      <ImageView fx:id="AvatarCompañero2chat" fitHeight="19.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" styleClass="avatar">
-                                                         <image>
-                                                            <Image url="@imagenes/imagePerfil.png" />
-                                                         </image>
-                                                      </ImageView>
-                                                      <Label fx:id="LabelUser3chat" prefHeight="19.0" prefWidth="48.0" styleClass="contact-name" stylesheets="@stylesChat.css" text="User3" />
-                                                   </children>
-                                                </HBox>
-                                             </graphic>
-                                          </ToggleButton>
+                                          <ToggleButton fx:id="buttonUser2" mnemonicParsing="false" prefHeight="42.0" prefWidth="112.0" styleClass="sidebar-button-chat" stylesheets="@stylesChat.css" />
+                                          <ToggleButton fx:id="buttonUser3" mnemonicParsing="false" prefHeight="42.0" prefWidth="112.0" styleClass="sidebar-button-chat" stylesheets="@stylesChat.css" />
                                        </children>
                                     </VBox>
                                  </children>
@@ -133,19 +107,19 @@
                                                       <Image url="@imagenes/imagePerfil.png" />
                                                    </image>
                                                 </ImageView>
-                                                <Label fx:id="LabelUser2" prefHeight="19.0" prefWidth="273.0" styleClass="contact-name" stylesheets="@stylesChat.css" text="User2" />
+                                                <Label fx:id="LabelUser2" prefHeight="19.0" prefWidth="273.0" styleClass="contact-name" stylesheets="@stylesChat.css" text="No tienes contactos" />
                                              </children>
                                           </HBox>
-                                          <VBox fx:id="chatSpace" prefHeight="258.0" prefWidth="264.0">
+                                          <VBox fx:id="chatSpace" alignment="BOTTOM_LEFT" prefHeight="258.0" prefWidth="264.0">
                                              <children>
-                                                <ScrollPane fx:id="scrollPaneContenedorMensajes">
+                                                <ScrollPane fx:id="scrollPaneContenedorMensajes" prefHeight="180.0" prefWidth="247.0">
                                                    <content>
-                                                      <AnchorPane>
-                                                         <VBox fx:id="contenedorMensajes" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" />
+                                                      <AnchorPane prefHeight="32.0" prefWidth="80.0">
+                                                         <VBox fx:id="contenedorMensajes" prefHeight="32.0" prefWidth="237.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="-157.0" AnchorPane.topAnchor="0" />
                                                       </AnchorPane>
                                                    </content>
                                                 </ScrollPane>
-                                                <HBox prefHeight="48.0" prefWidth="300.0">
+                                                <HBox prefHeight="48.0" prefWidth="247.0">
                                                    <children>
                                                       <HBox prefHeight="42.0" prefWidth="13.0" />
                                                       <TextField fx:id="messageTextField" prefHeight="27.0" prefWidth="219.0" promptText="Ingresa un mensaje" stylesheets="@stylesChat.css" />

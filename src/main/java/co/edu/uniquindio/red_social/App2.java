@@ -26,15 +26,12 @@ public class App2 {
         System.out.println(red.getEstudiantes().size());
         System.out.println("---------------------------------");
 
-
-
-        Estudiante estudiante = red.getEstudiantes().get(1);
+        Estudiante estudiante = red.getEstudiantes().get(0);
         Estudiante estudiante2 = red.getEstudiantes().get(2);
-
-
-        Chat chat = estudiante.getChats().getFirst();
-        chat.enviarMensaje(new Mensaje("Hola", LocalDateTime.now(), estudiante, chat));
-
+        estudiante.getContactos().show();
+        estudiante.enviarSolicitud(estudiante2);
+        estudiante2.aceptarSolicitud(estudiante2.getSolicitudesRecibidas().get(0));
+        estudiante.getChats().show();
 
     }
 }
