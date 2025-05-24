@@ -27,7 +27,7 @@ public class Estudiante extends Usuario implements AdministracionContenido {
     private ListaSimplementeEnlazada<Grupo> grupos;
     private ListaSimplementeEnlazada<Chat> chats;
     private String id;
-    private String rutaImagenPerfil;
+
 
     public Estudiante(String nombre,String apellido, String correo, String contrasena, File fotoPerfil) {
         super(nombre,apellido, correo, contrasena, fotoPerfil);
@@ -406,12 +406,9 @@ public class Estudiante extends Usuario implements AdministracionContenido {
         this.id = id;
     }
     public String getRutaImagenPerfil() {
-        return rutaImagenPerfil;
+        return imagenPerfil.getPath();
     }
 
-    public void setRutaImagenPerfil(String rutaImagenPerfil) {
-        this.rutaImagenPerfil = rutaImagenPerfil;
-    }
 
     @Override
     public String toString() {
