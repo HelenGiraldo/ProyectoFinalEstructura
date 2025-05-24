@@ -1,18 +1,27 @@
 package co.edu.uniquindio.red_social.controllers;
 
+import co.edu.uniquindio.red_social.clases.contenidos.Contenido;
 import co.edu.uniquindio.red_social.clases.social.Grupo;
+import co.edu.uniquindio.red_social.estructuras.ArbolBinario;
+import co.edu.uniquindio.red_social.estructuras.ListaSimplementeEnlazada;
 import co.edu.uniquindio.red_social.util.GrupoService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.List;
 
 public class GruposDeEstudioAdminController {
 
@@ -127,38 +136,24 @@ public class GruposDeEstudioAdminController {
     @FXML
     private VBox userchatListVBox;
 
-    @FXML
-    void irAChat(ActionEvent event) {
 
-    }
 
     @FXML
-    void irAConfig(ActionEvent event) {
+    private VBox contenedorGrupos;
 
-    }
-
-    @FXML
-    void irAContenidos(ActionEvent event) {
-
-    }
 
     @FXML
-    void irAInicio(ActionEvent event) {
+    private VBox gruposVBox;
 
-    }
+    private List<Grupo> listaGrupos;
 
-    @FXML
-    void irASolicitudesAyuda(ActionEvent event) {
 
-    }
+    GrupoService grupoService = GrupoService.getInstance();
 
-    @FXML
-    void irASugerencias(ActionEvent event) {
+    private ToggleGroup grupoGrupos = new ToggleGroup();
 
-    }
+    private ArbolBinario<Contenido> arbolContenido;
 
-    @FXML
-    private VBox contenedorGrupos; // VBox en tu FXML donde se listarán los grupos
 
     @FXML
     private void initialize() {
@@ -166,12 +161,213 @@ public class GruposDeEstudioAdminController {
     }
 
     private void cargarGrupos() {
-        contenedorGrupos.getChildren().clear();
-        for (Grupo grupo : GrupoService.getInstance().obtenerGrupos()) {
-            Label label = new Label("Nombre: " + grupo.getNombre() + ", Tipo: " + grupo.getTipoGrupo());
-            contenedorGrupos.getChildren().add(label);
+        gruposVBox.getChildren().clear();
+        listaGrupos = grupoService.obtenerGrupos();
+
+        for (Grupo grupo : listaGrupos) {
+            ToggleButton botonGrupo = new ToggleButton(grupo.getNombre());
+            botonGrupo.setPrefWidth(150);
+            botonGrupo.setPrefHeight(40);
+            botonGrupo.setToggleGroup(grupoGrupos);
+            botonGrupo.setUserData(grupo);
+            botonGrupo.getStyleClass().add("sidebar-button-grupo");
+
+            botonGrupo.setOnAction(e -> {
+                if (botonGrupo.isSelected()) {
+                    seleccionarGrupo(botonGrupo);
+                }
+            });
+
+            gruposVBox.getChildren().add(botonGrupo);
+        }
+
+        if (!gruposVBox.getChildren().isEmpty()) {
+            ToggleButton primero = (ToggleButton) gruposVBox.getChildren().get(0);
+            primero.setSelected(true);
+            seleccionarGrupo(primero);
         }
     }
+
+
+    private void seleccionarGrupo(ToggleButton botonGrupo) {
+
+        gruposVBox.getChildren().forEach(node -> {
+            if (node instanceof ToggleButton) {
+                ToggleButton tb = (ToggleButton) node;
+                if (tb != botonGrupo) {
+                    tb.setSelected(false);
+                }
+            }
+        });
+
+        Grupo grupoSeleccionado = (Grupo) botonGrupo.getUserData();
+
+
+        if (grupoSeleccionado != null) {
+
+            System.out.println("Grupo seleccionado: " + grupoSeleccionado.getNombre());
+            mostrarContenidoGrupo(grupoSeleccionado);
+        }
+
+
+    }
+
+
+    @FXML
+    private void irACrearGrupo(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/crearGrupo.fxml"));
+            Parent root = loader.load();
+
+            Stage popupStage = new Stage();
+            popupStage.setTitle("Crear nuevo grupo");
+            popupStage.setScene(new Scene(root));
+            popupStage.initOwner(((Node) event.getSource()).getScene().getWindow()); // Define la ventana principal como dueña
+            popupStage.setResizable(false);
+
+            popupStage.setOnHidden(e -> {
+                cargarGrupos(); // Recarga los grupos cuando se cierra la ventana popup
+            });
+
+            popupStage.show();// Muestra como ventana nueva sin cerrar la actual
+
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private void mostrarContenidoGrupo(Grupo grupo) {
+        grupoActualLabel.setText(grupo.getNombre());
+        arbolContenido = grupo.getContenidos(); // Asegúrate que esto retorna un ArbolBinario<Contenido>
+
+        LabelTotalPublicados.setText(arbolContenido.getPeso() + " Publicados");
+
+        VBox contenidosVBox = new VBox();
+        ListaSimplementeEnlazada<Contenido> lista = arbolContenido.recorrerInorden();
+
+        for (Contenido contenido : lista) {
+            Label label = new Label(contenido.getTitulo());
+            contenidosVBox.getChildren().add(label);
+        }
+
+        scrollPaneContenedorContenidos.setContent(contenidosVBox);
+    }
+
+
+
+    @FXML
+    private void irAChat(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/mensajes.fxml"));
+            Parent configView = loader.load();
+
+            Scene scene = new Scene(configView);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+    @FXML
+    private void irAInicio(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/gruposEstudio.fxml"));
+            Parent configView = loader.load();
+
+            Scene scene = new Scene(configView);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @FXML
+    private void irASugerencias(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/Configuracion.fxml"));
+            Parent configView = loader.load();
+
+            Scene scene = new Scene(configView);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @FXML
+    private void irAConfig(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/Configuracion.fxml"));
+            Parent configView = loader.load();
+
+            Scene scene = new Scene(configView);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void irASolicitudesAyuda(ActionEvent event) {
+        try {
+
+            URL configUrl = getClass().getResource("/co/edu/uniquindio/red_social/solicitudes.fxml");
+            System.out.println("URL config: " + configUrl);
+            FXMLLoader loader = new FXMLLoader(configUrl);
+            Parent configView = loader.load();
+
+            if (root != null) {
+                root.getChildren().clear();
+                root.getChildren().add(configView);
+            } else {
+                System.err.println("El contenedor principal es null.");
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void irAContenidos(ActionEvent event) {
+        try {
+
+            URL configUrl = getClass().getResource("/co/edu/uniquindio/red_social/TusContenidos.fxml");
+            System.out.println("URL Logo: " + configUrl);
+            FXMLLoader loader = new FXMLLoader(configUrl);
+            Parent configView = loader.load();
+
+            if (root != null) {
+                root.getChildren().clear();
+                root.getChildren().add(configView);
+            } else {
+                System.err.println("El contenedor principal es null.");
+            }
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
 
 }

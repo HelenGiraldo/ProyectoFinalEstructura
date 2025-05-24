@@ -23,6 +23,7 @@ import java.net.URL;
 public class LoginController {
 
     RedSocial redSocial = RedSocial.getInstance();
+
     @FXML
     private TextField textFieldEmail;
 
@@ -32,7 +33,6 @@ public class LoginController {
     @FXML
     private Label datosIncorrectosLabel;
 
-    public boolean modoAdminActivado = false;
 
 
     @FXML
@@ -42,60 +42,44 @@ public class LoginController {
 
     @FXML
     private void handleIniciarSesion(ActionEvent event) {
-        String usuarioIngresado = textFieldEmail.getText().trim();
-        String contrasenaIngresada = passwordField.getText().trim();
+        String correo = textFieldEmail.getText().trim();
+        String contrasena = passwordField.getText().trim();
 
-        Administrador adminRegistrado = redSocial.administradorExisteCorreo(usuarioIngresado);
-        Estudiante estudianteRegistrado = null;
+        // Buscar estudiante
+        Estudiante estudiante = redSocial.estudianteExisteCorreo(correo);
+        // Buscar administrador
+        Administrador admin = redSocial.administradorExisteCorreo(correo);
 
-        Usuario usuarioRegistrado = null;
 
-        if (adminRegistrado != null) {
-            usuarioRegistrado = adminRegistrado;
-        } else {
-            estudianteRegistrado = redSocial.estudianteExisteCorreo(usuarioIngresado);
-            if (estudianteRegistrado != null) {
-                usuarioRegistrado = estudianteRegistrado;
+        if (admin != null) {
+            // Solo accede si la contraseña también es "admin123"
+            if (contrasena.equals("admin123")) {
+                PerfilUsuario.setUsuarioActual(admin);
+                irAVistaAdministrador();
+            } else {
+                datosIncorrectosLabel.setText("Contraseña incorrecta para administrador.");
             }
+            return;
         }
-
-        if (usuarioRegistrado == null) {
-            datosIncorrectosLabel.setText("No hay usuarios registrados con ese email.");
+        if (estudiante != null) {
+            if (estudiante.getContrasena().equals(contrasena)) {
+                PerfilUsuario.setUsuarioActual(estudiante);
+                irAInicio();
+            } else {
+                datosIncorrectosLabel.setText("Contraseña incorrecta.");
+            }
             return;
         }
 
-        boolean contrasenaCorrecta = usuarioRegistrado.getContrasena().equals(contrasenaIngresada);
+        datosIncorrectosLabel.setText("No hay usuarios registrados con ese email.");
 
-        if (contrasenaCorrecta) {
-            datosIncorrectosLabel.setText("");
-            PerfilUsuario.setUsuarioActual(usuarioRegistrado);
-
-            // Aquí revisamos si el estudiante está activo como admin
-            if (usuarioRegistrado instanceof Estudiante estudiante) {
-                if (redSocial.estaActivoComoAdmin(estudiante)) {
-                    redSocial.convertirEstudianteAAdmin(estudiante);
-                    PerfilUsuario.setUsuarioActual(redSocial.administradorExisteCorreo(estudiante.getEmail()));
-                    irAVistaAdministrador();
-                    return;
-                } else {
-                    irAInicio();
-                    return;
-                }
-            }
-
-            if (usuarioRegistrado instanceof Administrador) {
-                irAVistaAdministrador();
-            }
-        } else {
-            datosIncorrectosLabel.setText("Contraseña incorrecta.");
-        }
     }
 
 
 
     private void irAVistaAdministrador() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/GruposEstudio.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/gruposDeEstudioAdmin.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) textFieldEmail.getScene().getWindow();
             stage.setScene(new Scene(root));
@@ -125,23 +109,6 @@ public class LoginController {
             e.printStackTrace();
             datosIncorrectosLabel.setText("No se pudo cargar la interfaz de recuperación.");
         }
-    }
-
-    @FXML
-    private void handleEresAdmin(MouseEvent event) {
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Modo Administrador");
-        dialog.setHeaderText("Ingresa la contraseña de administrador");
-        dialog.setContentText("Contraseña:");
-
-        dialog.showAndWait().ifPresent(password -> {
-            if (password.equals("admin123")) {
-                modoAdminActivado = true;
-                datosIncorrectosLabel.setText("Modo administrador activado.");
-            } else {
-                datosIncorrectosLabel.setText("Contraseña de administrador incorrecta.");
-            }
-        });
     }
 
 

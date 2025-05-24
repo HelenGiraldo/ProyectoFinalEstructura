@@ -11,6 +11,8 @@ import co.edu.uniquindio.red_social.estructuras.ListaSimplementeEnlazada;
 import java.io.File;
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class UtilSQL {
@@ -19,94 +21,6 @@ public class UtilSQL {
     static String user = bundle.getString("user");
     static String password = bundle.getString("password");
     static boolean save = true;
-
-
-    public static boolean estaActivoComoAdmin(Estudiante e) {
-        if (e == null || e.getId() == null || e.getId().equals("-1")) {
-            return false;
-        }
-
-        String sql = """
-        SELECT u.id, u.nombre, u.apellido, u.correo, u.imagenPerfil, a.activo
-        FROM usuarios u
-        INNER JOIN admins a ON u.id = a.id
-        WHERE u.correo = ? AND u.contrasena = ? AND a.activo = 1
-    """;
-
-        try (Connection conn = DriverManager.getConnection(url, user, password);
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setString(1, e.getEmail());       // CORREO en parámetro 1
-            stmt.setString(2, e.getContrasena());  // CONTRASEÑA en parámetro 2
-
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    boolean activo = rs.getBoolean("activo");
-
-                    return activo;
-                }
-            }
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-
-        return false;
-    }
-
-
-    public static boolean convertirEstudianteAAdmin(Estudiante e) {
-        if (!save) {
-            System.out.println("Save está en false, no se procede.");
-            return false;
-        }
-        if (e == null || e.getId() == null || e.getId().equals("-1")) {
-            System.out.println("Estudiante inválido");
-            return false;
-        }
-
-        try (Connection conn = DriverManager.getConnection(url, user, password)) {
-            conn.setAutoCommit(false); // iniciar transacción
-
-            String sqlInsertAdmin = "INSERT INTO admins (id, nombre, apellido, correo, contrasena, imagenPerfil) VALUES (?, ?, ?, ?, ?, ?)";
-            try (PreparedStatement stmtInsertAdmin = conn.prepareStatement(sqlInsertAdmin)) {
-                stmtInsertAdmin.setString(1, e.getId());
-                stmtInsertAdmin.setString(2, e.getNombre());
-                stmtInsertAdmin.setString(3, e.getApellido());
-                stmtInsertAdmin.setString(4, e.getEmail());
-                stmtInsertAdmin.setString(5, e.getContrasena());
-                stmtInsertAdmin.setString(6, e.getImagenPerfil() != null ? e.getImagenPerfil().getPath() : null);
-
-                int filasInsertadas = stmtInsertAdmin.executeUpdate();
-                System.out.println("Filas insertadas admins: " + filasInsertadas);
-                if (filasInsertadas == 0) {
-                    conn.rollback();
-                    System.out.println("Rollback: no insertó en admins");
-                    return false;
-                }
-            }
-
-            String sqlDeleteUsuario = "DELETE FROM usuarios WHERE id = ?";
-            try (PreparedStatement stmtDeleteUsuario = conn.prepareStatement(sqlDeleteUsuario)) {
-                stmtDeleteUsuario.setString(1, e.getId());
-                int filasEliminadas = stmtDeleteUsuario.executeUpdate();
-                System.out.println("Filas eliminadas usuarios: " + filasEliminadas);
-                if (filasEliminadas == 0) {
-                    conn.rollback();
-                    System.out.println("Rollback: no eliminó de usuarios");
-                    return false;
-                }
-            }
-
-            conn.commit();
-            System.out.println("Transacción exitosa");
-            return true;
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return false;
-        }
-    }
 
 
 
@@ -511,9 +425,11 @@ public class UtilSQL {
         return idGenerado;
     }
 
-    public static void obtenerGrupos() {
+    public static List<Grupo> obtenerGrupos() {
+        List<Grupo> grupos = new ArrayList<>();
+
         if (!save) {
-            return;
+            return grupos;
         }
 
         String sql = "SELECT id, nombre, descripcion, tipo, publico FROM grupos";
@@ -529,13 +445,22 @@ public class UtilSQL {
                 String tipo = rs.getString("tipo");
                 boolean publico = rs.getBoolean("publico");
 
+                // Crea la instancia de grupo
+                Grupo grupo = new Grupo(nombre, descripcion, tipo, publico);
+
+                // Puedes seguir usando RedSocial para otro propósito si quieres
                 RedSocial.getInstance().crearGrupo(id, nombre, descripcion, tipo, publico);
+
+                // Añade el grupo a la lista
+                grupos.add(grupo);
 
             }
 
         } catch (SQLException e) {
             throw new RuntimeException("Error al obtener grupos", e);
         }
+
+        return grupos;
     }
 
     public static boolean actualizarGrupo(Grupo grupo) {

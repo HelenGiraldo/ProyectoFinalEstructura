@@ -1,6 +1,7 @@
 package co.edu.uniquindio.red_social.util;
 
 import co.edu.uniquindio.red_social.clases.social.Grupo;
+import co.edu.uniquindio.red_social.data_base.UtilSQL;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,10 +20,10 @@ public class GrupoService {
     }
 
     public void agregarGrupo(Grupo grupo) {
-        listaGrupos.add(grupo);
+        UtilSQL.insertarGrupo(grupo);
     }
 
     public List<Grupo> obtenerGrupos() {
-        return listaGrupos;
+        return UtilSQL.obtenerGrupos();
     }
 }
