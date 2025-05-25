@@ -38,9 +38,7 @@
     -fx-border-width: 1px;
 }
 
-.boton-cambiar-imagen:hover {
-    -fx-background-color: rgba(255, 255, 255, 0.5);
-}
+
 .boton-cerrar-sesion {
     -fx-background-color: rgba(220, 53, 69, 0.3); /* rojo suave con transparencia */
     -fx-text-fill: #b02a37;
@@ -65,6 +63,46 @@
     -fx-background-color: rgba(220, 53, 69, 0.7);
     -fx-translate-y: 1px;
 }
+/* Contenedor principal con imagen de fondo */
+.root {
+    -fx-background-color: rgba(255, 255, 255, 0.8); /* Fondo blanco semitransparente */
+    -fx-padding: 30;
+    -fx-background-image: url('imagenes/background.png');
+    /* Reemplaza con la ruta de tu imagen */
+    -fx-background-size: cover; /* Ajusta la imagen a todo el contenedor */
+    -fx-background-position: center center; /* Centra la imagen */
+}
 
+/* Si la imagen es muy brillante o impactante, puedes aplicar un filtro de opacidad */
+.root {
+    -fx-background-color: rgba(0, 0, 0, 0.3); /* Fondo oscuro translúcido */
+    -fx-background-image: url('imagenes/background.png');
+    -fx-background-size: cover;
+    -fx-background-position: center center;
+}
+.boton-guardar {
+    -fx-background-color: rgba(40, 167, 69, 0.3); /* verde suave con transparencia */
+    -fx-text-fill: #218838; /* verde un poco más oscuro para el texto */
+    -fx-font-size: 12px; /* tamaño más pequeño que los demás */
+    -fx-font-weight: bold;
+    -fx-padding: 6 12;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-border-color: #218838;
+    -fx-border-width: 1px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, transparent, 0, 0, 0, 0);
+    -fx-transition: all 0.2s ease-in-out;
+}
+
+.boton-guardar:hover {
+    -fx-background-color: rgba(40, 167, 69, 0.5);
+    -fx-effect: dropshadow(gaussian, #218838, 4, 0.2, 0, 2);
+}
+
+.boton-guardar:pressed {
+    -fx-background-color: rgba(40, 167, 69, 0.7);
+    -fx-translate-y: 1px;
+}
 
 

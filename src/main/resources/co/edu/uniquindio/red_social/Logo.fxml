@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@styleInicioRegistro.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.red_social.controllers.LogoController">
+   <children>
+      <Label fx:id="labelLogo" layoutX="201.0" layoutY="96.0" styleClass="logo-label" stylesheets="@styleInicioRegistro.css" text="ThinkTogether" />
+      <VBox layoutX="201.0" layoutY="150.0" prefHeight="121.0" prefWidth="253.0">
+         <children>
+            <HBox prefHeight="90.0" prefWidth="253.0">
+               <children>
+                  <Label fx:id="textBienvenido" prefHeight="52.0" prefWidth="113.0" stylesheets="@styleInicioRegistro.css" text="Bienvenido " textFill="#3a7dff" />
+                  <HBox prefHeight="90.0" prefWidth="141.0">
+                     <children>
+                        <Label fx:id="textAlSistema" prefHeight="50.0" prefWidth="92.0" text="al sistema" />
+                     </children>
+                  </HBox>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+      <VBox layoutX="159.0" layoutY="211.0" prefHeight="106.0" prefWidth="300.0">
+         <children>
+            <HBox prefHeight="46.0" prefWidth="279.0">
+               <children>
+                  <Button fx:id="buttonIniciarSesion" mnemonicParsing="false" onAction="#irALogin" prefHeight="51.0" prefWidth="145.0" styleClass="boton-iniciarSesion" text="Iniciar Sesion" />
+                  <HBox prefHeight="46.0" prefWidth="37.0" />
+                  <HBox prefHeight="46.0" prefWidth="117.0">
+                     <children>
+                        <Button fx:id="buttonRegistro" mnemonicParsing="false" onAction="#irRegistro" prefHeight="46.0" prefWidth="127.0" styleClass="boton-registro" text="Registro" />
+                     </children>
+                  </HBox>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

@@ -1,24 +1,29 @@
 package co.edu.uniquindio.red_social.clases.usuarios;
 
 import java.io.File;
+/**
+    * Esta clase representa un usuario en la red social.
+    * Contiene información básica del usuario, como su nombre, apellido, email, contraseña e imagen de perfil.
+ */
+public class Usuario {
 
-public abstract class Usuario {
     protected String nombre;
-
-    protected String correo;
+    protected String apellido;
+    protected String email;
     protected String contrasena;
-    protected String fechaNacimiento;
-    protected File fotoPerfil;
+    protected File imagenPerfil;
+    private String rutaImagenPerfil;
 
 
-    public Usuario(String nombre, String correo, String contrasena, String fechaNacimiento, File fotoPerfil) {
+    public Usuario(String nombre, String apellido, String email, String contrasena, File imagenPerfil) {
         this.nombre = nombre;
-        this.correo = correo;
+        this.apellido = apellido;
+        this.email = email;
         this.contrasena = contrasena;
-        this.fechaNacimiento = fechaNacimiento;
-        this.fotoPerfil = fotoPerfil;
+        this.imagenPerfil = imagenPerfil;
     }
 
+    // Getters y Setters
 
     public String getNombre() {
         return nombre;
@@ -28,12 +33,20 @@ public abstract class Usuario {
         this.nombre = nombre;
     }
 
-    public String getCorreo() {
-        return correo;
+    public String getApellido() {
+        return apellido;
     }
 
-    public void setCorreo(String correo) {
-        this.correo = correo;
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getContrasena() {
@@ -44,19 +57,22 @@ public abstract class Usuario {
         this.contrasena = contrasena;
     }
 
-    public String getFechaNacimiento() {
-        return fechaNacimiento;
+    public File getImagenPerfil() {
+
+        return imagenPerfil;
     }
 
-    public void setFechaNacimiento(String fechaNacimiento) {
-        this.fechaNacimiento = fechaNacimiento;
+    public void setImagenPerfil(File imagenPerfil) {
+        this.imagenPerfil = imagenPerfil;
     }
 
-    public File getFotoPerfil() {
-        return fotoPerfil;
+    public String getRutaImagenPerfil() {
+        return rutaImagenPerfil;
     }
 
-    public void setFotoPerfil(File fotoPerfil) {
-        this.fotoPerfil = fotoPerfil;
+    public void setRutaImagenPerfil(String rutaImagenPerfil) {
+        System.out.println("imagennn: " + rutaImagenPerfil);
+        this.rutaImagenPerfil = rutaImagenPerfil;
     }
+
 }

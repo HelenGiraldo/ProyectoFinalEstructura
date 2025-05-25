@@ -1,0 +1,145 @@
+.boton-iniciarSesion {
+    -fx-background-color: #1e1e1e;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-padding: 12 24;
+    -fx-background-radius: 12;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 4, 0, 0, 1);
+}
+
+.boton-registro {
+    -fx-background-color: #6C8ED9;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-padding: 12 24;
+    -fx-background-radius: 12;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 4, 0, 0, 1);
+}
+
+.boton-iniciarSesion:hover {
+    -fx-background-color: #6C8ED9;
+}
+.boton-registro:hover {
+    -fx-background-color: #333333;
+}
+/* label inicio */
+
+.logo-label {
+    -fx-font-family: "Segoe UI Semibold", "Arial", sans-serif;
+    -fx-font-size: 32px;
+    -fx-text-fill: #1e1e1e;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 4, 0.2, 2, 2);
+    -fx-padding: 20 0 20 0;
+    -fx-letter-spacing: 1px;
+}
+
+/* texto bienvenida */
+
+
+#textBienvenido {
+    -fx-fill: #3A7DFF;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 3, 0.3, 1, 1);
+}
+
+#textAlSistema {
+    -fx-fill: #333333;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 3, 0.3, 1, 1);
+}
+/* Contenedor principal con imagen de fondo */
+.root {
+    -fx-background-color: rgba(255, 255, 255, 0.8); /* Fondo blanco semitransparente */
+    -fx-padding: 30;
+    -fx-background-image: url('imagenes/background.png');
+    /* Reemplaza con la ruta de tu imagen */
+    -fx-background-size: cover; /* Ajusta la imagen a todo el contenedor */
+    -fx-background-position: center center; /* Centra la imagen */
+}
+
+/* Si la imagen es muy brillante o impactante, puedes aplicar un filtro de opacidad */
+.root {
+    -fx-background-color: rgba(0, 0, 0, 0.3); /* Fondo oscuro translúcido */
+    -fx-background-image: url('imagenes/background.png');
+    -fx-background-size: cover;
+    -fx-background-position: center center;
+}
+
+/* Card Transparente para Inicio de Sesión */
+.login-card {
+    -fx-background-color: rgba(255, 255, 255, 0.7); /* Fondo blanco translúcido */
+    -fx-border-radius: 15;
+    -fx-background-radius: 15;
+    -fx-padding: 20;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0.3, 0, 2);
+    -fx-min-width: 300px;
+    -fx-max-width: 350px;
+    -fx-alignment: center;
+}
+
+/* Campos de texto */
+.text-field, .password-field {
+    -fx-background-color: #f0f0f0;
+    -fx-border-color: #ccc;
+    -fx-border-radius: 5;
+    -fx-padding: 10px;
+    -fx-font-size: 14px;
+    -fx-pref-width: 250px;
+    -fx-focus-color: #3A7DFF; /* Color de focus cuando está seleccionado */
+}
+
+/* Botón de Iniciar Sesión */
+.login-button {
+    -fx-background-color: #3A7DFF; /* Color azul */
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 10px;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+    -fx-pref-width: 100px;
+    -fx-alignment: center;
+}
+
+.login-button:hover {
+    -fx-background-color: #2a5bb7; /* Efecto hover */
+}
+
+/* Título del Login */
+.login-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333;
+    -fx-padding: 10px;
+}
+
+/* Texto de olvidé mi contraseña */
+.handle-Olvidaste-Contrasena {
+    -fx-font-size: 11px;
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-text-fill: #3A7DFF;
+    -fx-cursor: hand;
+    -fx-padding: 10px;
+}
+
+/* Texto de olvidé mi contraseña */
+.handle-Volver {
+    -fx-font-size: 11px;
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-underline: true;
+    -fx-text-fill: #333333;
+    -fx-cursor: hand;
+    -fx-padding: 10px;
+}
+.handle-Volver:hover {
+    -fx-text-fill: #3A7DFF;
+}
+
