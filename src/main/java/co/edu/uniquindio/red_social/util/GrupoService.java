@@ -3,12 +3,10 @@ package co.edu.uniquindio.red_social.util;
 import co.edu.uniquindio.red_social.clases.social.Grupo;
 import co.edu.uniquindio.red_social.data_base.UtilSQL;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class GrupoService {
     private static GrupoService instancia;
-    private final List<Grupo> listaGrupos = new ArrayList<>();
 
     private GrupoService() {}
 

@@ -2,11 +2,15 @@ package co.edu.uniquindio.red_social.controllers;
 
 import co.edu.uniquindio.red_social.clases.contenidos.Contenido;
 import co.edu.uniquindio.red_social.clases.social.Grupo;
+import co.edu.uniquindio.red_social.clases.usuarios.Administrador;
+import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
+import co.edu.uniquindio.red_social.clases.usuarios.Usuario;
 import co.edu.uniquindio.red_social.data_base.UtilSQL;
 import co.edu.uniquindio.red_social.estructuras.ArbolBinario;
 import co.edu.uniquindio.red_social.estructuras.ListaSimplementeEnlazada;
 import co.edu.uniquindio.red_social.util.GrupoService;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;

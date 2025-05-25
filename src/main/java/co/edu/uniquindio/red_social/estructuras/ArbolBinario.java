@@ -1,5 +1,7 @@
 package co.edu.uniquindio.red_social.estructuras;
 
+import co.edu.uniquindio.red_social.clases.contenidos.Contenido;
+
 import java.util.function.Consumer;
 
 
@@ -286,6 +288,36 @@ public class ArbolBinario<T extends Comparable<T>> {
 
     public void clear() {
         borrarArbol();
+    }
+
+    public void mostrarArbolCompleto() {
+        System.out.println("\n=== ESTRUCTURA DEL ÁRBOL ===");
+        mostrarNodo(raiz, 0);
+        System.out.println("Total elementos en árbol: " + this.recorrerInorden().size());
+    }
+
+    private void mostrarNodo(BNodo<T> nodo, int nivel) {
+        if (nodo != null) {
+            mostrarNodo(nodo.getIzquierdo(), nivel + 1);
+            System.out.println("  ".repeat(nivel) + "└─ " + nodo.getValor().toString());
+            mostrarNodo(nodo.getDerecho(), nivel + 1);
+        }
+    }
+
+    public void verificarOrdenPorTema() {
+        System.out.println("\n=== VERIFICANDO ORDEN POR TEMA ===");
+        ListaSimplementeEnlazada<T> elementos = recorrerInorden();
+        String temaAnterior = null;
+
+        for (T contenido : elementos) {
+            String temaActual = ((Contenido)contenido).getTema();
+            System.out.println(temaActual);
+
+            if (temaAnterior != null && temaAnterior.compareToIgnoreCase(temaActual) > 0) {
+                System.err.println("¡ERROR DE ORDEN! " + temaAnterior + " debería estar antes de " + temaActual);
+            }
+            temaAnterior = temaActual;
+        }
     }
 /*
     public void mostrarInorden(BNodo<T> nodo) {

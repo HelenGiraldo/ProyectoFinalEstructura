@@ -1,9 +1,13 @@
 
 package co.edu.uniquindio.red_social.data_base;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
+
+import java.io.File;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class ConexionBD {
     private static final String URL = "jdbc:mysql://localhost:3306/redsocial";
@@ -13,4 +17,6 @@ public class ConexionBD {
     public static Connection conectar() throws SQLException {
         return DriverManager.getConnection(URL, USER, PASSWORD);
     }
+
+
 }

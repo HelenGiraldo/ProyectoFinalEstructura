@@ -25,6 +25,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
+import static co.edu.uniquindio.red_social.util.EstudianteActual.usuarioActual;
+
 public class InicioController {
 
     @FXML

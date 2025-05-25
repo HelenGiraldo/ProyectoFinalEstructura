@@ -1,12 +1,15 @@
 package co.edu.uniquindio.red_social.controllers;
 
 import co.edu.uniquindio.red_social.clases.contenidos.Contenido;
+import co.edu.uniquindio.red_social.clases.social.Grupo;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.awt.*;
+import javafx.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
 

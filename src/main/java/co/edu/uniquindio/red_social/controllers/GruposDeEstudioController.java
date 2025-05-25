@@ -3,10 +3,13 @@ package co.edu.uniquindio.red_social.controllers;
 import co.edu.uniquindio.red_social.clases.RedSocial;
 import co.edu.uniquindio.red_social.clases.contenidos.Contenido;
 import co.edu.uniquindio.red_social.clases.social.Grupo;
+import co.edu.uniquindio.red_social.clases.usuarios.Administrador;
 import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
+import co.edu.uniquindio.red_social.clases.usuarios.Usuario;
 import co.edu.uniquindio.red_social.data_base.UtilSQL;
 import co.edu.uniquindio.red_social.estructuras.ArbolBinario;
 import co.edu.uniquindio.red_social.estructuras.ListaSimplementeEnlazada;
+import co.edu.uniquindio.red_social.util.GrupoContenidoViewUtil;
 import co.edu.uniquindio.red_social.util.GrupoService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -19,11 +22,18 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
+import static co.edu.uniquindio.red_social.data_base.UtilSQL.cargarGrupos;
 
 public class GruposDeEstudioController {
 
@@ -145,14 +155,9 @@ public class GruposDeEstudioController {
     @FXML
     private VBox gruposVBox;
 
-    private ListaSimplementeEnlazada<Grupo> listaGrupos;
-
-
-    GrupoService grupoService = GrupoService.getInstance();
 
     private ToggleGroup grupoGrupos = new ToggleGroup();
 
-    private ArbolBinario<Contenido> arbolContenido;
 
     private Estudiante usuarioActual;
 
@@ -179,46 +184,120 @@ public class GruposDeEstudioController {
             return;
         }
 
+        // Limpiar la interfaz
         gruposVBox.getChildren().clear();
+        limpiarContenido();
+        deshabilitarBotonesAccion();
+        grupoActualLabel.setText("");
 
-        // Recargar grupos desde BD
-        RedSocial.getInstance().getGrupos().clear();
-        UtilSQL.obtenerGrupos();
-        UtilSQL.cargarMiembrosDeGrupos();
+        // Debug: Mostrar estado antes de cargar
+        System.out.println("\n=== DEBUG PRE-CARGA ===");
+        System.out.println("Grupos en memoria antes de cargar: " + RedSocial.getInstance().getGrupos().size());
 
+        // Recargar datos desde la base de datos
+        try {
+            // 1. Limpiar datos existentes
+            RedSocial.getInstance().getGrupos().clear();
+
+            // 2. Cargar grupos básicos
+            UtilSQL.obtenerGrupos();
+
+            // Debug: Ver grupos recién cargados
+            System.out.println("Grupos cargados desde BD: " + RedSocial.getInstance().getGrupos().size());
+            for (Grupo g : RedSocial.getInstance().getGrupos()) {
+                System.out.println(" - " + g.getNombre() + " (ID: " + g.getId() + ")");
+            }
+
+            // 3. Cargar miembros para cada grupo
+            UtilSQL.cargarMiembrosDeGrupos();
+
+            // 4. Cargar contenidos para cada grupo
+            for (Grupo grupo : RedSocial.getInstance().getGrupos()) {
+                ListaSimplementeEnlazada<Contenido> contenidos = UtilSQL.cargarContenidosDelGrupo(grupo.getId());
+                ArbolBinario<Contenido> arbolContenidos = grupo.getContenidos(); // Obtener el árbol existente
+                arbolContenidos.clear(); // Limpiar el árbol si es necesario
+
+// Insertar todos los contenidos en el árbol
+                for (Contenido contenido : contenidos) {
+                    arbolContenidos.insertar(contenido);
+                }
+
+                // Debug por grupo
+                System.out.println("\nGrupo: " + grupo.getNombre());
+                System.out.println("Miembros: " + grupo.getMiembros().size());
+                System.out.println("Contenidos cargados: " + contenidos.size());
+                grupo.getContenidos().mostrarArbolCompleto(); // Mostrar estructura del árbol
+            }
+
+        } catch (Exception e) {
+            mostrarAlerta("Error", "No se pudieron cargar los grupos desde la base de datos");
+            e.printStackTrace();
+            return;
+        }
+
+        // Filtrar grupos según el modo (mis grupos o disponibles)
         ListaSimplementeEnlazada<Grupo> todosGrupos = RedSocial.getInstance().getGrupos();
         ListaSimplementeEnlazada<Grupo> gruposFiltrados = new ListaSimplementeEnlazada<>();
 
         for (Grupo grupo : todosGrupos) {
             boolean esMiembro = grupo.esMiembro(estudiante);
 
-            if (mostrarMisGrupos && esMiembro) {
-                gruposFiltrados.add(grupo);
-            } else if (!mostrarMisGrupos && grupo.isPublico() && !esMiembro) {
-                gruposFiltrados.add(grupo);
+            if (mostrarMisGrupos) {
+                if (esMiembro) {
+                    gruposFiltrados.add(grupo);
+                }
+            } else {
+                if (grupo.isPublico() && !esMiembro) {
+                    gruposFiltrados.add(grupo);
+                }
             }
         }
 
-        // Mostrar grupos filtrados
-        for (Grupo grupo : gruposFiltrados) {
-            ToggleButton botonGrupo = new ToggleButton(grupo.getNombre());
-            botonGrupo.setPrefWidth(150);
-            botonGrupo.setPrefHeight(40);
-            botonGrupo.setToggleGroup(grupoGrupos);
-            botonGrupo.setUserData(grupo);
-            botonGrupo.getStyleClass().add("sidebar-button-grupo");
+        // Mostrar grupos en la interfaz
+        if (gruposFiltrados.isEmpty()) {
+            Label mensaje = new Label(mostrarMisGrupos ?
+                    "No perteneces a ningún grupo" :
+                    "No hay grupos disponibles para unirse");
+            mensaje.getStyleClass().add("mensaje-vacio");
+            gruposVBox.getChildren().add(mensaje);
+        } else {
+            for (Grupo grupo : gruposFiltrados) {
+                ToggleButton botonGrupo = new ToggleButton(grupo.getNombre());
+                botonGrupo.setPrefWidth(150);
+                botonGrupo.setPrefHeight(40);
+                botonGrupo.setToggleGroup(grupoGrupos);
+                botonGrupo.setUserData(grupo);
+                botonGrupo.getStyleClass().add("sidebar-button-grupo");
 
-            botonGrupo.setOnAction(e -> {
-                if (botonGrupo.isSelected()) {
-                    seleccionarGrupo(botonGrupo);
-                    actualizarBotonesAccion(grupo);
+                // Resaltar si es el grupo actualmente seleccionado
+                if (grupoGrupos.getSelectedToggle() != null &&
+                        grupo.equals(((ToggleButton) grupoGrupos.getSelectedToggle()).getUserData())) {
+                    botonGrupo.setSelected(true);
                 }
-            });
 
-            gruposVBox.getChildren().add(botonGrupo);
+                botonGrupo.setOnAction(e -> {
+                    if (botonGrupo.isSelected()) {
+                        // Debug al seleccionar grupo
+                        System.out.println("\nGrupo seleccionado: " + grupo.getNombre());
+                        System.out.println("HashCode: " + grupo.hashCode());
+                        System.out.println("Contenidos en este grupo:");
+                        grupo.getContenidos().mostrarArbolCompleto();
+
+                        seleccionarGrupo(botonGrupo);
+                        actualizarBotonesAccion(grupo);
+                    } else {
+                        limpiarContenido();
+                        deshabilitarBotonesAccion();
+                    }
+                });
+
+                gruposVBox.getChildren().add(botonGrupo);
+            }
         }
 
-        // Resto del método permanece igual...
+        // Actualizar estado de los botones de navegación
+        buttonMisGrupos.setDisable(mostrarMisGrupos);
+        buttonGruposDisponibles.setDisable(!mostrarMisGrupos);
     }
 
     private void limpiarContenido() {
@@ -374,68 +453,46 @@ public class GruposDeEstudioController {
             return;
         }
 
-        // Obtener la instancia ACTUAL del grupo desde RedSocial
-        RedSocial redSocial = RedSocial.getInstance();
-        Grupo grupoActual = redSocial.obtenerGrupoPorId(grupoSeleccionado.getId());
+        // Debug clave
+        System.out.println("\n=== DEBUG DIRECTO ===");
+        System.out.println("Grupo: " + grupoSeleccionado.getNombre());
+        System.out.println("Contenidos en memoria:");
+        grupoSeleccionado.getContenidos().mostrarArbolCompleto(); // Asegúrate de que este método funcione
 
-        if (grupoActual == null) {
-            mostrarAlerta("Error", "Grupo no encontrado");
-            return;
-        }
-
-        // Debug 1: Verificar instancia del grupo
-        System.out.println("=== DEBUG GRUPO ===");
-        System.out.println("Grupo seleccionado: " + grupoSeleccionado.getNombre());
-        System.out.println("Hash grupo seleccionado: " + System.identityHashCode(grupoSeleccionado));
-        System.out.println("Hash grupo actual: " + System.identityHashCode(grupoActual));
-        System.out.println("¿Misma instancia? " + (grupoSeleccionado == grupoActual));
-        System.out.println("\n=== ESTRUCTURA DEL ÁRBOL ===");
-        grupoActual.getContenidos().mostrarInorden();
-
-        // Debug 2: Verificar contenidos directamente del árbol
-        System.out.println("\n=== CONTENIDOS EN GRUPO ===");
-        ListaSimplementeEnlazada<Contenido> contenidosGrupo = grupoActual.getContenidos().recorrerInorden();
-        System.out.println("Total en grupo: " + contenidosGrupo.size());
-
-        for (Contenido c : contenidosGrupo) {
-            System.out.println("DEBUG - Contenido: " + c.getTitulo());
-            System.out.println("DEBUG - Grupo: " + (c.getGrupo() != null ? c.getGrupo().getNombre() : "null"));
-        }
-
-        // Actualizar UI
-        grupoActualLabel.setText(grupoActual.getNombre());
+        // Crear contenedor UI
         VBox contenidosVBox = new VBox(10);
         contenidosVBox.setPadding(new Insets(10));
 
-        if (contenidosGrupo.isEmpty()) {
-            Label vacioLabel = new Label("Este grupo no tiene contenidos aún");
-            contenidosVBox.getChildren().add(vacioLabel);
-        } else {
-            for (Contenido contenido : contenidosGrupo) {
-                try {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/TarjetaContenido.fxml"));
-                    Parent tarjeta = loader.load();
+        // Obtener contenidos como lista
+        ListaSimplementeEnlazada<Contenido> contenidos = grupoSeleccionado.getContenidos().recorrerInorden();
 
+        // Mostrar en UI (sin agrupar por tema para simplificar)
+        if (contenidos.isEmpty()) {
+            contenidosVBox.getChildren().add(new Label("No hay contenidos en este grupo"));
+        } else {
+            // Recorrer lista enlazada manualmente
+            for (int i = 0; i < contenidos.size(); i++) {
+                Contenido contenido = contenidos.get(i);
+                try {
+                    FXMLLoader loader = new FXMLLoader(
+                            getClass().getResource("/co/edu/uniquindio/red_social/TarjetaContenido.fxml"));
+                    Parent tarjeta = loader.load();
                     TarjetaContenidoController controller = loader.getController();
                     controller.setContenido(contenido);
-
                     contenidosVBox.getChildren().add(tarjeta);
                 } catch (IOException e) {
-                    // Fallback básico si falla la carga de la tarjeta
-                    HBox fallback = new HBox(
-                            new Label(contenido.getTitulo()),
-                            new Label(" | " + contenido.getTipoContenido())
-                    );
+                    // Fallback básico
+                    Label fallback = new Label(contenido.getTitulo() + " (" + contenido.getTema() + ")");
                     contenidosVBox.getChildren().add(fallback);
                 }
             }
         }
 
+        // Actualizar UI
+        grupoActualLabel.setText(grupoSeleccionado.getNombre());
         scrollPaneContenedorContenidos.setContent(contenidosVBox);
         scrollPaneContenedorContenidos.setFitToWidth(true);
     }
-
-
     @FXML
     void irAChat(ActionEvent event) {
         try {
