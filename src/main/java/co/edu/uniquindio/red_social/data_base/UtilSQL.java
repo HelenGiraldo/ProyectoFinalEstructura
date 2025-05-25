@@ -11,6 +11,8 @@ import co.edu.uniquindio.red_social.estructuras.ListaSimplementeEnlazada;
 import java.io.File;
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class UtilSQL {
@@ -392,10 +394,14 @@ public class UtilSQL {
         return idGenerado;
     }
 
-    public static void obtenerGrupos() {
+    public static List<Grupo> obtenerGrupos() {
+        List<Grupo> grupos = new ArrayList<>();
+
         if (!save) {
-            return;
+            return grupos;
         }
+
+        RedSocial.getInstance().getGrupos().clear();
 
         String sql = "SELECT id, nombre, descripcion, tipo, publico FROM grupos";
 
@@ -410,13 +416,20 @@ public class UtilSQL {
                 String tipo = rs.getString("tipo");
                 boolean publico = rs.getBoolean("publico");
 
-                RedSocial.getInstance().crearGrupo(id, nombre, descripcion, tipo, publico);
+                // Crea la instancia de grupo
+                Grupo grupo = new Grupo(id, nombre, descripcion, tipo, publico);
+
+                RedSocial.getInstance().getGrupos().add(grupo);
+
+                grupos.add(grupo);
 
             }
 
         } catch (SQLException e) {
             throw new RuntimeException("Error al obtener grupos", e);
         }
+
+        return grupos;
     }
 
     public static boolean actualizarGrupo(Grupo grupo) {
@@ -966,6 +979,76 @@ public class UtilSQL {
         }
     }
 
+
+    private static Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(url, user, password);
+    }
+
+    public static ListaSimplementeEnlazada<Contenido> cargarContenidosDelGrupo(String idGrupo) {
+        ListaSimplementeEnlazada<Contenido> contenidos = new ListaSimplementeEnlazada<>();
+
+        String sql = "SELECT c.id, c.tipo_contenido, c.titulo, c.tema, c.descripcion, " +
+                "c.contenido, c.id_autor, c.id_grupo FROM publicaciones c " +
+                "WHERE c.id_grupo = ?";
+
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, idGrupo);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                String id = rs.getString("id");
+                String tipo = rs.getString("tipo_contenido");
+                String titulo = rs.getString("titulo");
+                String tema = rs.getString("tema");
+                String descripcion = rs.getString("descripcion");
+                String contenidoPath = rs.getString("contenido");
+                String idAutor = rs.getString("id_autor");
+
+                Estudiante autor = RedSocial.getInstance().obtenerEstudiantePorId(idAutor);
+                File archivoContenido = contenidoPath != null ? new File(contenidoPath) : null;
+
+                if (autor != null) {
+                    Contenido contenido = new Contenido(
+                            tipo,
+                            titulo,
+                            tema,
+                            descripcion,
+                            autor,
+                            archivoContenido,
+                            null // El grupo se asigna después
+                    );
+                    contenido.setId(id);
+                    contenidos.add(contenido);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return contenidos;
+    }
+
+    public static boolean usuarioEstaEnGrupo(String idUsuario, String idGrupo) {
+        String sql = "SELECT COUNT(*) FROM user_group WHERE id_user = ? AND id_group = ?";
+
+        try (Connection conn = DriverManager.getConnection(url, user, password);
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, idUsuario);
+            stmt.setString(2, idGrupo);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public static void obtenerTodasLasSolicitudes() {
 
         if (!save) {
@@ -991,7 +1074,15 @@ public class UtilSQL {
                 if (estudiante != null) {
                     SolicitudAyuda solicitud = new SolicitudAyuda(mensaje, estudiante, titulo, prioridad, estado);
                     solicitud.setId(id);
-                    RedSocial.getInstance().getSolicitudesAyuda().add(solicitud);
+                    int prioridadInt = 0;
+                    if (prioridad.equalsIgnoreCase("normal")) {
+                        prioridadInt = 1;
+                    } else if (prioridad.equalsIgnoreCase("urgente")) {
+                        prioridadInt = 2;
+                    } else if (prioridad.equalsIgnoreCase("muy urgente")) {
+                        prioridadInt = 3;
+                    }
+                    RedSocial.getInstance().getSolicitudesAyuda().add(solicitud,prioridadInt);
                 }
             }
 
@@ -1000,7 +1091,6 @@ public class UtilSQL {
         }
 
     }
-
 }
 
 
