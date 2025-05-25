@@ -56,7 +56,7 @@ public class ArbolBinario<T extends Comparable<T>> {
         } else if (valor.compareTo(nodoActual.getValor()) > 0) {
             nodoActual.setDerecho(eliminarRecursivo(nodoActual.getDerecho(), valor));
         } else {
-                if (nodoActual.getIzquierdo() == null) {
+            if (nodoActual.getIzquierdo() == null) {
                 return nodoActual.getDerecho();
             } else if (nodoActual.getDerecho() == null) {
                 return nodoActual.getIzquierdo();

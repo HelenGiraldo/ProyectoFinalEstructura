@@ -7,8 +7,8 @@ import javafx.scene.image.Image;
 import java.io.File;
 
 /*
-    * Esta clase es un singleton que representa el perfil del usuario actual.
-    * Contiene la imagen de perfil y el usuario actual.
+ * Esta clase es un singleton que representa el perfil del usuario actual.
+ * Contiene la imagen de perfil y el usuario actual.
  */
 public class PerfilUsuario {
 

@@ -1,6 +1,5 @@
 package co.edu.uniquindio.red_social.controllers;
 
-import co.edu.uniquindio.red_social.clases.RedSocial;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

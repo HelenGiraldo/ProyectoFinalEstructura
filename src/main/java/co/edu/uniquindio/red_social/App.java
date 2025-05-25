@@ -14,7 +14,7 @@ public class App extends Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("Logo.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 600, 400);
-        stage.setTitle("Super Class");
+        stage.setTitle(RedSocial.getInstance().getNombre());
         stage.setScene(scene);
         stage.show();
     }
@@ -30,6 +30,7 @@ public class App extends Application {
         UtilSQL.cargarMiembrosDeGrupos();
         UtilSQL.cargarGrupos();
         UtilSQL.obtenerTodosLosChats();
+        UtilSQL.obtenerTodasLasSolicitudes();
         red.getEstudiantes().show();
         launch();
     }

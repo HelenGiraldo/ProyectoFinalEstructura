@@ -31,7 +31,7 @@ public class ColaDePrioridad<T> implements Cola<T>{
 
     @Override
     public Iterator<T> iterator() {
-        return new Iterator<T>() {
+        return new Iterator<>() {
             PNodo<T> current = head;
 
             @Override
@@ -60,27 +60,38 @@ public class ColaDePrioridad<T> implements Cola<T>{
 
     @Override
     public boolean remove(T objeto) {
-        if(head == null){
+        if (head == null) {
             return false;
         }
+
         boolean borrado = false;
-        PNodo<T> current = head;
-        while(current !=null && current.getValue().equals(objeto)){
+
+        // Eliminar todos los nodos iniciales que coincidan
+        while (head != null && head.getValue().equals(objeto)) {
             head = head.getNext();
-            current = head;
+            if (head != null) {
+                head.setPrevious(null);
+            } else {
+                tail = null;
+            }
             borrado = true;
             length--;
         }
-        while (current.getNext() != null) {
-            if(current.getNext().getValue().equals(objeto)){
+
+        PNodo<T> current = head;
+        while (current != null && current.getNext() != null) {
+            if (current.getNext().getValue().equals(objeto)) {
                 current.setNext(current.getNext().getNext());
-                borrado = true;
-                length--;
-                if(current.getNext() == null){
+                if (current.getNext() != null) {
+                    current.getNext().setPrevious(current);
+                } else {
                     tail = current;
                 }
+                borrado = true;
+                length--;
+            } else {
+                current = current.getNext();
             }
-            current = current.getNext();
         }
 
         return borrado;
@@ -113,45 +124,56 @@ public class ColaDePrioridad<T> implements Cola<T>{
     }
 
 
-        @Override
+    @Override
     public boolean push(T value, int priority) {
         PNodo<T> node = new PNodo<>(value, priority);
+
         if (isEmpty()) {
             head = node;
             tail = node;
+            length++;
             return true;
         }
+
         PNodo<T> current = head;
-            while (current != null && current.getPriority() <= priority) {
-                current = current.getNext();
-            }
-            if (current == head) {
-                node.setNext(head);
-                head.setPrevious(node);
-                head = node;
-            } else if (current == null) {
-                tail.setNext(node);
-                node.setPrevious(tail);
-                tail = node;
+        PNodo<T> previous = null;
 
-            } else {
+        // Avanzar hasta encontrar la posición correcta según la prioridad (mayor prioridad primero)
+        while (current != null && current.getPriority() >= priority) {
+            previous = current;
+            current = current.getNext();
+        }
 
-                PNodo<T> anterior = current.getNext();
-                anterior.setNext(node); ;
-                node.setPrevious(anterior);
+        if (previous == null) { // Insertar al inicio
+            node.setNext(head);
+            head.setPrevious(node);
+            head = node;
+        } else if (current == null) { // Insertar al final
+            tail.setNext(node);
+            node.setPrevious(tail);
+            tail = node;
+        } else { // Insertar en medio
+            previous.setNext(node);
+            node.setPrevious(previous);
+            node.setNext(current);
+            current.setPrevious(node);
+        }
 
-                node.setNext(current);
-                current.setPrevious(node);
-            }
-            return true;
+        length++;
+        return true;
     }
 
     @Override
-    public void removeFirst(){
+    public void removeFirst() {
         if (isEmpty()) {
             return;
         }
         head = head.getNext();
+        if (head == null) {
+            tail = null;
+        } else {
+            head.setPrevious(null);
+        }
         length--;
     }
 
@@ -162,6 +184,11 @@ public class ColaDePrioridad<T> implements Cola<T>{
         }
         PNodo<T> node = head;
         head = head.getNext();
+        if (head == null) {
+            tail = null;
+        } else {
+            head.setPrevious(null);
+        }
         length--;
         return node.getValue();
     }
@@ -176,14 +203,12 @@ public class ColaDePrioridad<T> implements Cola<T>{
 
     @Override
     public boolean contains(T value) {
-        if (isEmpty()) {
-            return false;
-        }
         PNodo<T> node = head;
-        while (node.getNext() != null) {
+        while (node != null) {
             if (node.getValue().equals(value)) {
                 return true;
             }
+            node = node.getNext();
         }
         return false;
     }
@@ -194,5 +219,14 @@ public class ColaDePrioridad<T> implements Cola<T>{
         tail = null;
         length = 0;
         return true;
+    }
+
+    public void show(){
+        PNodo<T> current = head;
+        while(current != null){
+            System.out.print(current.getValue()+" ");
+            current = current.getNext();
+        }
+        System.out.println();
     }
 }

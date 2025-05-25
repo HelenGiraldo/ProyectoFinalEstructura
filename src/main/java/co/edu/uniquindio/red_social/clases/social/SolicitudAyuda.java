@@ -80,4 +80,16 @@ public class SolicitudAyuda {
     public void setEstado(String estado) {
         this.estado = estado;
     }
+
+    @Override
+    public String toString() {
+        return "SolicitudAyuda{" +
+                "mensaje='" + mensaje + '\'' +
+                ", estudiante=" + estudiante +
+                ", id='" + id + '\'' +
+                ", titulo='" + titulo + '\'' +
+                ", prioridad='" + prioridad + '\'' +
+                ", estado='" + estado + '\'' +
+                '}';
+    }
 }

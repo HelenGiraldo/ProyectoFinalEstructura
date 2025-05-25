@@ -4,7 +4,6 @@ import co.edu.uniquindio.red_social.clases.RedSocial;
 import co.edu.uniquindio.red_social.clases.usuarios.Administrador;
 import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
 import co.edu.uniquindio.red_social.clases.usuarios.PerfilUsuario;
-import co.edu.uniquindio.red_social.clases.usuarios.Usuario;
 import co.edu.uniquindio.red_social.data_base.UtilSQL;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

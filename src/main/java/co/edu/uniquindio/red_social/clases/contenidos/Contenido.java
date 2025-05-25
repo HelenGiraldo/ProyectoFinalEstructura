@@ -180,4 +180,3 @@ public class Contenido implements Comparable<Contenido> {
         return titulo + " - " + autor + " (" + tema + ")";
     }
 }
-
