@@ -69,29 +69,20 @@ public class Grupo {
 
 
     public boolean agregarPublicacion(Contenido contenido) {
-        if (contenido == null) return false;
-
-        // Debug detallado
-        System.out.println("[GRUPO] Agregando contenido ID: " + contenido.getId() +
-                " al grupo: " + this.nombre);
-
-        // Verificar si el contenido ya existe
-        for (Contenido c : this.contenidos.recorrerInorden()) {
-            if (c.getId().equals(contenido.getId())) {
-                System.out.println("[GRUPO] El contenido ya existe en el grupo");
-                return false;
-            }
+        if (contenido == null || contenido.getTema() == null) {
+            System.out.println("[ERROR] Contenido o tema es nulo");
+            return false;
         }
 
-        // Establecer la relación bidireccional
-        contenido.setGrupo(this);
+        // El árbol binario automáticamente ordenará por tema (gracias al compareTo)
+        this.contenidos.insertar(contenido);
 
-        // Insertar en el árbol del grupo
-        boolean resultado = this.contenidos.add(contenido);
-        System.out.println("[GRUPO] Resultado inserción: " + resultado +
-                " | Total ahora: " + this.contenidos.recorrerInorden().size());
+        // Debug
+        System.out.println("[GRUPO] Contenido agregado por tema: " + contenido.getTema());
+        System.out.println("Árbol actualizado (ordenado por tema):");
+        this.contenidos.mostrarArbolCompleto();
 
-        return resultado;
+        return true;
     }
 
 

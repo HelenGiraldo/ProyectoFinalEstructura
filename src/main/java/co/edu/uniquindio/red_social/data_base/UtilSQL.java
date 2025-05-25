@@ -21,6 +21,56 @@ public class UtilSQL {
     static boolean save = true;
 
 
+    private static Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(url, user, password);
+    }
+
+    public static ListaSimplementeEnlazada<Contenido> cargarContenidosDelGrupo(String idGrupo) {
+        ListaSimplementeEnlazada<Contenido> contenidos = new ListaSimplementeEnlazada<>();
+
+        String sql = "SELECT c.id, c.tipo_contenido, c.titulo, c.tema, c.descripcion, " +
+                "c.contenido, c.id_autor, c.id_grupo FROM publicaciones c " +
+                "WHERE c.id_grupo = ?";
+
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, idGrupo);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                String id = rs.getString("id");
+                String tipo = rs.getString("tipo_contenido");
+                String titulo = rs.getString("titulo");
+                String tema = rs.getString("tema");
+                String descripcion = rs.getString("descripcion");
+                String contenidoPath = rs.getString("contenido");
+                String idAutor = rs.getString("id_autor");
+
+                Estudiante autor = RedSocial.getInstance().obtenerEstudiantePorId(idAutor);
+                File archivoContenido = contenidoPath != null ? new File(contenidoPath) : null;
+
+                if (autor != null) {
+                    Contenido contenido = new Contenido(
+                            tipo,
+                            titulo,
+                            tema,
+                            descripcion,
+                            autor,
+                            archivoContenido,
+                            null // El grupo se asigna después
+                    );
+                    contenido.setId(id);
+                    contenidos.add(contenido);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return contenidos;
+    }
+
 
 
     public static int insertarEstudiante(Estudiante e) {
