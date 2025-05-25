@@ -16,13 +16,11 @@
       <HBox prefHeight="20.0" prefWidth="283.0">
          <children>
             <HBox prefHeight="73.0" prefWidth="69.0" />
-            <Label fx:id="temaLabel" styleClass="titulo-inicio" text="Resumen Estrcutura de datos" />
          </children>
       </HBox>
-      <HBox fx:id="HboxTusContendiosContenido" prefHeight="100.0" prefWidth="289.0" />
-      <VBox fx:id="VBoxTusContenidosContenido" prefHeight="76.0" prefWidth="309.0">
+      <VBox fx:id="VBoxTusContenidosContenido" prefHeight="36.0" prefWidth="289.0">
          <children>
-            <Label fx:id="grupoLabel" prefHeight="14.0" prefWidth="345.0" styleClass="subtitulo-inicio" stylesheets="@styles.css" text="grupo" />
+            <Label fx:id="grupoLabel" prefHeight="14.0" prefWidth="345.0" styleClass="subtitulo-inicio" stylesheets="@styles.css" />
          </children></VBox>
       <HBox prefHeight="20.0" prefWidth="301.0" />
       <HBox prefHeight="38.0" prefWidth="30.0">
@@ -33,12 +31,12 @@
       <Label fx:id="valoracionLabel" styleClass="label-valoracion" text="★ 4.7" />
       <VBox prefHeight="30.0" prefWidth="289.0">
          <children>
-            <Label fx:id="descripcionLabel" prefHeight="46.0" prefWidth="289.0" text="-" />
+            <Label fx:id="descripcionLabel" prefHeight="38.0" prefWidth="289.0" text="-" />
          </children>
       </VBox>
       <HBox fx:id="HboxTusContendiosContenido1" prefHeight="35.0" prefWidth="289.0">
          <children>
-            <Label fx:id="autorLabel" prefHeight="27.0" prefWidth="24.0" styleClass="subtitulo-inicio" stylesheets="@styles.css" text="autor" />
+            <Label fx:id="autorLabel" prefHeight="14.0" prefWidth="357.0" styleClass="subtitulo-inicio" stylesheets="@styles.css" text="autor" />
          </children>
       </HBox>
       <HBox prefHeight="35.0" prefWidth="289.0">

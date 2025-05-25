@@ -1,26 +1,28 @@
 package co.edu.uniquindio.red_social.controllers;
 
 import co.edu.uniquindio.red_social.clases.RedSocial;
+import co.edu.uniquindio.red_social.clases.usuarios.Administrador;
 import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
 import co.edu.uniquindio.red_social.clases.usuarios.PerfilUsuario;
-import co.edu.uniquindio.red_social.clases.usuarios.Usuario;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.scene.Node;
-import javafx.event.ActionEvent;
 
 import java.io.IOException;
-import java.net.URL;
 
 public class LoginController {
 
     RedSocial redSocial = RedSocial.getInstance();
+
     @FXML
     private TextField textFieldEmail;
 
@@ -30,6 +32,9 @@ public class LoginController {
     @FXML
     private Label datosIncorrectosLabel;
 
+    private Estudiante usuarioLogueado;
+
+
     @FXML
     private void initialize() {
 
@@ -37,36 +42,54 @@ public class LoginController {
 
     @FXML
     private void handleIniciarSesion(ActionEvent event) {
-        String usuarioIngresado = textFieldEmail.getText().trim();
-        String contrasenaIngresada = passwordField.getText().trim();
+        String correo = textFieldEmail.getText().trim();
+        String contrasena = passwordField.getText().trim();
 
-        Estudiante usuarioRegistrado = redSocial.estudianteExisteCorreo(usuarioIngresado);
+        // Buscar estudiante
+        Estudiante estudiante = redSocial.estudianteExisteCorreo(correo);
+        // Buscar administrador
+        Administrador admin = redSocial.administradorExisteCorreo(correo);
 
 
-        System.out.println("------ INTENTANDO INICIAR SESIÓN ------");
-        System.out.println("Email ingresado: " + usuarioIngresado);
-        System.out.println("Contraseña ingresada: " + contrasenaIngresada);
-
-        if (usuarioRegistrado == null) {
-            datosIncorrectosLabel.setText("No hay usuarios registrados con ese email.");
+        if (admin != null) {
+            // Solo accede si la contraseña también es "admin123"
+            if (contrasena.equals("admin123")) {
+                PerfilUsuario.setUsuarioActual(admin);
+                irAVistaAdministrador();
+            } else {
+                datosIncorrectosLabel.setText("Contraseña incorrecta para administrador.");
+            }
+            return;
+        }
+        if (estudiante != null) {
+            if (estudiante.getContrasena().equals(contrasena)) {
+                usuarioLogueado = estudiante;
+                PerfilUsuario.setUsuarioActual(estudiante);
+                irAInicio();
+            } else {
+                datosIncorrectosLabel.setText("Contraseña incorrecta.");
+            }
             return;
         }
 
-        boolean contrasenaCorrecta = usuarioRegistrado.getContrasena().equals(contrasenaIngresada);
-
-        if (contrasenaCorrecta) {
-            System.out.println("Login exitoso.");
-            datosIncorrectosLabel.setText("");
-            PerfilUsuario.setUsuarioActual(usuarioRegistrado);
-            irAInicio();
-        } else {
-            datosIncorrectosLabel.setText("Contraseña incorrecta.");
-            System.out.println("Login fallido: Contraseña incorrecta.");
-        }
-
-
+        datosIncorrectosLabel.setText("No hay usuarios registrados con ese email.");
 
     }
+
+
+
+    private void irAVistaAdministrador() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/gruposDeEstudioAdmin.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) textFieldEmail.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     @FXML
     private void handleOlvidasteContrasena(MouseEvent event) {
@@ -88,6 +111,7 @@ public class LoginController {
             datosIncorrectosLabel.setText("No se pudo cargar la interfaz de recuperación.");
         }
     }
+
 
 
 
@@ -114,6 +138,9 @@ public class LoginController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/Inicio.fxml"));
             Parent newRoot = loader.load();
+
+            InicioController inicioController = loader.getController();
+            inicioController.inicializarUsuario(usuarioLogueado);
 
             // Obtener la ventana actual (stage)
             Stage stage = (Stage) textFieldEmail.getScene().getWindow();

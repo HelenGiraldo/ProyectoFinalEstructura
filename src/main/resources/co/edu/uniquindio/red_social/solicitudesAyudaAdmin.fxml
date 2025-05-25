@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.red_social.controllers.SolicitudesAyudaAdminController">
+   <children>
+      <BorderPane layoutX="3.0" layoutY="6.0" prefHeight="387.0" prefWidth="594.0">
+         <top>
+            <VBox prefHeight="82.0" prefWidth="594.0" BorderPane.alignment="CENTER">
+               <children>
+                  <HBox prefHeight="75.0" prefWidth="594.0">
+                     <children>
+                        <HBox prefHeight="65.0" prefWidth="174.0">
+                           <children>
+                              <Label fx:id="TextFieldTitle" prefHeight="90.0" prefWidth="160.0" styleClass="title-label" stylesheets="@styles.css" text="ThinkTogether" />
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="65.0" prefWidth="30.0" />
+                        <HBox prefHeight="65.0" prefWidth="157.0">
+                           <children>
+                              <VBox prefHeight="100.0" prefWidth="164.0">
+                                 <children>
+                                    <Label fx:id="solicitudesAyudaLabel" prefHeight="62.0" prefWidth="162.0" styleClass="tus-Contenidos" stylesheets="@styleTusContenidos.css" text="Solicitudes Ayuda" />
+                                    <VBox prefHeight="200.0" prefWidth="100.0">
+                                       <children>
+                                          <Label prefHeight="19.0" prefWidth="35.0" styleClass="subtitulo-inicio" text="Admin" />
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="124.0">
+                           <children>
+                              <TextField fx:id="campoBusqueda" prefHeight="33.0" prefWidth="73.0" styleClass="label-busqueda" stylesheets="@styles.css">
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                              </TextField>
+                              <Button fx:id="botonBuscar" minWidth="47.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="47.0" styleClass="boton-buscar" stylesheets="@styles.css" text="🔍">
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                              </Button>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="66.0" prefWidth="60.0" />
+                        <ImageView fx:id="imagenPerfil" fitHeight="100" fitWidth="100">
+                           <image>
+                              <Image url="@imagenes/imagePerfil.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </top>
+         <left>
+            <VBox fx:id="hBoxDerecha" prefHeight="322.0" prefWidth="178.0" BorderPane.alignment="CENTER">
+               <children>
+                  <ToggleButton fx:id="InicioButton" mnemonicParsing="false" onAction="#irAInicio" prefHeight="37.0" prefWidth="161.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Inicio" />
+                  <ToggleButton fx:id="misContenidosButton" mnemonicParsing="false" onAction="irAContenidos" prefHeight="43.0" prefWidth="132.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Mis Contenidos" />
+                  <ToggleButton fx:id="gruposEstudioButton" mnemonicParsing="false" onAction="irAGrupoEStudio" prefHeight="42.0" prefWidth="151.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Grupos estudio" />
+                  <ToggleButton fx:id="MensajesButton" mnemonicParsing="false" onAction="#irAChat" prefHeight="42.0" prefWidth="161.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Mensajes" />
+                  <ToggleButton fx:id="SugerenciasButton" mnemonicParsing="false" prefHeight="38.0" prefWidth="159.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Sugerencias" />
+                  <ToggleButton fx:id="SolicitudesDeAyudaButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="160.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Solicitudes de ayuda" />
+                  <ToggleButton fx:id="configuracionPerfilButton" mnemonicParsing="false" onAction="#irAConfig" prefHeight="39.0" prefWidth="161.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Configuracion perfil" />
+               </children>
+            </VBox>
+         </left>
+         <center>
+            <VBox prefHeight="202.0" prefWidth="337.0" BorderPane.alignment="CENTER">
+               <children>
+                  <VBox prefHeight="46.0" prefWidth="416.0">
+                     <children>
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <HBox prefHeight="43.0" prefWidth="172.0">
+                                 <children>
+                                    <HBox prefHeight="46.0" prefWidth="94.0">
+                                       <children>
+                                          <Button fx:id="resolverButton" mnemonicParsing="false" prefHeight="29.0" prefWidth="91.0" styleClass="boton-guardar" stylesheets="@stylesConfig.css" text="Resolver" />
+                                       </children></HBox>
+                                 </children>
+                              </HBox>
+                              <Label fx:id="filtrarSolicitudesLabel" prefHeight="17.0" prefWidth="92.0" text="filtrar solicitudes" />
+                              <ComboBox fx:id="comboFiltro" prefWidth="150.0" styleClass="choice-box-estilo" stylesheets="@styleTusContenidos.css" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <ScrollPane fx:id="scrollPane" prefHeight="241.0" prefWidth="410.0" stylesheets="@styles.css">
+                     <content>
+                        <AnchorPane fx:id="contenedorSolicitudes" minHeight="0.0" minWidth="0.0" prefHeight="226.0" prefWidth="385.0">
+                           <children>
+                              <VBox fx:id="AnchorPaneContenedorSolicitudes" prefHeight="233.0" prefWidth="403.0">
+                                 <children>
+                                    <HBox prefHeight="100.0" prefWidth="200.0">
+                                       <children>
+                                          <Button mnemonicParsing="false" prefHeight="100.0" prefWidth="163.0" styleClass="card-mini" stylesheets="@styleInicioRegistro.css">
+                                             <graphic>
+                                                <VBox prefHeight="91.0" prefWidth="163.0">
+                                                   <children>
+                                                      <Label fx:id="nombreEstudianteLabel" text="User1" />
+                                                      <VBox prefHeight="25.0" prefWidth="140.0">
+                                                         <children>
+                                                            <Label fx:id="importanciaLabel" text="Importancia" />
+                                                         </children>
+                                                      </VBox>
+                                                      <VBox prefHeight="200.0" prefWidth="100.0">
+                                                         <children>
+                                                            <Label fx:id="tituloLabel" text="Titulo" />
+                                                            <Label fx:id="ContenidoSolicitudLabel" text="Contenido Solicitud" />
+                                                         </children>
+                                                      </VBox>
+                                                   </children>
+                                                </VBox>
+                                             </graphic>
+                                          </Button>
+                                          <HBox prefHeight="100.0" prefWidth="38.0" />
+                                          <Button mnemonicParsing="false" prefHeight="106.0" prefWidth="181.0" styleClass="card-mini">
+                                             <graphic>
+                                                <VBox prefHeight="17.0" prefWidth="140.0">
+                                                   <children>
+                                                      <Label fx:id="nombreEstudiante2Label" text="User2" />
+                                                      <VBox prefHeight="25.0" prefWidth="140.0">
+                                                         <children>
+                                                            <Label fx:id="importancia2Label" text="Importancia" />
+                                                         </children>
+                                                      </VBox>
+                                                      <VBox prefHeight="200.0" prefWidth="100.0">
+                                                         <children>
+                                                            <Label fx:id="tituloLabel2" text="Titulo" />
+                                                            <Label fx:id="contenidoSolicitudLabel2" text="Contenido Solicitud" />
+                                                         </children>
+                                                      </VBox>
+                                                   </children>
+                                                </VBox>
+                                             </graphic>
+                                          </Button>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </AnchorPane>
+                     </content>
+                     <styleClass>
+                        <String fx:value="scroll-bar" />
+                        <String fx:value="scroll-pane" />
+                     </styleClass>
+                  </ScrollPane>
+               </children>
+            </VBox>
+         </center>
+      </BorderPane>
+   </children>
+   <stylesheets>
+      <URL value="@styleInicioRegistro.css" />
+      <URL value="@styles.css" />
+   </stylesheets>
+</AnchorPane>

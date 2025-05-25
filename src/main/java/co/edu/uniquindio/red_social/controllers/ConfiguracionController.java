@@ -2,7 +2,6 @@ package co.edu.uniquindio.red_social.controllers;
 
 import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
 import co.edu.uniquindio.red_social.clases.usuarios.PerfilUsuario;
-import co.edu.uniquindio.red_social.data_base.UtilSQL;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,14 +13,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URL;
-
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URL;
 
 import static co.edu.uniquindio.red_social.data_base.UtilSQL.actualizarEstudiante;
 

@@ -414,15 +414,16 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo,
 
     public SolicitudAyuda agregarSolicitudAyuda(String mensaje, Estudiante estudiante, String titulo, String prioridad) {
        int prioridadInt = 0;
-        if (prioridad.equalsIgnoreCase("alta")) {
+        if (prioridad.equalsIgnoreCase("normal")) {
             prioridadInt = 1;
-        } else if (prioridad.equalsIgnoreCase("media")) {
+        } else if (prioridad.equalsIgnoreCase("urgente")) {
             prioridadInt = 2;
-        } else if (prioridad.equalsIgnoreCase("baja")) {
+        } else if (prioridad.equalsIgnoreCase("muy urgente")) {
             prioridadInt = 3;
         }
         SolicitudAyuda solicitudAyuda = new SolicitudAyuda(mensaje, estudiante, titulo, prioridad);
          solicitudesAyuda.add(solicitudAyuda, prioridadInt);
+         UtilSQL.crearSolicitudAyuda(solicitudAyuda);
          return solicitudAyuda;
     }
 
@@ -434,6 +435,7 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo,
      */
     public boolean eliminarSolicitudAyuda(SolicitudAyuda solicitudAyuda) {
         if (solicitudesAyuda.contains(solicitudAyuda)) {
+            UtilSQL.eliminarSolicitudAyuda(solicitudAyuda.getId());
             return solicitudesAyuda.remove(solicitudAyuda);
         }
         return false;

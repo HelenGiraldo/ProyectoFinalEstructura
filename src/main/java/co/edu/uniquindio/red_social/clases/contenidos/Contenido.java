@@ -83,6 +83,10 @@ public class Contenido implements Comparable<Contenido> {
     }
 
     public void setId(String id) {
+        if (this.id != null && !this.id.equals(id)) {
+            System.err.println("¡ADVERTENCIA! Intentando cambiar ID de " + this.id + " a " + id);
+            throw new IllegalStateException("El ID no puede ser modificado");
+        }
         this.id = id;
     }
 
@@ -154,6 +158,19 @@ public class Contenido implements Comparable<Contenido> {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Contenido contenido = (Contenido) o;
+        return id != null && id.equals(contenido.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
+
+    @Override
     public int compareTo(Contenido otro) {
         return this.tema.compareToIgnoreCase(otro.tema);
     }
@@ -163,4 +180,3 @@ public class Contenido implements Comparable<Contenido> {
         return titulo + " - " + autor + " (" + tema + ")";
     }
 }
-

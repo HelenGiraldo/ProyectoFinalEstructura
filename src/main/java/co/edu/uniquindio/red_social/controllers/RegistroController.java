@@ -1,9 +1,9 @@
 package co.edu.uniquindio.red_social.controllers;
 
 import co.edu.uniquindio.red_social.clases.RedSocial;
+import co.edu.uniquindio.red_social.clases.usuarios.Administrador;
 import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
 import co.edu.uniquindio.red_social.clases.usuarios.PerfilUsuario;
-import co.edu.uniquindio.red_social.clases.usuarios.Usuario;
 import co.edu.uniquindio.red_social.data_base.UtilSQL;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -22,8 +22,7 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URL;
+
 
 public class RegistroController {
 
@@ -77,6 +76,9 @@ public class RegistroController {
     @FXML
     private AnchorPane root;
 
+    @FXML private CheckBox adminCheckBox;
+    @FXML private PasswordField adminPasswordField;
+
     @FXML
     private void initialize() {
 
@@ -103,6 +105,12 @@ public class RegistroController {
         }
     }
 
+    @FXML
+    private void handleAdminCheckbox() {
+        adminPasswordField.setVisible(adminCheckBox.isSelected());
+    }
+
+
 
     @FXML
     private void registrarUsuario(ActionEvent event) {
@@ -110,6 +118,11 @@ public class RegistroController {
         String apellido = apellidoField.getText();
         String email = textFieldEmail.getText();
         String password = passwordField.getText();
+
+        boolean esAdmin = adminCheckBox.isSelected();
+        String claveAdminIngresada = adminPasswordField.getText().trim();
+
+
 
         if (nombre.isEmpty() || apellido.isEmpty() || email.isEmpty() || password.isEmpty()) {
             labelRegistroValidacion.setText("Por favor, complete todos los campos.");
@@ -122,10 +135,37 @@ public class RegistroController {
         }
 
 
-
         // Registrar usuario
         RedSocial redSocial = RedSocial.getInstance();
+
+        if (esAdmin) {
+            if (!claveAdminIngresada.equals("admin123")) {
+                labelRegistroValidacion.setText("Contraseña de administrador incorrecta.");
+                return;
+            }
+
+            Administrador admin = redSocial.crearAdministrador(nombre, apellido, email, password, new File("src/main/resources/co/edu/uniquindio/red_social/imagenes/imagen_correo.png"));
+            PerfilUsuario.setUsuarioActual(admin);
+            labelRegistro.setText("¡Registro exitoso como administrador!");
+            cambiarEscenaLogin();
+            return;
+
+        }
+
+
+
+        // Registrar estudiante
+
         Estudiante estudiante= redSocial.crearEstudiante(nombre, apellido, email, password, new File("src/main/resources/co/edu/uniquindio/red_social/imagenes/imagePerfil.png"));
+
+        int idGenerado = UtilSQL.insertarEstudiante(estudiante);
+        if (idGenerado == -1) {
+            labelRegistroValidacion.setText("Error al registrar el usuario en la base de datos.");
+            return;  // Terminar aquí si no pudo insertar
+        }
+
+        // Asignar el id generado al objeto estudiante
+        estudiante.setId(String.valueOf(idGenerado));
 
         if (archivoImagenSeleccionada != null) {
             try {
@@ -157,10 +197,13 @@ public class RegistroController {
                 labelRegistroValidacion.setText("Error al guardar la imagen de perfil.");
             }
         }
-        PerfilUsuario.setUsuarioActual(estudiante);
+
         // Mostrar mensaje de éxito
         labelRegistro.setText("¡Registro exitoso!");
+
         UtilSQL.actualizarEstudiante(estudiante);
+
+        PerfilUsuario.setUsuarioActual(estudiante);
 
         cambiarEscenaLogin();
 

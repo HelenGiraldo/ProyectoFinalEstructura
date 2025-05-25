@@ -4,10 +4,6 @@ package co.edu.uniquindio.red_social.controllers;
 import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
 import co.edu.uniquindio.red_social.clases.usuarios.PerfilUsuario;
 import co.edu.uniquindio.red_social.clases.usuarios.Usuario;
-import javafx.animation.Interpolator;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -24,7 +20,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 import java.io.File;
 import java.io.IOException;
@@ -234,6 +229,16 @@ public class InicioController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/gruposEstudio.fxml"));
             Parent configView = loader.load();
 
+            GruposDeEstudioController controller = loader.getController();
+
+            // PASAR el usuario (que tienes en 'usuario' o usa PerfilUsuario.getUsuarioActual())
+            if (usuario != null) {
+                controller.setUsuarioActual(usuario);
+                System.out.println("Usuario enviado a GruposDeEstudioController: " + usuario.getNombre());
+            } else {
+                System.out.println("usuario en InicioController es null");
+            }
+
             Scene scene = new Scene(configView);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);
@@ -242,8 +247,8 @@ public class InicioController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
+
 
     @FXML
     private void irASugerencias(ActionEvent event) {

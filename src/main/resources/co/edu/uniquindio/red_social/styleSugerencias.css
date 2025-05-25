@@ -1,0 +1,16 @@
+.boton-notificacion {
+    -fx-background-color: rgba(228, 226, 226, 0.67);
+    -fx-text-fill: black;
+    -fx-background-radius: 10px;
+    -fx-padding: 4px 10px;
+    -fx-font-size: 12px;
+    -fx-cursor: hand;
+}
+.boton-notificacion:hover{
+    -fx-background-color: rgba(104, 93, 93, 0.87);
+    -fx-effect: dropshadow(gaussian, #515050, 4, 0.2, 0, 2);
+}
+.boton-notificacion:pressed{
+    -fx-background-color: rgba(120, 93, 93, 0.87);
+    -fx-translate-y: 1px;
+}

@@ -69,12 +69,20 @@
 }
 
 .boton-accion {
-    -fx-background-color: rgba(255, 23, 2, 0.67);
-    -fx-text-fill: white;
+    -fx-background-color: rgba(138, 126, 126, 0.67);
+    -fx-text-fill: black;
     -fx-background-radius: 10px;
     -fx-padding: 4px 10px;
     -fx-font-size: 12px;
     -fx-cursor: hand;
+}
+.boton-accion:hover{
+    -fx-background-color: rgba(104, 93, 93, 0.87);
+    -fx-effect: dropshadow(gaussian, #515050, 4, 0.2, 0, 2);
+}
+.boton-accion:pressed{
+    -fx-background-color: rgba(120, 93, 93, 0.87);
+    -fx-translate-y: 1px;
 }
 
 .timestamp {

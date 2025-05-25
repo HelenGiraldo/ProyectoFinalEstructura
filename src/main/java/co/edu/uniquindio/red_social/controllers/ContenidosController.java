@@ -1,7 +1,11 @@
 package co.edu.uniquindio.red_social.controllers;
 
+import co.edu.uniquindio.red_social.clases.RedSocial;
 import co.edu.uniquindio.red_social.clases.contenidos.Contenido;
+import co.edu.uniquindio.red_social.clases.social.Grupo;
+import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
 import co.edu.uniquindio.red_social.clases.usuarios.PerfilUsuario;
+import co.edu.uniquindio.red_social.data_base.UtilSQL;
 import co.edu.uniquindio.red_social.estructuras.ArbolBinario;
 import co.edu.uniquindio.red_social.estructuras.ListaSimplementeEnlazada;
 import javafx.application.Platform;
@@ -11,11 +15,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -26,6 +26,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ContenidosController {
@@ -131,24 +132,6 @@ public class ContenidosController {
         return arbolContenidos;
     }
 
-    public void inicializarContenidos(List<Contenido> contenidos) {
-        vBoxTodosContenidos.getChildren().clear(); // Limpia antes de agregar nuevos
-
-        for (Contenido contenido : contenidos) {
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/TarjetaContenido.fxml"));
-                VBox tarjeta = loader.load();
-                TarjetaContenidoController controller = loader.getController();
-                controller.setContenido(contenido);
-                vBoxTodosContenidos.getChildren().add(tarjeta);
-
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
 
     @FXML
     private  void  initialize() {
@@ -174,34 +157,55 @@ public class ContenidosController {
         if (perfil.getImagenPerfil() != null) {
             imagenPerfil.setImage(perfil.getImagenPerfil());
         }
-        cargarContenidos();
+
+
+        refrescarVistaSinDuplicados();
     }
-    private void cargarContenidos() {
-        vBoxTodosContenidos.getChildren().clear();
-        ListaSimplementeEnlazada<Contenido> lista = arbolContenidos.recorrerInorden();
-        for (Contenido contenido : lista) {
-            mostrarContenidoEnVista(contenido);
-        }
-        actualizarTotalPublicados();
-    }
+
+
 
     public void agregarContenido(Contenido contenido) {
-        System.out.println(">>> Agregando contenido: " + contenido.getTitulo());
+        // Guardar en la base de datos
+        int idGenerado = UtilSQL.agregarPublicacion(contenido);
+        if (idGenerado != -1) {
+            contenido.setId(String.valueOf(idGenerado));
 
-        arbolContenidos.insertar(contenido);
-        listaContenidos.add(contenido);
+            // Agregar a las estructuras locales
+            arbolContenidos.insertar(contenido);
+            listaContenidos.add(contenido);
 
-        // Imprimir todos los contenidos
-        System.out.println(">>> Contenidos actuales en lista enlazada:");
-        for (int i = 0; i < listaContenidos.size(); i++) {
-            Contenido c = listaContenidos.get(i);
-            System.out.println("- " + c.getTitulo() + " | Calificaciones: " + (c.getCalificaciones() != null ? c.getCalificaciones().size() : 0));
+            // Mostrar en la vista
+            mostrarContenidoEnVista(contenido);
+            actualizarTotalPublicados();
+
+            // También agregar a RedSocial para mantener consistencia
+            RedSocial.getInstance().agregarPublicacion(contenido,
+                    contenido.getGrupo() != null ? contenido.getGrupo().getId() : null);
         }
-
-        mostrarContenidoEnVista(contenido);
-        actualizarTotalPublicados();
     }
 
+    private void refrescarVistaSinDuplicados() {
+        // 1. Limpiar solo la vista (NO los datos)
+        vBoxTodosContenidos.getChildren().clear();
+
+        // 2. Obtener contenidos directamente de RedSocial (fuente principal)
+        ListaSimplementeEnlazada<Contenido> contenidos = RedSocial.getInstance()
+                .getContenidos().recorrerInorden();
+
+        // 3. Sincronizar con el árbol local
+        arbolContenidos.clear();
+        for (Contenido c : contenidos) {
+            arbolContenidos.insertar(c);
+        }
+
+        // 4. Mostrar en vista
+        for (Contenido contenido : contenidos) {
+            mostrarContenidoEnVista(contenido);
+        }
+
+        // 5. Actualizar contador desde el árbol local
+        actualizarTotalPublicados();
+    }
 
     private void actualizarTotalPublicados() {
         int total = arbolContenidos.getPeso();
@@ -321,14 +325,27 @@ public class ContenidosController {
         }
     }
 
+
     @FXML
     private void irAPublicar(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/Publicar.fxml"));
             Parent root = loader.load();
-
             Stage popupStage = new Stage();
+
             PublicarController controller = loader.getController();
+            Estudiante usuarioActual = (Estudiante) PerfilUsuario.getUsuarioActual();
+
+            // Convertir ListaSimplementeEnlazada a List para el ChoiceBox
+            List<Grupo> gruposList = new ArrayList<>();
+            for (int i = 0; i < usuarioActual.getGrupos().size(); i++) {
+                gruposList.add(usuarioActual.getGrupos().get(i));
+            }
+
+            // Pasar los grupos al controlador
+            controller.setGruposUsuario(gruposList);
+
+            // Configurar el stage y controlador
             controller.setStage(popupStage);
             controller.setContenidosController(this);
 
@@ -349,6 +366,24 @@ public class ContenidosController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/gruposEstudio.fxml"));
             Parent configView = loader.load();
 
+            // Obtener el controlador
+            GruposDeEstudioController controller = loader.getController();
+
+            // Obtener el usuario actual (de la instancia de PerfilUsuario)
+            Estudiante usuarioActual = (Estudiante) PerfilUsuario.getUsuarioActual();
+
+            // Verificar que el usuario existe
+            if (usuarioActual != null) {
+                // Pasar el usuario al controlador
+                controller.setUsuarioActual(usuarioActual);
+                System.out.println("Usuario enviado a GruposDeEstudioController: " + usuarioActual.getNombre());
+            } else {
+                System.out.println("Error: No hay usuario autenticado");
+                mostrarAlerta("Error", "No hay usuario autenticado");
+                return;
+            }
+
+            // Configurar y mostrar la ventana
             Scene scene = new Scene(configView);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);
@@ -356,9 +391,19 @@ public class ContenidosController {
 
         } catch (IOException e) {
             e.printStackTrace();
+            mostrarAlerta("Error", "No se pudo cargar la ventana de grupos de estudio");
         }
-
     }
+
+    // Método auxiliar para mostrar alertas
+    private void mostrarAlerta(String titulo, String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
+
 
     @FXML
     private void irASugerencias(ActionEvent event) {
