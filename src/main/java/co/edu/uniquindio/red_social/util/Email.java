@@ -8,7 +8,7 @@ import java.util.ResourceBundle;
 
 public class Email {
     static ResourceBundle bundle = ResourceBundle.getBundle("credenciales");
-    static boolean isEmailSent = false;
+    static boolean isEmailSent = true;
     public static void sendEmail(String to, String subject, String bodyText) {
         if(!isEmailSent) {
             return;
