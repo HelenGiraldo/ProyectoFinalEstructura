@@ -1,6 +1,8 @@
 package co.edu.uniquindio.red_social.controllers;
 
 import co.edu.uniquindio.red_social.clases.contenidos.Contenido;
+import co.edu.uniquindio.red_social.clases.social.Grupo;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -8,6 +10,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.awt.*;
+import javafx.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
 
@@ -47,10 +50,10 @@ public class TarjetaContenidoController {
     @FXML
     private Label archivoAdjuntoLabel;
 
-    public void inicializarDatos(Contenido contenido) {
+    @FXML
+    private Label grupoLabel;
 
 
-    }
 
 
 
@@ -77,6 +80,14 @@ public class TarjetaContenidoController {
             archivoAdjuntoLabel.setText("No hay archivo adjunto");
             archivoAdjuntoLabel.setOnMouseClicked(null);
         }
+
+        if (contenido.getGrupo() != null) {
+            grupoLabel.setText(contenido.getGrupo().getNombre());
+        } else {
+            grupoLabel.setText("Sin grupo");
+        }
+
+
     }
 
     private void abrirArchivoAdjunto(File archivo) {
@@ -93,6 +104,9 @@ public class TarjetaContenidoController {
     }
 
     public void setContenido(Contenido contenido, int totalPublicados) {
+        System.out.println("DEBUG - Contenido: " + contenido.getTitulo());
+        System.out.println("DEBUG - Grupo: " + (contenido.getGrupo() != null ? contenido.getGrupo().getNombre() : "NULL"));
+
         tituloLabel.setText(contenido.getTitulo());
         autorLabel.setText(contenido.getAutor().getNombre() + " " + contenido.getAutor().getApellido());
         descripcionLabel.setText(contenido.getDescripcion());
@@ -110,9 +124,15 @@ public class TarjetaContenidoController {
             archivoAdjuntoLabel.setText("Sin archivo adjunto");
             archivoAdjuntoLabel.setOnMouseClicked(null); // Quitar listener si no hay archivo
         }
+
+        if (contenido.getGrupo() != null) {
+            grupoLabel.setText(contenido.getGrupo().getNombre());
+        } else {
+            grupoLabel.setText(""); // Cadena vacía para que no muestre nada
+        }
     }
 
 
 
+    }
 
-}

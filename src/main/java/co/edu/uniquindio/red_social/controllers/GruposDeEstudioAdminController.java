@@ -2,13 +2,18 @@ package co.edu.uniquindio.red_social.controllers;
 
 import co.edu.uniquindio.red_social.clases.contenidos.Contenido;
 import co.edu.uniquindio.red_social.clases.social.Grupo;
+import co.edu.uniquindio.red_social.clases.usuarios.Administrador;
+import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
+import co.edu.uniquindio.red_social.clases.usuarios.Usuario;
+import co.edu.uniquindio.red_social.data_base.UtilSQL;
 import co.edu.uniquindio.red_social.estructuras.ArbolBinario;
 import co.edu.uniquindio.red_social.estructuras.ListaSimplementeEnlazada;
 import co.edu.uniquindio.red_social.util.GrupoService;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -241,21 +246,63 @@ public class GruposDeEstudioAdminController {
 
     private void mostrarContenidoGrupo(Grupo grupo) {
         grupoActualLabel.setText(grupo.getNombre());
-        arbolContenido = grupo.getContenidos(); // Asegúrate que esto retorna un ArbolBinario<Contenido>
+        arbolContenido = grupo.getContenidos();
 
-        LabelTotalPublicados.setText(arbolContenido.getPeso() + " Publicados");
+        LabelTotalPublicados.setText(arbolContenido.getPeso() + " Publicaciones");
 
-        VBox contenidosVBox = new VBox();
-        ListaSimplementeEnlazada<Contenido> lista = arbolContenido.recorrerInorden();
+        VBox contenidosVBox = new VBox(10);
+        contenidosVBox.setPadding(new Insets(10));
+        contenidosVBox.setStyle("-fx-background-color: #f9f9f9;");
 
-        for (Contenido contenido : lista) {
-            Label label = new Label(contenido.getTitulo());
-            contenidosVBox.getChildren().add(label);
+        if (arbolContenido.getPeso() == 0) {
+            Label vacioLabel = new Label("Este grupo no tiene contenidos aún");
+            vacioLabel.setStyle("-fx-text-fill: #666; -fx-font-style: italic;");
+            contenidosVBox.getChildren().add(vacioLabel);
+        } else {
+            ListaSimplementeEnlazada<Contenido> lista = arbolContenido.recorrerInorden();
+
+            for (Contenido contenido : lista) {
+                try {
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/TarjetaContenido.fxml"));
+                    VBox tarjeta = loader.load();
+
+                    TarjetaContenidoController controller = loader.getController();
+                    controller.setContenido(contenido, arbolContenido.getPeso());
+
+
+                    contenidosVBox.getChildren().add(tarjeta);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    // Fallback básico
+                    HBox contenidoBox = new HBox(10);
+                    Label contenidoLabel = new Label(contenido.getTitulo() + " - " + contenido.getAutor().getNombre());
+
+                    Button eliminarBtn = new Button("Eliminar");
+                    eliminarBtn.setOnAction(ex -> {
+                        if (UtilSQL.eliminarPublicacion(contenido.getId())) {
+                            grupo.eliminarPublicacion(contenido);
+                            mostrarContenidoGrupo(grupo); // Refrescar vista
+                            mostrarAlerta("Éxito", "Contenido eliminado correctamente");
+                        }
+                    });
+
+                    contenidoBox.getChildren().addAll(contenidoLabel, eliminarBtn);
+                    contenidosVBox.getChildren().add(contenidoBox);
+                }
+            }
         }
 
         scrollPaneContenedorContenidos.setContent(contenidosVBox);
+        scrollPaneContenedorContenidos.setFitToWidth(true);
     }
 
+    private void mostrarAlerta(String titulo, String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
 
 
     @FXML

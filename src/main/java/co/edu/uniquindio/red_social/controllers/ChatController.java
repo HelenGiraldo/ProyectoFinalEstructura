@@ -16,7 +16,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -25,6 +27,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
+import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
@@ -484,7 +487,46 @@ public class ChatController implements  ChatObserver {
 
     @FXML
     private void irAGruposEstudio(ActionEvent event) {
-        // Lógica para ir a contenidos
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/gruposEstudio.fxml"));
+            Parent configView = loader.load();
+
+            // Obtener el controlador
+            GruposDeEstudioController controller = loader.getController();
+
+            // Obtener el usuario actual (de la instancia de PerfilUsuario)
+            Estudiante usuarioActual = (Estudiante) PerfilUsuario.getUsuarioActual();
+
+            // Verificar que el usuario existe
+            if (usuarioActual != null) {
+                // Pasar el usuario al controlador
+                controller.setUsuarioActual(usuarioActual);
+                System.out.println("Usuario enviado a GruposDeEstudioController: " + usuarioActual.getNombre());
+            } else {
+                System.out.println("Error: No hay usuario autenticado");
+                mostrarAlerta("Error", "No hay usuario autenticado");
+                return;
+            }
+
+            // Configurar y mostrar la ventana
+            Scene scene = new Scene(configView);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            mostrarAlerta("Error", "No se pudo cargar la ventana de grupos de estudio");
+        }
+    }
+
+    // Método auxiliar para mostrar alertas
+    private void mostrarAlerta(String titulo, String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
     }
 
     @FXML

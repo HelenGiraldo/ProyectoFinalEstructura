@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.red_social.controllers.GruposDeEstudioController">
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@stylesChat.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.red_social.controllers.GruposDeEstudioAdminController">
    <children>
       <BorderPane layoutX="3.0" layoutY="6.0" prefHeight="387.0" prefWidth="594.0">
          <top>
@@ -28,11 +28,25 @@
                            </children>
                         </HBox>
                         <HBox prefHeight="65.0" prefWidth="30.0" />
-                        <HBox prefHeight="65.0" prefWidth="157.0">
+                        <VBox prefHeight="66.0" prefWidth="135.0">
                            <children>
-                              <Label fx:id="gruposEstudioLabel" prefHeight="64.0" prefWidth="162.0" styleClass="tus-Contenidos" stylesheets="@styleTusContenidos.css" text="grupos Estudio" />
+                              <HBox prefHeight="39.0" prefWidth="135.0">
+                                 <children>
+                                    <Label fx:id="gruposEstudioLabel" prefHeight="40.0" prefWidth="135.0" styleClass="tus-Contenidos" stylesheets="@styleTusContenidos.css" text="grupos Estudio" />
+                                 </children>
+                              </HBox>
+                              <VBox prefHeight="20.0" prefWidth="135.0">
+                                 <children>
+                                    <Label fx:id="adminLabel" prefHeight="53.0" prefWidth="54.0" styleClass="label-tipo" text="Admin">
+                                       <stylesheets>
+                                          <URL value="@styleTusContenidos.css" />
+                                          <URL value="@styles.css" />
+                                       </stylesheets>
+                                    </Label>
+                                 </children>
+                              </VBox>
                            </children>
-                        </HBox>
+                        </VBox>
                         <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="124.0">
                            <children>
                               <TextField fx:id="campoBusqueda" prefHeight="33.0" prefWidth="73.0" styleClass="label-busqueda" stylesheets="@styles.css">
@@ -80,7 +94,28 @@
                            <children>
                               <VBox fx:id="contenedorGrupos" prefHeight="314.0" prefWidth="112.0">
                                  <children>
-                                    <VBox fx:id="gruposVBox" prefHeight="294.0" prefWidth="97.0" />
+                                    <VBox fx:id="gruposVBox" prefHeight="294.0" prefWidth="97.0">
+                                       <children>
+                                          <ToggleButton fx:id="buttonGrupo1" mnemonicParsing="false" prefHeight="42.0" prefWidth="112.0" styleClass="sidebar-button-chat" stylesheets="@stylesChat.css">
+                                             <graphic>
+                                                <HBox fx:id="HboxGrupo1">
+                                                   <children>
+                                                      <Label fx:id="grupo1Label" prefHeight="19.0" prefWidth="48.0" styleClass="contact-name" stylesheets="@stylesChat.css" text="grupo1" />
+                                                   </children>
+                                                </HBox>
+                                             </graphic>
+                                          </ToggleButton>
+                                          <ToggleButton fx:id="buttonGrupo2" mnemonicParsing="false" prefHeight="42.0" prefWidth="112.0" styleClass="sidebar-button-chat" stylesheets="@stylesChat.css">
+                                             <graphic>
+                                                <HBox fx:id="HboxGrupo2">
+                                                   <children>
+                                                      <Label fx:id="grupo2Label" prefHeight="19.0" prefWidth="48.0" styleClass="contact-name" stylesheets="@stylesChat.css" text="grupo2" />
+                                                   </children>
+                                                </HBox>
+                                             </graphic>
+                                          </ToggleButton>
+                                       </children>
+                                    </VBox>
                                  </children>
                               </VBox>
                            </children>
@@ -93,12 +128,8 @@
                                        <children>
                                           <HBox prefHeight="41.0" prefWidth="294.0">
                                              <children>
-                                                <HBox prefHeight="53.0" prefWidth="225.0">
-                                                   <children>
-                                                      <Button fx:id="buttonMisGrupos" mnemonicParsing="false" onAction="#irAMisGrupos" prefHeight="29.0" prefWidth="85.0" styleClass="button-Estadisticas" stylesheets="@styleTusContenidos.css" text="Mis grupos" />
-                                                   </children>
-                                                </HBox>
-                                                <Button fx:id="buttonUnirse" mnemonicParsing="false" onAction="#unirseAGrupo" styleClass="boton-guardar" stylesheets="@stylesConfig.css" text="unirse" />
+                                                <HBox prefHeight="53.0" prefWidth="225.0" />
+                                                <Button fx:id="buttonAniadir" mnemonicParsing="false" onAction="#irACrearGrupo" prefHeight="29.0" prefWidth="67.0" styleClass="button-aniadir" stylesheets="@styleTusContenidos.css" text="+" />
                                              </children>
                                           </HBox>
                                        </children>
@@ -107,22 +138,17 @@
                                        <children>
                                           <HBox prefHeight="100.0" prefWidth="200.0">
                                              <children>
-                                                <HBox prefHeight="43.0" prefWidth="138.0">
-                                                   <children>
-                                                      <Button fx:id="buttonGruposDisponibles" mnemonicParsing="false" onAction="#irAGruposDisponibles" prefHeight="29.0" prefWidth="139.0" styleClass="button-Estadisticas" stylesheets="@styleTusContenidos.css" text="grupos disponibles " />
-                                                   </children>
-                                                </HBox>
+                                                <HBox prefHeight="43.0" prefWidth="138.0" />
                                                 <HBox prefHeight="43.0" prefWidth="158.0">
                                                    <children>
                                                       <HBox prefHeight="43.0" prefWidth="88.0" />
-                                                      <Button fx:id="buttonSalir" mnemonicParsing="false" onAction="#salirDeGrupo" prefHeight="29.0" prefWidth="73.0" styleClass="boton-cerrar-sesion" stylesheets="@stylesConfig.css" text="salir" />
                                                    </children>
                                                 </HBox>
                                              </children>
                                           </HBox>
                                        </children>
                                     </VBox>
-                                    <ScrollPane fx:id="scrollPaneContenedorContenidos" prefHeight="155.0" prefWidth="339.0">
+                                    <ScrollPane fx:id="scrollPaneContenedorContenidos" prefHeight="223.0" prefWidth="294.0">
                                        <content>
                                           <AnchorPane prefHeight="135.0" prefWidth="357.0">
                                              <children>
@@ -190,6 +216,5 @@
    <stylesheets>
       <URL value="@styleInicioRegistro.css" />
       <URL value="@styles.css" />
-      <URL value="@stylesChat.css" />
    </stylesheets>
 </AnchorPane>

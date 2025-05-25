@@ -4,6 +4,7 @@ import co.edu.uniquindio.red_social.clases.RedSocial;
 import co.edu.uniquindio.red_social.clases.contenidos.Contenido;
 import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
 import co.edu.uniquindio.red_social.clases.usuarios.Usuario;
+import co.edu.uniquindio.red_social.data_base.UtilSQL;
 import co.edu.uniquindio.red_social.estructuras.ArbolBinario;
 import co.edu.uniquindio.red_social.estructuras.ListaSimplementeEnlazada;
 
@@ -36,22 +37,63 @@ public class Grupo {
         }
         return false;
     }
-    public boolean eliminarMiembro( Estudiante miembro) {
-        if (miembros.contains(miembro)) {
-            miembro.eliminarGrupo(this);
-            miembro.eliminarPublicacionGrupo(this);
-            return miembros.remove(miembro);
+    public boolean eliminarMiembro(Estudiante miembro) {
+        if (miembro == null) return false;
+
+        // Buscar por ID en lugar de por referencia de objeto
+        for (Estudiante m : miembros) {
+            if (m.getId().equals(miembro.getId())) {
+                // Primero eliminar de la base de datos
+                if (UtilSQL.eliminarUsuarioDeGrupo(miembro.getId(), this.getId())) {
+                    // Luego eliminar de las estructuras en memoria
+                    miembro.eliminarGrupo(this);
+                    miembro.eliminarPublicacionGrupo(this);
+                    return miembros.remove(m);
+                }
+                return false;
+            }
         }
         return false;
     }
 
-    public boolean agregarPublicacion(Contenido contenido) {
-        if (!contenidos.contains(contenido)) {
-            RedSocial.getInstance().agregarPublicacion(contenido);
-            return contenidos.add(contenido);
+    public boolean esMiembro(Estudiante estudiante) {
+        if (estudiante == null) return false;
+
+        for (Estudiante m : miembros) {
+            if (m.getId().equals(estudiante.getId())) {
+                return true;
+            }
         }
         return false;
     }
+
+
+    public boolean agregarPublicacion(Contenido contenido) {
+        if (contenido == null) return false;
+
+        // Debug detallado
+        System.out.println("[GRUPO] Agregando contenido ID: " + contenido.getId() +
+                " al grupo: " + this.nombre);
+
+        // Verificar si el contenido ya existe
+        for (Contenido c : this.contenidos.recorrerInorden()) {
+            if (c.getId().equals(contenido.getId())) {
+                System.out.println("[GRUPO] El contenido ya existe en el grupo");
+                return false;
+            }
+        }
+
+        // Establecer la relación bidireccional
+        contenido.setGrupo(this);
+
+        // Insertar en el árbol del grupo
+        boolean resultado = this.contenidos.add(contenido);
+        System.out.println("[GRUPO] Resultado inserción: " + resultado +
+                " | Total ahora: " + this.contenidos.recorrerInorden().size());
+
+        return resultado;
+    }
+
 
     public boolean eliminarPublicacion(Contenido contenido) {
         if (contenidos.contains(contenido)) {
@@ -97,7 +139,11 @@ public class Grupo {
     }
 
     public ArbolBinario<Contenido> getContenidos() {
-        return contenidos;
+        if (this.contenidos == null) {
+            this.contenidos = new ArbolBinario<>();
+            System.out.println("Inicializado árbol vacío para grupo: " + this.nombre);
+        }
+        return this.contenidos;
     }
 
     public void setContenidos(ArbolBinario<Contenido> contenidos) {
@@ -134,6 +180,11 @@ public class Grupo {
 
     public void setTipoGrupo(String tipoGrupo) {
         this.tipoGrupo = tipoGrupo;
+    }
+
+    @Override
+    public String toString() {
+        return this.nombre != null ? this.nombre : "Grupo sin nombre";
     }
 }
 

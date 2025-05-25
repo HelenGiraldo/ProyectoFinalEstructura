@@ -30,6 +30,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
+import static co.edu.uniquindio.red_social.util.EstudianteActual.usuarioActual;
+
 public class InicioController {
 
     @FXML
@@ -234,6 +236,16 @@ public class InicioController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/gruposEstudio.fxml"));
             Parent configView = loader.load();
 
+            GruposDeEstudioController controller = loader.getController();
+
+            // PASAR el usuario (que tienes en 'usuario' o usa PerfilUsuario.getUsuarioActual())
+            if (usuario != null) {
+                controller.setUsuarioActual(usuario);
+                System.out.println("Usuario enviado a GruposDeEstudioController: " + usuario.getNombre());
+            } else {
+                System.out.println("usuario en InicioController es null");
+            }
+
             Scene scene = new Scene(configView);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);
@@ -242,8 +254,8 @@ public class InicioController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
+
 
     @FXML
     private void irASugerencias(ActionEvent event) {

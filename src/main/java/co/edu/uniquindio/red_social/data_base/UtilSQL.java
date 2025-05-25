@@ -11,9 +11,7 @@ import co.edu.uniquindio.red_social.estructuras.ListaSimplementeEnlazada;
 import java.io.File;
 import java.sql.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class UtilSQL {
     static ResourceBundle bundle = ResourceBundle.getBundle("sql");
@@ -363,6 +361,7 @@ public class UtilSQL {
         }
     }
 
+
     public static boolean actualizarEstadoAmistad(String idUser1, String idUser2, String nuevoEstado) {
         if (!save) {
             return false;
@@ -432,6 +431,8 @@ public class UtilSQL {
             return grupos;
         }
 
+        RedSocial.getInstance().getGrupos().clear();
+
         String sql = "SELECT id, nombre, descripcion, tipo, publico FROM grupos";
 
         try (Connection conn = DriverManager.getConnection(url, user, password);
@@ -446,12 +447,10 @@ public class UtilSQL {
                 boolean publico = rs.getBoolean("publico");
 
                 // Crea la instancia de grupo
-                Grupo grupo = new Grupo(nombre, descripcion, tipo, publico);
+                Grupo grupo = new Grupo(id, nombre, descripcion, tipo, publico);
 
-                // Puedes seguir usando RedSocial para otro propósito si quieres
-                RedSocial.getInstance().crearGrupo(id, nombre, descripcion, tipo, publico);
+                RedSocial.getInstance().getGrupos().add(grupo);
 
-                // Añade el grupo a la lista
                 grupos.add(grupo);
 
             }
@@ -533,8 +532,33 @@ public class UtilSQL {
         }
     }
 
+    public static boolean usuarioEstaEnGrupo(String idUsuario, String idGrupo) {
+        String sql = "SELECT COUNT(*) FROM user_group WHERE id_user = ? AND id_group = ?";
+
+        try (Connection conn = DriverManager.getConnection(url, user, password);
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, idUsuario);
+            stmt.setString(2, idGrupo);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public static boolean agregarUsuarioAGrupo(String idUsuario, String idGrupo) {
         if (!save || idUsuario == null || idGrupo == null) {
+            return false;
+        }
+
+        // Verificar antes si ya existe la relación
+        if (usuarioEstaEnGrupo(idUsuario, idGrupo)) {
+            System.out.println("El usuario ya pertenece al grupo.");
             return false;
         }
 
@@ -545,12 +569,16 @@ public class UtilSQL {
 
             stmt.setString(1, idUsuario);
             stmt.setString(2, idGrupo);
+
             return stmt.executeUpdate() > 0;
 
         } catch (SQLException e) {
-            throw new RuntimeException("Error al agregar usuario al grupo", e);
+            e.printStackTrace();
+            return false;
         }
     }
+
+
 
     public static boolean eliminarUsuarioDeGrupo(String idUsuario, String idGrupo) {
         if (!save || idUsuario == null || idGrupo == null) {
@@ -631,10 +659,10 @@ public class UtilSQL {
     }
 
     public static void obtenerPublicaciones() {
-        ListaSimplementeEnlazada<Contenido> lista = new ListaSimplementeEnlazada<>();
-        if (!save) {
-            return;
-        }
+        if (!save) return;
+
+        RedSocial redSocial = RedSocial.getInstance();
+        // No limpiamos contenidos aquí para no perder referencias
 
         String sql = "SELECT id, tipo_contenido, titulo, tema, descripcion, contenido, id_autor, id_grupo FROM publicaciones";
 
@@ -644,30 +672,68 @@ public class UtilSQL {
 
             while (rs.next()) {
                 String id = rs.getString("id");
+
+                // 1. Primero verificar si ya existe la publicación
+                Contenido existente = redSocial.obtenerPublicacionPorId(id);
+                if (existente != null) {
+                    continue; // Ya existe, saltar
+                }
+
+                // 2. Obtener datos de la publicación
                 String tipoContenido = rs.getString("tipo_contenido");
                 String titulo = rs.getString("titulo");
                 String tema = rs.getString("tema");
                 String descripcion = rs.getString("descripcion");
-                File contenido = new File(rs.getString("contenido"));
+                String rutaContenido = rs.getString("contenido");
+                File contenido = (rutaContenido != null && !rutaContenido.isEmpty()) ?
+                        new File(rutaContenido) : null;
 
-                Estudiante autor = RedSocial.getInstance().obtenerEstudiantePorId(rs.getString("id_autor"));
+                // 3. Obtener autor
+                Estudiante autor = redSocial.obtenerEstudiantePorId(rs.getString("id_autor"));
+                if (autor == null) {
+                    System.err.println("Autor no encontrado para publicación ID: " + id);
+                    continue;
+                }
 
+                // 4. Obtener grupo (si existe)
                 Grupo grupo = null;
                 String idGrupo = rs.getString("id_grupo");
                 if (idGrupo != null) {
-                    grupo = RedSocial.getInstance().obtenerGrupoPorId(idGrupo);
+                    grupo = redSocial.obtenerGrupoPorId(idGrupo);
                 }
 
-                Contenido pub = new Contenido(tipoContenido, titulo, tema, descripcion, autor, contenido, grupo);
+                // 5. Crear la publicación usando el constructor existente
+                Contenido nuevaPublicacion = new Contenido(
+                        tipoContenido,
+                        titulo,
+                        tema,
+                        descripcion,
+                        autor,
+                        contenido,
+                        grupo
+                );
 
-                RedSocial.getInstance().agregarPublicacion(pub, idGrupo);
+                // 6. Establecer el ID usando el método setId()
+                try {
+                    nuevaPublicacion.setId(id); // Esto puede lanzar IllegalStateException
+
+                    // 7. Agregar a RedSocial
+                    redSocial.agregarPublicacion(nuevaPublicacion);
+
+                    // 8. Si pertenece a un grupo, agregar al árbol del grupo
+                    if (grupo != null) {
+                        grupo.agregarPublicacion(nuevaPublicacion);
+                    }
+
+                } catch (IllegalStateException e) {
+                    System.err.println("Error al asignar ID a publicación: " + e.getMessage());
+                    continue;
+                }
             }
-
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
+            throw new RuntimeException("Error al obtener publicaciones", e);
         }
-
-
     }
 
 

@@ -1,6 +1,6 @@
 .boton-notificacion {
     -fx-background-color: rgba(228, 226, 226, 0.67);
-    -fx-text-fill: white;
+    -fx-text-fill: black;
     -fx-background-radius: 10px;
     -fx-padding: 4px 10px;
     -fx-font-size: 12px;

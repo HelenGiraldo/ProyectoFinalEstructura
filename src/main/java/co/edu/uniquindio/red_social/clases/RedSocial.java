@@ -367,16 +367,30 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo,
      * @param contenido La publicación a agregar.
      * @return true si se agregó correctamente, false en caso contrario.
      */
-    public boolean agregarPublicacion(Contenido contenido) {
-        if (!contenidos.contains(contenido)) {
-            int id = UtilSQL.agregarPublicacion(contenido);
-            contenido.setId(String.valueOf(id));
-            return contenidos.add(contenido);
+    public void agregarPublicacion(Contenido contenido) {
+        // Verificar si ya existe una publicación con ese ID
+        if (obtenerPublicacionPorId(contenido.getId()) != null) {
+            throw new IllegalStateException("Ya existe una publicación con ID: " + contenido.getId());
         }
-        return false;
+        this.contenidos.add(contenido);
     }
 
-    public boolean agregarPublicacion( Contenido contenido, String id) {
+
+    public boolean agregarPublicacion(Contenido contenido, String id) {
+        if (contenido == null) return false; // Cambiado para retornar boolean
+
+        // Verificar que no se modifique el ID
+        String idOriginal = contenido.getId();
+
+        // Insertar en el árbol principal
+        this.contenidos.insertar(contenido);
+
+        // Si el ID cambió, revertirlo
+        if (!idOriginal.equals(contenido.getId())) {
+            System.err.println("ADVERTENCIA: Se intentó modificar el ID de " + idOriginal + " a " + contenido.getId());
+            contenido.setId(idOriginal); // Revertir el cambio
+        }
+
         if(!contenidos.contains(contenido)) {
             contenido.setId(id);
             contenidos.add(contenido);
@@ -460,10 +474,11 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo,
      * @param idGrupo El ID del administrador.
      * @return El administrador correspondiente al ID, o null si no existe.
      */
-    public Grupo obtenerGrupoPorId(String idGrupo) {
-        for (Grupo grupo : grupos) {
-            if (grupo.getId().equals(idGrupo)) {
-                return grupo;
+    public Grupo obtenerGrupoPorId(String id) {
+        for (Grupo g : this.grupos) {
+            if (g.getId().equals(id)) {
+                // Devuelve la instancia EXACTA que está en la lista principal
+                return g;
             }
         }
         return null;
@@ -480,6 +495,13 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo,
         return null;
     }
 
+    public boolean existePublicacion(String id) {
+        return obtenerPublicacionPorId(id) != null;
+    }
+
+    public void agregarPublicacionSinValidarId(Contenido contenido) {
+        this.contenidos.add(contenido);
+    }
 
     public boolean agregarAdministrador(Administrador admin) {
         int idGenerado = UtilSQL.insertarAdministrador(admin);
@@ -488,6 +510,11 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo,
             return administradores.add(admin);
         }
         return false;
+    }
+
+
+    public void limpiarPublicaciones() {
+        this.contenidos.clear();
     }
 
 

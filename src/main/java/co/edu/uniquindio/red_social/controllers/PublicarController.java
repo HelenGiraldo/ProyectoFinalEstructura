@@ -1,15 +1,13 @@
 package co.edu.uniquindio.red_social.controllers;
 
 import co.edu.uniquindio.red_social.clases.contenidos.Contenido;
+import co.edu.uniquindio.red_social.clases.social.Grupo;
 import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
 import co.edu.uniquindio.red_social.clases.usuarios.PerfilUsuario;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
@@ -17,8 +15,10 @@ import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import javafx.util.StringConverter;
 
 import java.io.File;
+import java.util.List;
 
 public class PublicarController {
 
@@ -98,6 +98,11 @@ public class PublicarController {
         this.contenidosController = contenidosController;
     }
 
+    @FXML
+    private ChoiceBox<Grupo> choiceBoxGrupo;
+
+    private List<Grupo> gruposUsuario;
+
 
 
     @FXML
@@ -124,6 +129,42 @@ public class PublicarController {
         }
     }
 
+    public void setGruposUsuario(List<Grupo> gruposUsuario) {
+        // Verificar que el ChoiceBox esté inicializado
+        if (choiceBoxGrupo == null) {
+            System.out.println("El ChoiceBox no está inicializado");
+            return;
+        }
+
+        // Limpiar y cargar los grupos
+        choiceBoxGrupo.getItems().clear();
+
+        if (gruposUsuario != null && !gruposUsuario.isEmpty()) {
+            // Agregar opción para publicación pública
+            choiceBoxGrupo.getItems().add(null); // null representa "Público"
+
+            // Agregar todos los grupos del usuario
+            choiceBoxGrupo.getItems().addAll(gruposUsuario);
+
+            // Configurar cómo se muestran los grupos
+            choiceBoxGrupo.setConverter(new StringConverter<Grupo>() {
+                @Override
+                public String toString(Grupo grupo) {
+                    return grupo == null ? "Público" : grupo.getNombre();
+                }
+
+                @Override
+                public Grupo fromString(String string) {
+                    return null; // No necesario para este caso
+                }
+            });
+
+        } else {
+            System.out.println("El usuario no tiene grupos");
+            choiceBoxGrupo.setDisable(true);
+            // No agregamos texto, solo lo deshabilitamos
+        }
+    }
 
     @FXML
     private void handlePublicar() {
@@ -133,6 +174,7 @@ public class PublicarController {
         String tema = temaField.getText().trim();
         String tipo = tipoField.getText().trim();
         String descripcion = descripcionField.getText().trim();
+        Grupo grupoSeleccionado = choiceBoxGrupo.getValue();
 
         if (titulo.isEmpty() || tema.isEmpty() || tipo.isEmpty() || descripcion.isEmpty()) {
             publicadoConExitoLabel.setText("Todos los campos son obligatorios.");
@@ -144,9 +186,14 @@ public class PublicarController {
             return;
         }
 
-        Contenido nuevoContenido = new Contenido(tipo, titulo, tema, descripcion, (Estudiante) PerfilUsuario.getUsuarioActual(), archivoAdjunto, null);
-        ((Estudiante) PerfilUsuario.getUsuarioActual()).publicarContenido(nuevoContenido,null);
+        Contenido nuevoContenido = new Contenido(tipo, titulo, tema, descripcion, (Estudiante) PerfilUsuario.getUsuarioActual(), archivoAdjunto, grupoSeleccionado);
+
         nuevoContenido.setContenido(archivoAdjuntoSeleccionado);
+
+        if(grupoSeleccionado !=null){
+            grupoSeleccionado.agregarPublicacion(nuevoContenido);
+        }
+
 
         if (contenidosController != null) {
             contenidosController.agregarContenido(nuevoContenido);

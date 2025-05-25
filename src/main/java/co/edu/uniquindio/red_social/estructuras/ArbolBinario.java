@@ -2,6 +2,8 @@ package co.edu.uniquindio.red_social.estructuras;
 
 import java.util.function.Consumer;
 
+
+
 public class ArbolBinario<T extends Comparable<T>> {
     BNodo<T> raiz;
     private int peso;
@@ -18,6 +20,13 @@ public class ArbolBinario<T extends Comparable<T>> {
     public void insertar(T valor) {
         raiz = agregarRecursivo(raiz, valor);
         peso++;
+    }
+    public void mostrarInorden(BNodo<T> nodo) {
+        if (nodo != null) {
+            mostrarInorden(nodo.getIzquierdo());
+            System.out.print(nodo.getValor()+" -> ");
+            mostrarInorden(nodo.getDerecho());
+        }
     }
 
     private BNodo<T> agregarRecursivo(BNodo<T> nodoActual, T valor) {

@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.red_social.controllers.SolicitudesAyudaController">
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.red_social.controllers.SolicitudesAyudaAdminController">
    <children>
       <BorderPane layoutX="3.0" layoutY="6.0" prefHeight="387.0" prefWidth="594.0">
          <top>
@@ -32,7 +32,16 @@
                         <HBox prefHeight="65.0" prefWidth="30.0" />
                         <HBox prefHeight="65.0" prefWidth="157.0">
                            <children>
-                              <Label fx:id="solicitudesAyudaLabel" prefHeight="64.0" prefWidth="162.0" styleClass="tus-Contenidos" stylesheets="@styleTusContenidos.css" text="Solicitudes Ayuda" />
+                              <VBox prefHeight="100.0" prefWidth="164.0">
+                                 <children>
+                                    <Label fx:id="solicitudesAyudaLabel" prefHeight="62.0" prefWidth="162.0" styleClass="tus-Contenidos" stylesheets="@styleTusContenidos.css" text="Solicitudes Ayuda" />
+                                    <VBox prefHeight="200.0" prefWidth="100.0">
+                                       <children>
+                                          <Label prefHeight="19.0" prefWidth="35.0" styleClass="subtitulo-inicio" text="Admin" />
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </VBox>
                            </children>
                         </HBox>
                         <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="124.0">
@@ -82,12 +91,10 @@
                            <children>
                               <HBox prefHeight="43.0" prefWidth="172.0">
                                  <children>
-                                    <HBox prefHeight="46.0" prefWidth="40.0">
+                                    <HBox prefHeight="46.0" prefWidth="94.0">
                                        <children>
-                                          <Button mnemonicParsing="false" prefHeight="23.0" prefWidth="37.0" styleClass="boton-notificacion" stylesheets="@styleSugerencias.css" text="🔔" />
+                                          <Button fx:id="resolverButton" mnemonicParsing="false" prefHeight="29.0" prefWidth="91.0" styleClass="boton-guardar" stylesheets="@stylesConfig.css" text="Resolver" />
                                        </children></HBox>
-                                    <HBox prefHeight="46.0" prefWidth="0.0" stylesheets="@styleSugerencias.css" />
-                                    <Button fx:id="botonAniadir" mnemonicParsing="false" styleClass="boton-accion" stylesheets="@styleSolicitudes.css" text="+" />
                                  </children>
                               </HBox>
                               <Label fx:id="filtrarSolicitudesLabel" prefHeight="17.0" prefWidth="92.0" text="filtrar solicitudes" />
@@ -97,16 +104,16 @@
                      </children>
                   </VBox>
                   <ScrollPane fx:id="scrollPane" prefHeight="241.0" prefWidth="410.0" stylesheets="@styles.css">
-                    <content>
-                      <AnchorPane fx:id="contenedorSolicitudes" minHeight="0.0" minWidth="0.0" prefHeight="226.0" prefWidth="385.0">
+                     <content>
+                        <AnchorPane fx:id="contenedorSolicitudes" minHeight="0.0" minWidth="0.0" prefHeight="226.0" prefWidth="385.0">
                            <children>
                               <VBox fx:id="AnchorPaneContenedorSolicitudes" prefHeight="233.0" prefWidth="403.0">
                                  <children>
                                     <HBox prefHeight="100.0" prefWidth="200.0">
                                        <children>
-                                          <HBox fx:id="HboxSolicitud" prefHeight="100.0" prefWidth="163.0" styleClass="card-solicitud" stylesheets="@styleSolicitudes.css">
-                                             <children>
-                                                <VBox prefHeight="17.0" prefWidth="140.0">
+                                          <Button mnemonicParsing="false" prefHeight="100.0" prefWidth="163.0" styleClass="card-mini" stylesheets="@styleInicioRegistro.css">
+                                             <graphic>
+                                                <VBox prefHeight="91.0" prefWidth="163.0">
                                                    <children>
                                                       <Label fx:id="nombreEstudianteLabel" text="User1" />
                                                       <VBox prefHeight="25.0" prefWidth="140.0">
@@ -116,17 +123,17 @@
                                                       </VBox>
                                                       <VBox prefHeight="200.0" prefWidth="100.0">
                                                          <children>
-                                                            <Label fx:id="ContenidoSolicitudLabel" text="Titulo" />
+                                                            <Label fx:id="tituloLabel" text="Titulo" />
                                                             <Label fx:id="ContenidoSolicitudLabel" text="Contenido Solicitud" />
                                                          </children>
                                                       </VBox>
                                                    </children>
                                                 </VBox>
-                                             </children>
-                                          </HBox>
+                                             </graphic>
+                                          </Button>
                                           <HBox prefHeight="100.0" prefWidth="38.0" />
-                                          <HBox fx:id="HboxSolicitud2" prefHeight="100.0" prefWidth="173.0" styleClass="card-solicitud" stylesheets="@styleSolicitudes.css">
-                                             <children>
+                                          <Button mnemonicParsing="false" prefHeight="106.0" prefWidth="181.0" styleClass="card-mini">
+                                             <graphic>
                                                 <VBox prefHeight="17.0" prefWidth="140.0">
                                                    <children>
                                                       <Label fx:id="nombreEstudiante2Label" text="User2" />
@@ -137,21 +144,21 @@
                                                       </VBox>
                                                       <VBox prefHeight="200.0" prefWidth="100.0">
                                                          <children>
-                                                            <Label fx:id="titulo2" text="Titulo" />
+                                                            <Label fx:id="tituloLabel2" text="Titulo" />
                                                             <Label fx:id="contenidoSolicitudLabel2" text="Contenido Solicitud" />
                                                          </children>
                                                       </VBox>
                                                    </children>
                                                 </VBox>
-                                             </children>
-                                          </HBox>
+                                             </graphic>
+                                          </Button>
                                        </children>
                                     </HBox>
                                  </children>
                               </VBox>
                            </children>
                         </AnchorPane>
-                    </content>
+                     </content>
                      <styleClass>
                         <String fx:value="scroll-bar" />
                         <String fx:value="scroll-pane" />

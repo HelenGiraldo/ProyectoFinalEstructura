@@ -33,6 +33,7 @@ public class LoginController {
     @FXML
     private Label datosIncorrectosLabel;
 
+    private Estudiante usuarioLogueado;
 
 
     @FXML
@@ -63,6 +64,7 @@ public class LoginController {
         }
         if (estudiante != null) {
             if (estudiante.getContrasena().equals(contrasena)) {
+                usuarioLogueado = estudiante;
                 PerfilUsuario.setUsuarioActual(estudiante);
                 irAInicio();
             } else {
@@ -137,6 +139,9 @@ public class LoginController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/Inicio.fxml"));
             Parent newRoot = loader.load();
+
+            InicioController inicioController = loader.getController();
+            inicioController.inicializarUsuario(usuarioLogueado);
 
             // Obtener la ventana actual (stage)
             Stage stage = (Stage) textFieldEmail.getScene().getWindow();

@@ -10,22 +10,15 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-public class SolicitudesAyudaController {
+public class SolicitudesAyudaAdminController {
 
     @FXML
     private VBox AnchorPaneContenedorSolicitudes;
 
     @FXML
     private Label ContenidoSolicitudLabel;
-
-    @FXML
-    private HBox HboxSolicitud;
-
-    @FXML
-    private HBox HboxSolicitud2;
 
     @FXML
     private ToggleButton InicioButton;
@@ -41,9 +34,6 @@ public class SolicitudesAyudaController {
 
     @FXML
     private Label TextFieldTitle;
-
-    @FXML
-    private Button botonAniadir;
 
     @FXML
     private Button botonBuscar;
@@ -91,6 +81,9 @@ public class SolicitudesAyudaController {
     private Label nombreEstudianteLabel;
 
     @FXML
+    private Button resolverButton;
+
+    @FXML
     private AnchorPane root;
 
     @FXML
@@ -100,7 +93,10 @@ public class SolicitudesAyudaController {
     private Label solicitudesAyudaLabel;
 
     @FXML
-    private Label titulo2;
+    private Label tituloLabel;
+
+    @FXML
+    private Label tituloLabel2;
 
     @FXML
     void irAChat(ActionEvent event) {
