@@ -51,6 +51,28 @@ public class CreacionGrafo {
         }
     }
 
+    public ListaSimplementeEnlazada<Estudiante> recomedarEstudiantes(Estudiante estudiante){
+        ListaSimplementeEnlazada<Estudiante> sugerecnias = new ListaSimplementeEnlazada<>();
+        for(Estudiante est: RedSocial.getInstance().getEstudiantes()){
+            if(sonAmigos(est,estudiante)){
+                return null;
+            }
+            if(amigosMutuos(est,estudiante)){
+                sugerecnias.add(est);
+            }else
+            if(tienenInteresesComunes(est,estudiante)){
+                sugerecnias.add(est);
+            }else if(tienenGruposComunes(est,estudiante)){
+                sugerecnias.add(est);
+            }else if(tienenValoracionesSimilares(estudiante, est)){
+                sugerecnias.add(est);
+            }
+
+        }
+        return sugerecnias;
+
+    }
+
 
     private boolean sonAmigos(Estudiante estudiante1, Estudiante estudiante2) {
         for(Estudiante estudiante : estudiante1.getContactos()) {
@@ -129,6 +151,7 @@ public class CreacionGrafo {
         crearNodos();
         generarConexionesAutomaticas();
         estudiantes.show();
+        CreacionGrafo creacionGrafo = CreacionGrafo.getInstance();
        GrafoSwing.main();
 
     }

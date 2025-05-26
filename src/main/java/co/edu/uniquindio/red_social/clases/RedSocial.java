@@ -14,6 +14,8 @@ import co.edu.uniquindio.red_social.estructuras.ColaDePrioridad;
 import co.edu.uniquindio.red_social.estructuras.ListaSimplementeEnlazada;
 import co.edu.uniquindio.red_social.util.Email;
 import co.edu.uniquindio.red_social.util.EstudianteActual;
+import co.edu.uniquindio.red_social.util.grafo.CreacionGrafo;
+
 import java.io.File;
 import java.util.Iterator;
 
@@ -473,7 +475,7 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo,
     /**
      * Obtiene un administrador por su ID.
      *
-     * @param idGrupo El ID del administrador.
+     * @param id El ID del administrador.
      * @return El administrador correspondiente al ID, o null si no existe.
      */
     public Grupo obtenerGrupoPorId(String id) {
@@ -517,6 +519,11 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo,
 
     public void limpiarPublicaciones() {
         this.contenidos.clear();
+    }
+
+    public ListaSimplementeEnlazada<Estudiante> crearSugerencias(Estudiante estudiante) {
+        CreacionGrafo grafo = CreacionGrafo.getInstance();
+        return grafo.recomedarEstudiantes(estudiante);
     }
 
 
