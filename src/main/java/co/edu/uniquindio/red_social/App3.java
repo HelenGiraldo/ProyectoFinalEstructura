@@ -22,6 +22,13 @@ public class App3 extends Application {
     }
 
     public static void main(String[] args) {
+
+        RedSocial red = RedSocial.getInstance("Think Together");
+        PerfilUsuario.setUsuarioActual(red.getEstudiantes().get(0));
+        launch();
+    }
+
+    public static void iniciarDatos(){
         RedSocial red = RedSocial.getInstance("Think Together");
         UtilSQL.obtenerEstudiantes();
         UtilSQL.obtenerGrupos();
@@ -34,7 +41,5 @@ public class App3 extends Application {
         UtilSQL.obtenerTodosLosChats();
         UtilSQL.obtenerTodasLasSolicitudes();
         red.getEstudiantes().show();
-        PerfilUsuario.setUsuarioActual(red.getEstudiantes().get(0));
-        launch();
     }
 }

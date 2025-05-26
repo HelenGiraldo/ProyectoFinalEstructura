@@ -10,8 +10,8 @@ class GNodo {
     public GNodo(Estudiante estudiante) {
         this.estudiante = estudiante;
         this.nombre = estudiante.getNombre();
-        this.x = 0;
-        this.y = 0;
+        this.x = 100;
+        this.y = 100;
     }
 
 
@@ -21,11 +21,13 @@ class GNodo {
         this.y = y;
     }
 
-    public GNodo(String nombre, int x, int y, Estudiante estudiante) {
-        this.nombre = nombre;
-        this.x = x;
-        this.y = y;
-        this.estudiante = estudiante;
+    @Override
+    public String toString() {
+        return "GNodo{" +
+                "nombre='" + nombre + '\'' +
+                ", y=" + y +
+                ", x=" + x +
+                '}';
     }
 }
 

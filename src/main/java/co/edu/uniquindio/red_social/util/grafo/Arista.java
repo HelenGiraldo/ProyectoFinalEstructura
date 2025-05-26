@@ -16,6 +16,7 @@ class Arista {
     public Arista(GNodo origen, GNodo destino) {
         this.origen = origen;
         this.destino = destino;
+        this.etiqueta = "N0";
     }
 
     public Arista(GNodo origen, GNodo destino, String etiqueta) {
