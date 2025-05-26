@@ -96,6 +96,8 @@
                                                 <HBox prefHeight="53.0" prefWidth="225.0">
                                                    <children>
                                                       <Button fx:id="buttonMisGrupos" mnemonicParsing="false" onAction="#irAMisGrupos" prefHeight="29.0" prefWidth="85.0" styleClass="button-Estadisticas" stylesheets="@styleTusContenidos.css" text="Mis grupos" />
+                                                      <HBox prefHeight="35.0" prefWidth="17.0" />
+                                                      <Button fx:id="calificarButtton" mnemonicParsing="false" onAction="#calificarContenido" styleClass="boton-notificacion" stylesheets="@styleSugerencias.css" text="★" />
                                                    </children>
                                                 </HBox>
                                                 <Button fx:id="buttonUnirse" mnemonicParsing="false" onAction="#unirseAGrupo" styleClass="boton-guardar" stylesheets="@stylesConfig.css" text="unirse" />

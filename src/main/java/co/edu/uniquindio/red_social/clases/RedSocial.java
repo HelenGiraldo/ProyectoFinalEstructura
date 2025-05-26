@@ -69,15 +69,27 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo,
      */
     @Override
     public Estudiante crearEstudiante(String nombre, String apellido, String correo, String contrasena, File fotoPerfil) {
-        Estudiante nuevoEstudiante = new Estudiante(nombre, apellido, correo, contrasena, fotoPerfil);
-        if (estudianteExisteCorreo(correo) == null) {
-            boolean a = estudiantes.add(nuevoEstudiante);
-            int id = UtilSQL.insertarEstudiante(nuevoEstudiante);
-            nuevoEstudiante.setId(String.valueOf(id));
-            Email.saludoBienvenida(correo, nombre + " " + apellido);
-            return (a) ? nuevoEstudiante : null;
+        // Validaciones básicas
+        if (nombre == null || nombre.isEmpty() ||
+                apellido == null || apellido.isEmpty() ||
+                correo == null || correo.isEmpty() ||
+                contrasena == null || contrasena.isEmpty()) {
+            System.err.println("Error: Campos requeridos faltantes");
+            return null;
         }
-        return null;
+
+        try {
+            // Verifica que el archivo de imagen exista
+            if (fotoPerfil == null || !fotoPerfil.exists()) {
+                System.err.println("Error: Imagen de perfil no válida");
+                return null;
+            }
+
+            return new Estudiante(nombre, apellido, correo, contrasena, fotoPerfil);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**
@@ -473,7 +485,7 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo,
     /**
      * Obtiene un administrador por su ID.
      *
-     * @param idGrupo El ID del administrador.
+     * @param id El ID del administrador.
      * @return El administrador correspondiente al ID, o null si no existe.
      */
     public Grupo obtenerGrupoPorId(String id) {

@@ -13,7 +13,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -22,6 +24,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
+import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -135,6 +139,8 @@ public class ChatController implements  ChatObserver {
     Estudiante estudianteActual = (Estudiante) PerfilUsuario.getUsuarioActual();
     Chat chatActual;
 
+    private Estudiante usuario;
+
     @FXML
     public void initialize() {
 
@@ -147,7 +153,7 @@ public class ChatController implements  ChatObserver {
             imagenPerfil.setClip(clip);
         }
 
-        if(estudianteActual.getChats().isEmpty()) {
+        if (estudianteActual.getChats().isEmpty()) {
 
             return;
         }
@@ -169,7 +175,6 @@ public class ChatController implements  ChatObserver {
         if (perfil.getImagenPerfil() != null) {
             imagenPerfil.setImage(perfil.getImagenPerfil());
         }
-
 
 
     }
@@ -322,7 +327,7 @@ public class ChatController implements  ChatObserver {
 
         }
 
-        chatActual.enviarMensaje(new Mensaje(texto, LocalDateTime.now(), estudianteActual, chatActual) );
+        chatActual.enviarMensaje(new Mensaje(texto, LocalDateTime.now(), estudianteActual, chatActual));
 
     }
 
@@ -360,8 +365,6 @@ public class ChatController implements  ChatObserver {
     }
 
 
-
-
     private void cargarMensajes(Estudiante receptor) {
         contenedorMensajes.getChildren().clear();
 
@@ -369,8 +372,8 @@ public class ChatController implements  ChatObserver {
         if (emisor == null || receptor == null) return;
 
         for (Chat chat : estudianteActual.getChats()) {
-            if ( (chat.getEstudiante().equals(emisor) && chat.getEstudiante2().equals(receptor)) ||
-                    (chat.getEstudiante().equals(receptor) && chat.getEstudiante2().equals(emisor)) ) {
+            if ((chat.getEstudiante().equals(emisor) && chat.getEstudiante2().equals(receptor)) ||
+                    (chat.getEstudiante().equals(receptor) && chat.getEstudiante2().equals(emisor))) {
                 chatActual = chat;
                 break;
             }
@@ -409,28 +412,6 @@ public class ChatController implements  ChatObserver {
     }
 
 
-
-    @FXML
-    private void irAConfig(ActionEvent event) {
-        try {
-
-            URL configUrl = getClass().getResource("/co/edu/uniquindio/red_social/configuracion.fxml");
-            System.out.println("URL config: " + configUrl);
-            FXMLLoader loader = new FXMLLoader(configUrl);
-            Parent configView = loader.load();
-
-            if (root != null) {
-                root.getChildren().clear();
-                root.getChildren().add(configView);
-            } else {
-                System.err.println("El contenedor principal es null.");
-            }
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
     @FXML
     private void irAInicio(ActionEvent event) {
         try {
@@ -458,22 +439,123 @@ public class ChatController implements  ChatObserver {
     }
 
     @FXML
-    private void irAContenidos(ActionEvent event) {
-        // Lógica para ir a contenidos
+    private void irAChat(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/mensajes.fxml"));
+            Parent configView = loader.load();
+
+            Scene scene = new Scene(configView);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @FXML
     private void irAGruposEstudio(ActionEvent event) {
-        // Lógica para ir a contenidos
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/gruposEstudio.fxml"));
+            Parent configView = loader.load();
+
+            GruposDeEstudioController controller = loader.getController();
+
+            // PASAR el usuario (que tienes en 'usuario' o usa PerfilUsuario.getUsuarioActual())
+            if (usuario != null) {
+                controller.setUsuarioActual(usuario);
+                System.out.println("Usuario enviado a GruposDeEstudioController: " + usuario.getNombre());
+            } else {
+                System.out.println("usuario en InicioController es null");
+            }
+
+            Scene scene = new Scene(configView);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
 
     @FXML
     private void irASugerencias(ActionEvent event) {
-        // Lógica para ir a contenidos
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/Configuracion.fxml"));
+            Parent configView = loader.load();
+
+            Scene scene = new Scene(configView);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @FXML
+    private void irAConfig(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/Configuracion.fxml"));
+            Parent configView = loader.load();
+
+            Scene scene = new Scene(configView);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
     private void irASolicitudesAyuda(ActionEvent event) {
-        chatActual.getMensajes().show();
+        try {
+
+            URL configUrl = getClass().getResource("/co/edu/uniquindio/red_social/solicitudes.fxml");
+            System.out.println("URL config: " + configUrl);
+            FXMLLoader loader = new FXMLLoader(configUrl);
+            Parent configView = loader.load();
+
+            if (root != null) {
+                root.getChildren().clear();
+                root.getChildren().add(configView);
+            } else {
+                System.err.println("El contenedor principal es null.");
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
+    @FXML
+    private void irAContenidos(ActionEvent event) {
+        try {
+
+            URL configUrl = getClass().getResource("/co/edu/uniquindio/red_social/TusContenidos.fxml");
+            System.out.println("URL Logo: " + configUrl);
+            FXMLLoader loader = new FXMLLoader(configUrl);
+            Parent configView = loader.load();
+
+            if (root != null) {
+                root.getChildren().clear();
+                root.getChildren().add(configView);
+            } else {
+                System.err.println("El contenedor principal es null.");
+            }
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

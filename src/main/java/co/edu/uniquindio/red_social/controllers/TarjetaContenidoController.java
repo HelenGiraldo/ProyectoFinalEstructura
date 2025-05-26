@@ -1,7 +1,9 @@
 package co.edu.uniquindio.red_social.controllers;
 
+import co.edu.uniquindio.red_social.clases.contenidos.Calificacion;
 import co.edu.uniquindio.red_social.clases.contenidos.Contenido;
 import co.edu.uniquindio.red_social.clases.social.Grupo;
+import co.edu.uniquindio.red_social.estructuras.ListaSimplementeEnlazada;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -12,6 +14,8 @@ import java.awt.*;
 import javafx.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
+
+import static co.edu.uniquindio.red_social.util.EstudianteActual.usuarioActual;
 
 public class TarjetaContenidoController {
 
@@ -63,6 +67,8 @@ public class TarjetaContenidoController {
         tipoLabel.setText(contenido.getTipoContenido());
         valoracionLabel.setText("★ " + contenido.getCalificacionPromedio());
 
+
+
         File archivo = contenido.getContenido();
 
         if (archivo != null && archivo.exists()) {
@@ -110,8 +116,21 @@ public class TarjetaContenidoController {
         autorLabel.setText(contenido.getAutor().getNombre() + " " + contenido.getAutor().getApellido());
         descripcionLabel.setText(contenido.getDescripcion());
         tipoLabel.setText(contenido.getTipoContenido());
-        valoracionLabel.setText("★ " + contenido.getCalificacionPromedio());
+        valoracionLabel.setText(String.format("%.1f ★", contenido.getCalificacionPromedio()));
         totalPublicadosLabel.setText("Total Publicados: " + totalPublicados);
+
+        if (contenido.getCalificaciones() == null) {
+            contenido.setCalificaciones(new ListaSimplementeEnlazada<>());
+        }
+
+
+        for (Calificacion c : contenido.getCalificaciones()) {
+            if (c.getUsuario().equals(usuarioActual)) {
+                valoracionLabel.setText("Tu calificación: " + c.getValoracion() + "★");
+                break;
+            }
+        }
+
 
         if (contenido.getContenido() != null) {
             archivoAdjuntoLabel.setText(contenido.getContenido().getName());

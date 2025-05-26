@@ -1,16 +1,14 @@
 package co.edu.uniquindio.red_social.controllers;
 
+import co.edu.uniquindio.red_social.clases.RedSocial;
 import co.edu.uniquindio.red_social.clases.contenidos.Contenido;
 import co.edu.uniquindio.red_social.clases.social.Grupo;
 import co.edu.uniquindio.red_social.clases.usuarios.Administrador;
-import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
-import co.edu.uniquindio.red_social.clases.usuarios.Usuario;
 import co.edu.uniquindio.red_social.data_base.UtilSQL;
 import co.edu.uniquindio.red_social.estructuras.ArbolBinario;
 import co.edu.uniquindio.red_social.estructuras.ListaSimplementeEnlazada;
 import co.edu.uniquindio.red_social.util.GrupoService;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -30,172 +28,118 @@ import java.util.List;
 
 public class GruposDeEstudioAdminController {
 
-    @FXML
-    private HBox HboxAvatarNombre1;
+    // Elementos de la interfaz
+    @FXML private HBox HboxGrupo1;
+    @FXML private HBox HboxGrupo2;
+    @FXML private HBox HboxTusContendiosContenido;
+    @FXML private ToggleButton InicioButton;
+    @FXML private Label LabelTipo;
+    @FXML private Label LabelTotalPublicados;
+    @FXML private Label LabelTusContenidos;
+    @FXML private Label LabelTusContenidosContenido;
+    @FXML private Label LabelValoracion;
+    @FXML private ToggleButton MensajesButton;
+    @FXML private ToggleButton SolicitudesDeAyudaButton;
+    @FXML private ToggleButton SugerenciasButton;
+    @FXML private Label TextFieldTitle;
+    @FXML private VBox TuscontendiosVBox;
+    @FXML private VBox VBoxTusContenidosContenido;
+    @FXML private Label adminLabel;
+    @FXML private Button botonBuscar;
+    @FXML private Button buttonAniadir;
+    @FXML private ToggleButton buttonGrupo1;
+    @FXML private ToggleButton buttonGrupo2;
+    @FXML private TextField campoBusqueda;
+    @FXML private VBox chatListVBoxFondoDos;
+    @FXML private VBox chatSpace;
+    @FXML private ToggleButton configuracionPerfilButton;
+    @FXML private VBox contenedorGrupos;
+    @FXML private Label contenidosLabel;
+    @FXML private Label grupo1Label;
+    @FXML private Label grupo2Label;
+    @FXML private Label grupoActualLabel;
+    @FXML private ToggleButton gruposEstudioButton;
+    @FXML private Label gruposEstudioLabel;
+    @FXML private VBox gruposVBox;
+    @FXML private VBox hBoxDerecha;
+    @FXML private ImageView imagenPerfil;
+    @FXML private ToggleButton misContenidosButton;
+    @FXML private AnchorPane root;
+    @FXML private ScrollPane scrollPaneContenedorContenidos;
 
-    @FXML
-    private HBox HboxAvatarNombre2;
-
-    @FXML
-    private HBox HboxTusContendiosContenido;
-
-    @FXML
-    private ToggleButton InicioButton;
-
-    @FXML
-    private Label LabelTipo;
-
-    @FXML
-    private Label LabelTotalPublicados;
-
-    @FXML
-    private Label LabelTusContenidos;
-
-    @FXML
-    private Label LabelTusContenidosContenido;
-
-    @FXML
-    private Label LabelUser3chat;
-
-    @FXML
-    private Label LabelValoracion;
-
-    @FXML
-    private ToggleButton MensajesButton;
-
-    @FXML
-    private ToggleButton SolicitudesDeAyudaButton;
-
-    @FXML
-    private ToggleButton SugerenciasButton;
-
-    @FXML
-    private Label TextFieldTitle;
-
-    @FXML
-    private VBox TuscontendiosVBox;
-
-    @FXML
-    private VBox VBoxTusContenidosContenido;
-
-    @FXML
-    private Label adminLabel;
-
-    @FXML
-    private Button botonBuscar;
-
-    @FXML
-    private Button buttonAniadir;
-
-    @FXML
-    private ToggleButton buttonGrupo1;
-
-    @FXML
-    private ToggleButton buttonGrupo2;
-
-    @FXML
-    private Button buttonGrupos;
-
-    @FXML
-    private TextField campoBusqueda;
-
-    @FXML
-    private VBox chatListVBoxFondoDos;
-
-    @FXML
-    private VBox chatSpace;
-
-    @FXML
-    private ToggleButton configuracionPerfilButton;
-
-    @FXML
-    private Label contenidosLabel;
-
-    @FXML
-    private Label grupo1Label;
-
-    @FXML
-    private Label grupoActualLabel;
-
-    @FXML
-    private ToggleButton gruposEstudioButton;
-
-    @FXML
-    private Label gruposEstudioLabel;
-
-    @FXML
-    private VBox hBoxDerecha;
-
-    @FXML
-    private ImageView imagenPerfil;
-
-    @FXML
-    private ToggleButton misContenidosButton;
-
-    @FXML
-    private AnchorPane root;
-
-    @FXML
-    private ScrollPane scrollPaneContenedorContenidos;
-
-    @FXML
-    private VBox userchatListVBox;
-
-
-
-    @FXML
-    private VBox contenedorGrupos;
-
-
-    @FXML
-    private VBox gruposVBox;
-
-    private List<Grupo> listaGrupos;
-
-
-    GrupoService grupoService = GrupoService.getInstance();
-
+    // Variables de control
     private ToggleGroup grupoGrupos = new ToggleGroup();
-
+    private Administrador administradorActual;
+    private GrupoService grupoService = GrupoService.getInstance();
     private ArbolBinario<Contenido> arbolContenido;
-
 
     @FXML
     private void initialize() {
         cargarGrupos();
     }
 
+    public void setAdministradorActual(Administrador administrador) {
+        this.administradorActual = administrador;
+        cargarGrupos();
+    }
+
     private void cargarGrupos() {
         gruposVBox.getChildren().clear();
-        listaGrupos = grupoService.obtenerGrupos();
+        limpiarContenido();
+        grupoActualLabel.setText("");
 
-        for (Grupo grupo : listaGrupos) {
-            ToggleButton botonGrupo = new ToggleButton(grupo.getNombre());
-            botonGrupo.setPrefWidth(150);
-            botonGrupo.setPrefHeight(40);
-            botonGrupo.setToggleGroup(grupoGrupos);
-            botonGrupo.setUserData(grupo);
-            botonGrupo.getStyleClass().add("sidebar-button-grupo");
+        try {
+            // Recargar datos desde la base de datos
+            RedSocial.getInstance().getGrupos().clear();
+            UtilSQL.obtenerGrupos();
+            UtilSQL.cargarMiembrosDeGrupos();
 
-            botonGrupo.setOnAction(e -> {
-                if (botonGrupo.isSelected()) {
-                    seleccionarGrupo(botonGrupo);
+            // Cargar contenidos para cada grupo
+            for (Grupo grupo : RedSocial.getInstance().getGrupos()) {
+                ListaSimplementeEnlazada<Contenido> contenidos = UtilSQL.cargarContenidosDelGrupo(grupo.getId());
+                ArbolBinario<Contenido> arbolContenidos = grupo.getContenidos();
+                arbolContenidos.clear();
+
+                for (Contenido contenido : contenidos) {
+                    arbolContenidos.insertar(contenido);
                 }
-            });
+            }
 
-            gruposVBox.getChildren().add(botonGrupo);
-        }
+            // Mostrar todos los grupos (el admin puede ver todos)
+            for (Grupo grupo : RedSocial.getInstance().getGrupos()) {
+                ToggleButton botonGrupo = new ToggleButton(grupo.getNombre());
+                botonGrupo.setPrefWidth(150);
+                botonGrupo.setPrefHeight(40);
+                botonGrupo.setToggleGroup(grupoGrupos);
+                botonGrupo.setUserData(grupo);
+                botonGrupo.getStyleClass().add("sidebar-button-grupo");
 
-        if (!gruposVBox.getChildren().isEmpty()) {
-            ToggleButton primero = (ToggleButton) gruposVBox.getChildren().get(0);
-            primero.setSelected(true);
-            seleccionarGrupo(primero);
+                botonGrupo.setOnAction(e -> {
+                    if (botonGrupo.isSelected()) {
+                        seleccionarGrupo(botonGrupo);
+                    }
+                });
+
+                gruposVBox.getChildren().add(botonGrupo);
+            }
+
+            if (!gruposVBox.getChildren().isEmpty()) {
+                ToggleButton primero = (ToggleButton) gruposVBox.getChildren().get(0);
+                primero.setSelected(true);
+                seleccionarGrupo(primero);
+            }
+
+        } catch (Exception e) {
+            mostrarAlerta("Error", "No se pudieron cargar los grupos desde la base de datos");
+            e.printStackTrace();
         }
     }
 
+    private void limpiarContenido() {
+        scrollPaneContenedorContenidos.setContent(new VBox());
+    }
 
     private void seleccionarGrupo(ToggleButton botonGrupo) {
-
         gruposVBox.getChildren().forEach(node -> {
             if (node instanceof ToggleButton) {
                 ToggleButton tb = (ToggleButton) node;
@@ -206,48 +150,14 @@ public class GruposDeEstudioAdminController {
         });
 
         Grupo grupoSeleccionado = (Grupo) botonGrupo.getUserData();
-
-
         if (grupoSeleccionado != null) {
-
-            System.out.println("Grupo seleccionado: " + grupoSeleccionado.getNombre());
             mostrarContenidoGrupo(grupoSeleccionado);
         }
-
-
     }
-
-
-    @FXML
-    private void irACrearGrupo(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/crearGrupo.fxml"));
-            Parent root = loader.load();
-
-            Stage popupStage = new Stage();
-            popupStage.setTitle("Crear nuevo grupo");
-            popupStage.setScene(new Scene(root));
-            popupStage.initOwner(((Node) event.getSource()).getScene().getWindow()); // Define la ventana principal como dueña
-            popupStage.setResizable(false);
-
-            popupStage.setOnHidden(e -> {
-                cargarGrupos(); // Recarga los grupos cuando se cierra la ventana popup
-            });
-
-            popupStage.show();// Muestra como ventana nueva sin cerrar la actual
-
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
 
     private void mostrarContenidoGrupo(Grupo grupo) {
         grupoActualLabel.setText(grupo.getNombre());
         arbolContenido = grupo.getContenidos();
-
         LabelTotalPublicados.setText(arbolContenido.getPeso() + " Publicaciones");
 
         VBox contenidosVBox = new VBox(10);
@@ -263,17 +173,15 @@ public class GruposDeEstudioAdminController {
 
             for (Contenido contenido : lista) {
                 try {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/TarjetaContenido.fxml"));
+                    FXMLLoader loader = new FXMLLoader(
+                            getClass().getResource("/co/edu/uniquindio/red_social/TarjetaContenido.fxml"));
                     VBox tarjeta = loader.load();
 
                     TarjetaContenidoController controller = loader.getController();
                     controller.setContenido(contenido, arbolContenido.getPeso());
-
-
                     contenidosVBox.getChildren().add(tarjeta);
                 } catch (IOException e) {
-                    e.printStackTrace();
-                    // Fallback básico
+                    // Fallback básico con opción de eliminar (para admin)
                     HBox contenidoBox = new HBox(10);
                     Label contenidoLabel = new Label(contenido.getTitulo() + " - " + contenido.getAutor().getNombre());
 
@@ -304,100 +212,59 @@ public class GruposDeEstudioAdminController {
         alert.showAndWait();
     }
 
+    @FXML
+    private void irACrearGrupo(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/crearGrupo.fxml"));
+            Parent root = loader.load();
+
+            Stage popupStage = new Stage();
+            popupStage.setTitle("Crear nuevo grupo");
+            popupStage.setScene(new Scene(root));
+            popupStage.initOwner(((Node) event.getSource()).getScene().getWindow());
+            popupStage.setResizable(false);
+
+            popupStage.setOnHidden(e -> cargarGrupos());
+            popupStage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @FXML
     private void irAChat(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/mensajes.fxml"));
-            Parent configView = loader.load();
-
-            Scene scene = new Scene(configView);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        navegarAVentana("/co/edu/uniquindio/red_social/mensajes.fxml", event);
     }
+
     @FXML
     private void irAInicio(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/gruposEstudio.fxml"));
-            Parent configView = loader.load();
-
-            Scene scene = new Scene(configView);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        navegarAVentana("/co/edu/uniquindio/red_social/gruposEstudio.fxml", event);
     }
 
     @FXML
     private void irASugerencias(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/Configuracion.fxml"));
-            Parent configView = loader.load();
-
-            Scene scene = new Scene(configView);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        navegarAVentana("/co/edu/uniquindio/red_social/Configuracion.fxml", event);
     }
-
 
     @FXML
     private void irAConfig(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/Configuracion.fxml"));
-            Parent configView = loader.load();
-
-            Scene scene = new Scene(configView);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        navegarAVentana("/co/edu/uniquindio/red_social/Configuracion.fxml", event);
     }
 
     @FXML
     private void irASolicitudesAyuda(ActionEvent event) {
-        try {
-
-            URL configUrl = getClass().getResource("/co/edu/uniquindio/red_social/solicitudes.fxml");
-            System.out.println("URL config: " + configUrl);
-            FXMLLoader loader = new FXMLLoader(configUrl);
-            Parent configView = loader.load();
-
-            if (root != null) {
-                root.getChildren().clear();
-                root.getChildren().add(configView);
-            } else {
-                System.err.println("El contenedor principal es null.");
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        navegarAVentana("/co/edu/uniquindio/red_social/solicitudes.fxml", event);
     }
 
     @FXML
     private void irAContenidos(ActionEvent event) {
-        try {
+        navegarAVentana("/co/edu/uniquindio/red_social/TusContenidos.fxml", event);
+    }
 
-            URL configUrl = getClass().getResource("/co/edu/uniquindio/red_social/TusContenidos.fxml");
-            System.out.println("URL Logo: " + configUrl);
+    private void navegarAVentana(String fxmlPath, ActionEvent event) {
+        try {
+            URL configUrl = getClass().getResource(fxmlPath);
             FXMLLoader loader = new FXMLLoader(configUrl);
             Parent configView = loader.load();
 
@@ -405,16 +272,15 @@ public class GruposDeEstudioAdminController {
                 root.getChildren().clear();
                 root.getChildren().add(configView);
             } else {
-                System.err.println("El contenedor principal es null.");
+                Scene scene = new Scene(configView);
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                stage.setScene(scene);
+                stage.show();
             }
-
-
         } catch (IOException e) {
             e.printStackTrace();
+            mostrarAlerta("Error", "No se pudo cargar la ventana: " + fxmlPath);
         }
     }
-
-
-
-
 }
+

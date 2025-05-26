@@ -134,3 +134,9 @@
     -fx-opacity: 0.7;
 }
 
+.rating {
+    -fx-icon-size: 25px;
+}
+.rating .star {
+    -fx-text-fill: #FFD700; /* Color dorado */
+}

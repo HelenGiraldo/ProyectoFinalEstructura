@@ -161,7 +161,7 @@ public class InicioController {
         File file = PerfilUsuario.getUsuarioActual().getImagenPerfil();
         Image imagen = new Image(file.toURI().toString());
         imagenPerfil.setImage(imagen);
-        actualizarSaludo(); // Saludo se basa en el usuario actual
+        actualizarSaludo();
     }
 
 

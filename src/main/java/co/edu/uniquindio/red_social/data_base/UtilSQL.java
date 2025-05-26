@@ -25,6 +25,40 @@ public class UtilSQL {
         return DriverManager.getConnection(url, user, password);
     }
 
+
+    public static ListaSimplementeEnlazada<Calificacion> obtenerCalificacionesPorContenido(String idContenido) {
+        ListaSimplementeEnlazada<Calificacion> listaCalificaciones = new ListaSimplementeEnlazada<>();
+        String sql = "SELECT id, valoracion, autor FROM Calificaciones WHERE id_publicacion = ?";
+
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, idContenido);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                String idCalificacion = rs.getString("id");
+                int valoracion = rs.getInt("valoracion");
+                String autorId = rs.getString("autor");  // Aquí uso autor en vez de usuario_id
+
+                // Obtener usuario desde RedSocial (lista cargada)
+                Estudiante usuario = RedSocial.getInstance().obtenerEstudiantePorId(autorId);
+
+                if (usuario != null) {
+                    Calificacion calificacion = new Calificacion(valoracion, usuario, null);
+                    calificacion.setId(idCalificacion);
+                    listaCalificaciones.add(calificacion);
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return listaCalificaciones;
+    }
+
+
     public static ListaSimplementeEnlazada<Contenido> cargarContenidosDelGrupo(String idGrupo) {
         ListaSimplementeEnlazada<Contenido> contenidos = new ListaSimplementeEnlazada<>();
 

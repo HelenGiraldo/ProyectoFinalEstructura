@@ -52,16 +52,6 @@ public class LoginController {
         Administrador admin = redSocial.administradorExisteCorreo(correo);
 
 
-        if (admin != null) {
-            // Solo accede si la contraseña también es "admin123"
-            if (contrasena.equals("admin123")) {
-                PerfilUsuario.setUsuarioActual(admin);
-                irAVistaAdministrador();
-            } else {
-                datosIncorrectosLabel.setText("Contraseña incorrecta para administrador.");
-            }
-            return;
-        }
         if (estudiante != null) {
             if (estudiante.getContrasena().equals(contrasena)) {
                 usuarioLogueado = estudiante;
@@ -72,6 +62,18 @@ public class LoginController {
             }
             return;
         }
+
+        if (admin != null) {
+            // Solo accede si la contraseña también es "admin123"
+            if (contrasena.equals("admin123")) {
+                PerfilUsuario.setUsuarioActual(admin);
+                irAVistaAdministrador();
+            } else {
+                datosIncorrectosLabel.setText("Contraseña incorrecta para administrador.");
+            }
+            return;
+        }
+
 
         datosIncorrectosLabel.setText("No hay usuarios registrados con ese email.");
 

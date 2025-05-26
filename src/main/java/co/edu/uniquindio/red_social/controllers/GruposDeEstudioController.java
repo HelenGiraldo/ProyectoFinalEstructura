@@ -1,16 +1,19 @@
 package co.edu.uniquindio.red_social.controllers;
 
 import co.edu.uniquindio.red_social.clases.RedSocial;
+import co.edu.uniquindio.red_social.clases.contenidos.Calificacion;
 import co.edu.uniquindio.red_social.clases.contenidos.Contenido;
 import co.edu.uniquindio.red_social.clases.social.Grupo;
 import co.edu.uniquindio.red_social.clases.usuarios.Administrador;
 import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
+import co.edu.uniquindio.red_social.clases.usuarios.PerfilUsuario;
 import co.edu.uniquindio.red_social.clases.usuarios.Usuario;
 import co.edu.uniquindio.red_social.data_base.UtilSQL;
 import co.edu.uniquindio.red_social.estructuras.ArbolBinario;
 import co.edu.uniquindio.red_social.estructuras.ListaSimplementeEnlazada;
 import co.edu.uniquindio.red_social.util.GrupoContenidoViewUtil;
 import co.edu.uniquindio.red_social.util.GrupoService;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,19 +22,19 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 import static co.edu.uniquindio.red_social.data_base.UtilSQL.cargarGrupos;
 
@@ -155,6 +158,9 @@ public class GruposDeEstudioController {
     @FXML
     private VBox gruposVBox;
 
+    @FXML
+    private Button calificarButtton;
+
 
     private ToggleGroup grupoGrupos = new ToggleGroup();
 
@@ -163,13 +169,45 @@ public class GruposDeEstudioController {
 
     private boolean mostrandoMisGrupos = true;
 
+    private Contenido contenidoSeleccionado;
+
+
 
 
     @FXML
     private void initialize() {
+        calificarButtton.setDisable(true);
+
+        calificarButtton.setOnAction(this::calificarContenido);
         if (usuarioActual != null) {
             cargarGrupos(usuarioActual, true);
         }
+
+        Platform.runLater(() -> {
+            if (imagenPerfil != null) {
+                double radius = imagenPerfil.getFitWidth() / 2;
+                Circle clip = new Circle(radius, radius, radius);
+                imagenPerfil.setClip(clip);
+            }
+        });
+
+        PerfilUsuario perfil = PerfilUsuario.getInstancia();
+
+
+        perfil.imagenPerfilProperty().addListener((obs, oldImg, newImg) -> {
+            if (newImg != null) {
+                imagenPerfil.setImage(newImg);
+            }
+        });
+
+        System.out.println("Imagen de perfil: " + perfil.getImagenPerfil());
+        // Mostrar imagen actual si ya existe
+        if (perfil.getImagenPerfil() != null) {
+            imagenPerfil.setImage(perfil.getImagenPerfil());
+        }
+        File file = PerfilUsuario.getUsuarioActual().getImagenPerfil();
+        Image imagen = new Image(file.toURI().toString());
+        imagenPerfil.setImage(imagen);
     }
 
 
@@ -318,15 +356,137 @@ public class GruposDeEstudioController {
         });
 
         Grupo grupoSeleccionado = (Grupo) botonGrupo.getUserData();
+        contenidoSeleccionado = null;
+        calificarButtton.setDisable(true);
 
 
         if (grupoSeleccionado != null) {
-
             System.out.println("Grupo seleccionado: " + grupoSeleccionado.getNombre());
             mostrarContenidoGrupo(grupoSeleccionado);
         }
 
 
+    }
+
+    @FXML
+    private void calificarContenido(ActionEvent event) {
+        if (contenidoSeleccionado == null) {
+            mostrarAlerta("Error", "Debes seleccionar un contenido primero");
+            return;
+        }
+
+        if (usuarioActual == null) {
+            mostrarAlerta("Error", "No hay usuario autenticado");
+            return;
+        }
+
+        // Verificar si el usuario es el autor del contenido
+        if (contenidoSeleccionado.getAutor().equals(usuarioActual)) {
+            mostrarAlerta("Información", "No puedes calificar tu propio contenido");
+            return;
+        }
+
+        // Crear diálogo de calificación
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setTitle("Calificar Contenido");
+        dialog.setHeaderText("Califica: " + contenidoSeleccionado.getTitulo());
+
+        // Crear slider para la calificación
+        Slider slider = new Slider(1, 5, 3);
+        slider.setShowTickLabels(true);
+        slider.setShowTickMarks(true);
+        slider.setMajorTickUnit(1);
+        slider.setMinorTickCount(0);
+        slider.setBlockIncrement(1);
+        slider.setSnapToTicks(true);
+
+        Label valorLabel = new Label("3");
+        slider.valueProperty().addListener((obs, oldVal, newVal) -> {
+            valorLabel.setText(String.valueOf(newVal.intValue()));
+        });
+
+        VBox content = new VBox(10);
+        content.getChildren().addAll(
+                new Label("Selecciona una calificación (1-5):"),
+                slider,
+                new HBox(5, new Label("Valor:"), valorLabel)
+        );
+        content.setPadding(new Insets(20));
+        dialog.getDialogPane().setContent(content);
+
+        // Agregar botones
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+        // Mostrar diálogo y procesar resultado
+        Optional<ButtonType> result = dialog.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            int valoracion = (int) slider.getValue();
+            procesarCalificacion(valoracion);
+        }
+    }
+
+    private void procesarCalificacion(int valoracion) {
+        try {
+            // Crear nueva calificación
+            Calificacion calificacion = new Calificacion(valoracion, usuarioActual, contenidoSeleccionado);
+
+
+
+            if (contenidoSeleccionado.getCalificaciones() == null) {
+                contenidoSeleccionado.setCalificaciones(new ListaSimplementeEnlazada<>());
+            }
+
+
+            // Validar si usuario ya calificó
+            for (Calificacion c : contenidoSeleccionado.getCalificaciones()) {
+                if (c.getUsuario().equals(usuarioActual)) {
+                    mostrarAlerta("Información", "Ya has calificado este contenido.");
+                    return;
+                }
+            }
+
+            // Guardar en BD
+            int idCalificacion = UtilSQL.agregarCalificacion(calificacion);
+            System.out.println("ID calificación insertada: " + idCalificacion);
+
+            if (idCalificacion > 0) {
+                calificacion.setId(String.valueOf(idCalificacion));
+                contenidoSeleccionado.agregarCalificacion(calificacion);
+                contenidoSeleccionado.setCalificacionPromedio(calcularPromedio(contenidoSeleccionado));
+                mostrarAlerta("Éxito", "Calificación registrada: " + valoracion + " estrellas");
+
+                // Actualizar la vista
+                Grupo grupoActual = (Grupo) ((ToggleButton) grupoGrupos.getSelectedToggle()).getUserData();
+                mostrarContenidoGrupo(grupoActual);
+            } else {
+                mostrarAlerta("Error", "No se pudo guardar la calificación");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            mostrarAlerta("Error", "Ocurrió un error al calificar");
+        }
+    }
+
+
+
+    private double calcularPromedio(Contenido contenido) {
+        ListaSimplementeEnlazada<Calificacion> calificaciones = contenido.getCalificaciones();
+        if (calificaciones == null || calificaciones.isEmpty()) {
+            return 0.0;
+        }
+
+        double suma = 0;
+        int cantidad = 0;
+
+        for (Calificacion c : calificaciones) {
+            suma += c.getValoracion();
+            cantidad++;
+        }
+
+        double promedio = suma / cantidad;
+
+        // Redondear a 1 decimal
+        return Math.round(promedio * 10.0) / 10.0;
     }
 
 
@@ -453,6 +613,9 @@ public class GruposDeEstudioController {
             return;
         }
 
+        contenidoSeleccionado = null;
+        calificarButtton.setDisable(true);
+
         // Debug clave
         System.out.println("\n=== DEBUG DIRECTO ===");
         System.out.println("Grupo: " + grupoSeleccionado.getNombre());
@@ -470,15 +633,29 @@ public class GruposDeEstudioController {
         if (contenidos.isEmpty()) {
             contenidosVBox.getChildren().add(new Label("No hay contenidos en este grupo"));
         } else {
+
             // Recorrer lista enlazada manualmente
             for (int i = 0; i < contenidos.size(); i++) {
                 Contenido contenido = contenidos.get(i);
+                ListaSimplementeEnlazada<Calificacion> calificaciones = UtilSQL.obtenerCalificacionesPorContenido(contenido.getId());
+                contenido.setCalificaciones(calificaciones);
+                contenido.setCalificacionPromedio(calcularPromedio(contenido));
+                System.out.println("Contenido: " + contenido.getTitulo() + " - Calificaciones cargadas: " + calificaciones.size() +
+                        " - Promedio calculado: " + contenido.getCalificacionPromedio());
                 try {
                     FXMLLoader loader = new FXMLLoader(
                             getClass().getResource("/co/edu/uniquindio/red_social/TarjetaContenido.fxml"));
                     Parent tarjeta = loader.load();
                     TarjetaContenidoController controller = loader.getController();
                     controller.setContenido(contenido);
+
+                    tarjeta.setOnMouseClicked(event -> {
+                        contenidoSeleccionado = contenido;
+                        calificarButtton.setDisable(false);
+                    });
+                    System.out.println("contenido seleccionado: " + contenido.getTitulo());
+
+
                     contenidosVBox.getChildren().add(tarjeta);
                 } catch (IOException e) {
                     // Fallback básico
@@ -492,7 +669,11 @@ public class GruposDeEstudioController {
         grupoActualLabel.setText(grupoSeleccionado.getNombre());
         scrollPaneContenedorContenidos.setContent(contenidosVBox);
         scrollPaneContenedorContenidos.setFitToWidth(true);
+
     }
+
+
+
     @FXML
     void irAChat(ActionEvent event) {
         try {
