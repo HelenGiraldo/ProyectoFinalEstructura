@@ -14,7 +14,7 @@ public class App3 extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("solicitudes.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("solicitudesAyudaAdmin.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 600, 400);
         stage.setTitle(RedSocial.getInstance().getNombre());
         stage.setScene(scene);
@@ -22,9 +22,9 @@ public class App3 extends Application {
     }
 
     public static void main(String[] args) {
-
         RedSocial red = RedSocial.getInstance("Think Together");
-        PerfilUsuario.setUsuarioActual(red.getEstudiantes().get(0));
+        iniciarDatos();
+        PerfilUsuario.setUsuarioActual(red.getAdministradores().get(0));
         launch();
     }
 

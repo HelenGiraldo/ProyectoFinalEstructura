@@ -31,6 +31,7 @@ public class App extends Application {
         UtilSQL.cargarGrupos();
         UtilSQL.obtenerTodosLosChats();
         UtilSQL.obtenerTodasLasSolicitudes();
+        UtilSQL.obtenerTodasLasPreferencias();
         red.getEstudiantes().show();
         launch();
     }

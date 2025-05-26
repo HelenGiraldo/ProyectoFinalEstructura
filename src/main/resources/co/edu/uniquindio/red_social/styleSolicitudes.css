@@ -46,6 +46,13 @@
     -fx-alignment: center-left;
 }
 
+.solicitud-seleccionada {
+    -fx-border-color: #2a9df4;
+    -fx-border-width: 2px;
+    -fx-border-radius: 5px;
+    -fx-effect: dropshadow(three-pass-box, rgba(42,157,244,0.5), 10, 0, 0, 0);
+}
+
 .badge-prioridad {
     -fx-font-size: 12px;
     -fx-font-weight: bold;

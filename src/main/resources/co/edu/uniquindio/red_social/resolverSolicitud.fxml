@@ -28,7 +28,7 @@
                                     <HBox prefHeight="58.0" prefWidth="138.0">
                                        <children>
                                           <HBox prefHeight="48.0" prefWidth="6.0" />
-                                          <Label fx:id="volverLabel" prefHeight="34.0" prefWidth="61.0" styleClass="handle-Volver" text="volver" />
+                                          <Label fx:id="volverLabel" onMouseClicked="#onVolver" prefHeight="34.0" prefWidth="61.0" styleClass="handle-Volver" text="volver" />
                                        </children>
                                     </HBox>
                                     <Label fx:id="resolverSolicitudLabel" prefHeight="48.0" prefWidth="237.0" styleClass="login-title" text="Resolver Solicitud" />
@@ -50,7 +50,7 @@
                                           <HBox prefHeight="100.0" prefWidth="200.0">
                                              <children>
                                                 <HBox prefHeight="24.0" prefWidth="51.0" />
-                                                <Label fx:id="UsuarioLabel" prefHeight="38.0" prefWidth="200.0" text="Usuario" />
+                                                <Label fx:id="UsuarioLabel" prefHeight="23.0" prefWidth="257.0" text="Usuario" />
                                              </children>
                                           </HBox>
                                        </children>
@@ -130,7 +130,7 @@
                                  <children>
                                     <HBox prefHeight="33.0" prefWidth="147.0">
                                        <children>
-                                          <Button fx:id="buttonEnviar" mnemonicParsing="false" styleClass="boton-guardar" stylesheets="@stylesConfig.css" text="enviar" />
+                                          <Button fx:id="buttonEnviar" mnemonicParsing="false" onAction="#enviarSolucion" styleClass="boton-guardar" stylesheets="@stylesConfig.css" text="enviar" />
                                        </children>
                                     </HBox>
                                  </children>
