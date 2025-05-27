@@ -78,9 +78,9 @@
                               </VBox>
                               <VBox prefHeight="119.0" prefWidth="389.0">
                                  <children>
-                                    <TableView prefHeight="99.0" prefWidth="389.0">
+                                    <TableView prefHeight="99.0" prefWidth="389.0" stylesheets="@styleSugerencias.css">
                                       <columns>
-                                        <TableColumn fx:id="tableRowCell" prefWidth="388.0" text="intereses" />
+                                        <TableColumn id="tableRowCell" fx:id="tableRowCell" prefWidth="388.0" text="intereses" />
                                       </columns>
                                     </TableView>
                                  </children></VBox>
