@@ -125,7 +125,14 @@
                                        <children>
                                           <HBox prefHeight="41.0" prefWidth="294.0">
                                              <children>
-                                                <HBox prefHeight="53.0" prefWidth="225.0" />
+                                                <HBox prefHeight="53.0" prefWidth="225.0">
+                                                   <children>
+                                                      <HBox prefHeight="29.0" prefWidth="106.0">
+                                                         <children>
+                                                            <Button fx:id="buttonEstadistica" mnemonicParsing="false" onAction="#irAEstadistica" styleClass="button-Estadisticas" stylesheets="@styleTusContenidos.css" text="Estadísticas" />
+                                                         </children>
+                                                      </HBox>
+                                                   </children></HBox>
                                                 <Button fx:id="buttonAniadir" mnemonicParsing="false" onAction="#irACrearGrupo" prefHeight="29.0" prefWidth="67.0" styleClass="button-aniadir" stylesheets="@styleTusContenidos.css" text="+" />
                                              </children>
                                           </HBox>
