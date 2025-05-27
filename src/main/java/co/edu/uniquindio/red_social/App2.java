@@ -22,10 +22,15 @@ public class App2 {
         UtilSQL.cargarMiembrosDeGrupos();
         UtilSQL.cargarGrupos();
         UtilSQL.obtenerTodosLosChats();
+        UtilSQL.obtenerTodasLasPreferencias();
         red.getAdministradores().show();
-        System.out.println(red.getAdministradores().size());
+        System.out.println(red.getEstudiantes().size());
         System.out.println("---------------------------------");
 
+        Estudiante estudiante = red.getEstudiantes().get(1);
+        estudiante.anadirPreferencia("La cuca");
+        Estudiante estudiante1 = red.getEstudiantes().get(4);
+        estudiante1.anadirPreferencia("La cuca");
 
 
     }

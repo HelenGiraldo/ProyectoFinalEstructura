@@ -420,7 +420,7 @@ public class ContenidosController {
     @FXML
     private void irASugerencias(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/sugerencias.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/Configuracion.fxml"));
             Parent configView = loader.load();
 
             Scene scene = new Scene(configView);
@@ -437,7 +437,7 @@ public class ContenidosController {
     @FXML
     private void irASolicitudesAyuda(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/solicitudesAyuda.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/Configuracion.fxml"));
             Parent configView = loader.load();
 
             Scene scene = new Scene(configView);

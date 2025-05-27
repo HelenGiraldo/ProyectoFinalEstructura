@@ -90,6 +90,7 @@
                                                          <children>
                                                             <Button fx:id="buttonAniadir" mnemonicParsing="false" onAction="#irAPublicar" styleClass="button-aniadir" stylesheets="@styleTusContenidos.css" text="+" />
                                                             <HBox prefHeight="29.0" prefWidth="12.0" />
+                                                            <Button fx:id="buttonEstadistica" mnemonicParsing="false" onAction="#irAEstadistica" styleClass="button-Estadisticas" stylesheets="@styleTusContenidos.css" text="Estadísticas" />
                                                          </children>
                                                       </HBox>
                                                       <HBox prefHeight="26.0" prefWidth="67.0">

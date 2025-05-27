@@ -438,6 +438,22 @@ public class ChatController implements  ChatObserver {
         cagarMensajesChat(chatActual);
     }
 
+    @FXML
+    private void irAChat(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/mensajes.fxml"));
+            Parent configView = loader.load();
+
+            Scene scene = new Scene(configView);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
 
     @FXML
     private void irAGruposEstudio(ActionEvent event) {
@@ -469,7 +485,7 @@ public class ChatController implements  ChatObserver {
     @FXML
     private void irASugerencias(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/sugerencias.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/Configuracion.fxml"));
             Parent configView = loader.load();
 
             Scene scene = new Scene(configView);

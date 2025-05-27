@@ -120,8 +120,6 @@ public class SolicitudesAyudaController {
     @FXML
     private Label titulo2;
 
-
-
     @FXML
     void irAContenido(ActionEvent event) {
         navegar("/co/edu/uniquindio/red_social/TusContenidos.fxml", event);
@@ -168,8 +166,6 @@ public class SolicitudesAyudaController {
 
     @FXML
     private void initialize() {
-        SolicitudesDeAyudaButton.setSelected(true);
-
         System.out.println(redSocial.getSolicitudesAyuda().size());
         redSocial.getSolicitudesAyuda().show();
         cargarComboBox();

@@ -83,7 +83,7 @@ public class LoginController {
 
     private void irAVistaAdministrador() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/inicioAdmin.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/gruposDeEstudioAdmin.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) textFieldEmail.getScene().getWindow();
             stage.setScene(new Scene(root));

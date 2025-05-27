@@ -52,10 +52,13 @@ public class CreacionGrafo {
     }
 
     public ListaSimplementeEnlazada<Estudiante> recomedarEstudiantes(Estudiante estudiante){
+        System.out.println("Pablo");
         ListaSimplementeEnlazada<Estudiante> sugerecnias = new ListaSimplementeEnlazada<>();
+        RedSocial.getInstance().getEstudiantes().show();
         for(Estudiante est: RedSocial.getInstance().getEstudiantes()){
-            if(sonAmigos(est,estudiante)){
-                return null;
+            System.out.println("Estudiante: " + est.getNombre() + " - " + est.getId()+ " Pref: " + tienenInteresesComunes(estudiante,est));
+            if(sonAmigos(est,estudiante)||est.equals(estudiante)){
+                continue;
             }
             if(amigosMutuos(est,estudiante)){
                 sugerecnias.add(est);
@@ -69,6 +72,7 @@ public class CreacionGrafo {
             }
 
         }
+        System.out.println("SIsas");
         return sugerecnias;
 
     }
@@ -85,8 +89,8 @@ public class CreacionGrafo {
 
     private boolean amigosMutuos(Estudiante e1, Estudiante e2) {
         for (Estudiante amigo : e1.getContactos()) {
-            for(Estudiante amigo2 : e2.getContactos()) {
-                if (amigo.equals(e2)) {
+            for(Estudiante amigo2 : amigo.getContactos()) {
+                if (amigo2.equals(e2)) {
                     return true;
                 }
             }
@@ -96,8 +100,10 @@ public class CreacionGrafo {
 
     private boolean tienenInteresesComunes(Estudiante e1, Estudiante e2) {
         for (String interes : e1.getPreferencias()) {
-            if (e2.getPreferencias().contains(interes)) {
-                return true;
+            for (String pref : e2.getPreferencias()) {
+                if (interes.equals(pref)) {
+                    return true;
+                }
             }
         }
         return false;

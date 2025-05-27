@@ -21,7 +21,7 @@
       </ImageView>
       <VBox layoutX="15.0" layoutY="359.0" prefHeight="27.0" prefWidth="429.0">
          <children>
-            <Label fx:id="publicadoConExitoLabel" styleClass="titulo-inicio" stylesheets="@styles.css" text="..." />
+            <Label fx:id="agregadoConExitoLabel" styleClass="titulo-inicio" stylesheets="@styles.css" text="..." />
          </children>
       </VBox>
       <ScrollPane fx:id="scrollPaneContenedorNuevoContenido" layoutX="14.0" layoutY="23.0" stylesheets="@styles.css">
@@ -37,7 +37,7 @@
                                     <HBox prefHeight="48.0" prefWidth="53.0">
                                        <children>
                                           <HBox prefHeight="48.0" prefWidth="6.0" />
-                                          <Label fx:id="volverLabel" prefHeight="34.0" prefWidth="61.0" styleClass="handle-Volver" text="volver" />
+                                          <Label fx:id="volverLabel" onMouseClicked="#onVolver" prefHeight="34.0" prefWidth="61.0" styleClass="handle-Volver" text="volver" />
                                        </children>
                                     </HBox>
                                     <Label fx:id="publicarNuevoContenidoLabel" prefHeight="48.0" prefWidth="374.0" styleClass="login-title" text="Intereses" />
@@ -78,9 +78,9 @@
                               </VBox>
                               <VBox prefHeight="119.0" prefWidth="389.0">
                                  <children>
-                                    <TableView prefHeight="99.0" prefWidth="389.0" stylesheets="@styleSugerencias.css">
+                                    <TableView fx:id="tableIntereses" prefHeight="99.0" prefWidth="389.0" stylesheets="@styleSugerencias.css">
                                       <columns>
-                                        <TableColumn id="tableRowCell" fx:id="tableRowCell" prefWidth="388.0" text="intereses" />
+                                        <TableColumn id="tableRowCell" fx:id="columIntereses" prefWidth="388.0" text="intereses" />
                                       </columns>
                                     </TableView>
                                  </children></VBox>
@@ -90,11 +90,11 @@
                                        <children>
                                           <HBox prefHeight="28.0" prefWidth="68.0">
                                              <children>
-                                                <Button fx:id="buttonPublicar" mnemonicParsing="false" onAction="#handlePublicar" styleClass="boton-guardar" stylesheets="@stylesConfig.css" text="agregar" />
+                                                <Button fx:id="botonAgregar" mnemonicParsing="false" onAction="#onAgregar" styleClass="boton-guardar" stylesheets="@stylesConfig.css" text="agregar" />
                                              </children>
                                           </HBox>
                                           <HBox prefHeight="29.0" prefWidth="249.0" />
-                                          <Button mnemonicParsing="false" styleClass="boton-cerrar-sesion" stylesheets="@stylesConfig.css" text="eliminar" />
+                                          <Button fx:id="botonEliminar" mnemonicParsing="false" onAction="#onEliminar" styleClass="boton-cerrar-sesion" stylesheets="@stylesConfig.css" text="eliminar" />
                                        </children>
                                     </HBox>
                                  </children>

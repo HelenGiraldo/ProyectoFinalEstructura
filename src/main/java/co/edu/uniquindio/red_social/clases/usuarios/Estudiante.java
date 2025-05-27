@@ -372,6 +372,15 @@ public class Estudiante extends Usuario implements AdministracionContenido {
         return a;
     }
 
+    public boolean yaSolicitado(Estudiante estudiante){
+        for(SolicitudAmistad solicitud : solicitudesRecibidas) {
+            if(solicitud.getEstudianteSolicitado().equals(estudiante)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     // Getters y Setters
 
 
