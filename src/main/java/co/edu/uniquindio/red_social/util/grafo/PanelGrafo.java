@@ -26,6 +26,8 @@ class PanelGrafo extends JPanel implements MouseListener, MouseMotionListener {
     private final Color COLOR_ETIQUETA_ARISTA = new Color(69, 90, 100);
     private final Color COLOR_FONDO_ETIQUETA = new Color(255, 255, 255, 220);
 
+    private static final int RADIO_NODO = 30;  // Aumentamos de 20 a 30 (diámetro de 60)
+    private static final int DIAMETRO_NODO = RADIO_NODO * 2;
     private GNodo nodoSeleccionado = null;
     private Arista etiquetaSeleccionada = null;
     private int offsetX, offsetY;
@@ -62,6 +64,7 @@ class PanelGrafo extends JPanel implements MouseListener, MouseMotionListener {
         g2d.setColor(COLOR_ARISTA);
 
         for (Arista a : grafo.aristas) {
+            a.calcularPosicionEtiqueta();
             // Dibujar línea entre nodos
             g2d.drawLine(a.origen.x, a.origen.y, a.destino.x, a.destino.y);
 
@@ -117,22 +120,23 @@ class PanelGrafo extends JPanel implements MouseListener, MouseMotionListener {
     }
 
     private void dibujarNodoIndividual(Graphics2D g2d, GNodo n, Color colorNodo, FontMetrics fm) {
-        // Relleno del nodo
+        // Relleno del nodo (más grande)
         g2d.setColor(colorNodo);
-        g2d.fillOval(n.x - 20, n.y - 20, 40, 40);
+        g2d.fillOval(n.x - RADIO_NODO, n.y - RADIO_NODO, DIAMETRO_NODO, DIAMETRO_NODO);
 
         // Borde del nodo
         g2d.setColor(COLOR_BORDE_NODO);
         g2d.setStroke(new BasicStroke(2f));
-        g2d.drawOval(n.x - 20, n.y - 20, 40, 40);
+        g2d.drawOval(n.x - RADIO_NODO, n.y - RADIO_NODO, DIAMETRO_NODO, DIAMETRO_NODO);
 
-        // Texto del nodo (centrado)
+        // Texto del nodo (centrado y mejor ajustado)
         g2d.setColor(COLOR_TEXTO);
         int textoAncho = fm.stringWidth(n.nombre);
         int textoAlto = fm.getHeight();
+
+        // Ajustamos posición vertical para mejor centrado
         g2d.drawString(n.nombre, n.x - textoAncho/2, n.y + textoAlto/4);
     }
-
     // ==== Eventos del Mouse ====
     @Override
     public void mousePressed(MouseEvent e) {
@@ -167,9 +171,6 @@ class PanelGrafo extends JPanel implements MouseListener, MouseMotionListener {
                 nodoSeleccionado = n;
                 offsetX = e.getX() - n.x;
                 offsetY = e.getY() - n.y;
-
-                grafo.estudiantes.remove(n);
-                grafo.estudiantes.add(n);
                 break;
             }
         }
