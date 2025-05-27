@@ -84,7 +84,7 @@
                                  <children>
                                     <HBox prefHeight="46.0" prefWidth="40.0">
                                        <children>
-                                          <Button mnemonicParsing="false" onAction="#irNotificaciones" prefHeight="23.0" prefWidth="37.0" styleClass="boton-notificacion" stylesheets="@styleSugerencias.css" text="🔔" />
+                                          <Button fx:id="buttonRespuestas" mnemonicParsing="false" onAction="#irARespuestas" prefHeight="23.0" prefWidth="37.0" styleClass="boton-notificacion" stylesheets="@styleSugerencias.css" text="🔔" />
                                        </children></HBox>
                                     <HBox prefHeight="46.0" prefWidth="0.0" stylesheets="@styleSugerencias.css" />
                                     <Button fx:id="botonAniadir" mnemonicParsing="false" onAction="#aniadirSolicitud" styleClass="boton-accion" stylesheets="@styleSolicitudes.css" text="+" />
