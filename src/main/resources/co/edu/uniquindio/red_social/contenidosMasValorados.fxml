@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.red_social.controllers.ContenidosController">
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.red_social.controllers.ContenidosMasValoradosAdminController">
    <children>
       <BorderPane layoutX="3.0" layoutY="6.0" prefHeight="387.0" prefWidth="594.0">
          <top>
@@ -95,7 +95,7 @@
                                           </VBox>
                                           <ScrollPane fx:id="scrollPaneContenedorContenidos">
                                              <content>
-                                                <TableView prefHeight="167.0" prefWidth="478.0" stylesheets="@styleSugerencias.css">
+                                                <TableView fx:id="contenidosMasValoradosTable" prefHeight="167.0" prefWidth="478.0" stylesheets="@styleSugerencias.css">
                                                   <columns>
                                                     <TableColumn fx:id="contenidoTableColumun" prefWidth="130.0" text="contenido" />
                                                     <TableColumn fx:id="valoracionTableColumun" prefWidth="103.0" text="valoracion" />
