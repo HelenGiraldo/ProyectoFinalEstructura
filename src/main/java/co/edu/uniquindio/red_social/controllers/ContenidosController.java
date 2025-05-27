@@ -188,22 +188,34 @@ public class ContenidosController {
         // 1. Limpiar solo la vista (NO los datos)
         vBoxTodosContenidos.getChildren().clear();
 
-        // 2. Obtener contenidos directamente de RedSocial (fuente principal)
-        ListaSimplementeEnlazada<Contenido> contenidos = RedSocial.getInstance()
+        // 2. Obtener usuario actual
+        Estudiante usuarioActual = (Estudiante) PerfilUsuario.getUsuarioActual();
+        if (usuarioActual == null) return;
+
+        // 3. Obtener contenidos del usuario actual desde RedSocial
+        ListaSimplementeEnlazada<Contenido> contenidosUsuario = new ListaSimplementeEnlazada<>();
+        ListaSimplementeEnlazada<Contenido> todosContenidos = RedSocial.getInstance()
                 .getContenidos().recorrerInorden();
 
-        // 3. Sincronizar con el árbol local
+        // Filtrar contenidos por usuario actual
+        for (Contenido c : todosContenidos) {
+            if (c.getAutor().equals(usuarioActual)) {
+                contenidosUsuario.add(c);
+            }
+        }
+
+        // 4. Sincronizar con el árbol local (solo contenidos del usuario)
         arbolContenidos.clear();
-        for (Contenido c : contenidos) {
+        for (Contenido c : contenidosUsuario) {
             arbolContenidos.insertar(c);
         }
 
-        // 4. Mostrar en vista
-        for (Contenido contenido : contenidos) {
+        // 5. Mostrar en vista
+        for (Contenido contenido : contenidosUsuario) {
             mostrarContenidoEnVista(contenido);
         }
 
-        // 5. Actualizar contador desde el árbol local
+        // 6. Actualizar contador
         actualizarTotalPublicados();
     }
 

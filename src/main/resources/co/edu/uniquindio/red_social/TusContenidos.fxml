@@ -63,10 +63,10 @@
                <children>
                   <ToggleButton fx:id="InicioButton" mnemonicParsing="false" onAction="#irAInicio" prefHeight="37.0" prefWidth="161.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Inicio" />
                   <ToggleButton fx:id="misContenidosButton" mnemonicParsing="false" prefHeight="43.0" prefWidth="132.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Mis Contenidos" />
-                  <ToggleButton fx:id="gruposEstudioButton" onAction="#irAGruposEstudio" mnemonicParsing="false" prefHeight="42.0" prefWidth="151.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Grupos estudio" />
+                  <ToggleButton fx:id="gruposEstudioButton" mnemonicParsing="false" onAction="#irAGruposEstudio" prefHeight="42.0" prefWidth="151.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Grupos estudio" />
                   <ToggleButton fx:id="MensajesButton" mnemonicParsing="false" onAction="#irAChat" prefHeight="42.0" prefWidth="161.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Mensajes" />
-                  <ToggleButton fx:id="SugerenciasButton" onAction="#irASugerencias" mnemonicParsing="false" prefHeight="38.0" prefWidth="159.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Sugerencias" />
-                  <ToggleButton fx:id="SolicitudesDeAyudaButton" onAction="#irASolicitudesAyuda" mnemonicParsing="false" prefHeight="40.0" prefWidth="160.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Solicitudes de ayuda" />
+                  <ToggleButton fx:id="SugerenciasButton" mnemonicParsing="false" onAction="#irASugerencias" prefHeight="38.0" prefWidth="159.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Sugerencias" />
+                  <ToggleButton fx:id="SolicitudesDeAyudaButton" mnemonicParsing="false" onAction="#irASolicitudesAyuda" prefHeight="40.0" prefWidth="160.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Solicitudes de ayuda" />
                   <ToggleButton fx:id="configuracionPerfilButton" mnemonicParsing="false" onAction="#irAConfig" prefHeight="39.0" prefWidth="161.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Configuracion perfil" />
                </children>
             </VBox>
@@ -90,7 +90,7 @@
                                                          <children>
                                                             <Button fx:id="buttonAniadir" mnemonicParsing="false" onAction="#irAPublicar" styleClass="button-aniadir" stylesheets="@styleTusContenidos.css" text="+" />
                                                             <HBox prefHeight="29.0" prefWidth="12.0" />
-                                                            <Button mnemonicParsing="false" onAction="#irAEstadistica" styleClass="button-Estadisticas" stylesheets="@styleTusContenidos.css" text="Estadísticas" />
+                                                            <Button fx:id="buttonEstadistica" mnemonicParsing="false" onAction="#irAEstadistica" styleClass="button-Estadisticas" stylesheets="@styleTusContenidos.css" text="Estadísticas" />
                                                          </children>
                                                       </HBox>
                                                       <HBox prefHeight="26.0" prefWidth="67.0">
