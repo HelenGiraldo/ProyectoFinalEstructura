@@ -1,6 +1,7 @@
 
 package co.edu.uniquindio.red_social.controllers;
 
+import co.edu.uniquindio.red_social.clases.usuarios.Administrador;
 import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
 import co.edu.uniquindio.red_social.clases.usuarios.PerfilUsuario;
 import co.edu.uniquindio.red_social.clases.usuarios.Usuario;
@@ -25,9 +26,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
-import static co.edu.uniquindio.red_social.util.EstudianteActual.usuarioActual;
-
-public class InicioController {
+public class InicioAdminController {
 
     @FXML
     private HBox HboxTusContendiosContenido;
@@ -130,7 +129,7 @@ public class InicioController {
     @FXML
     private AnchorPane root;
 
-    private Estudiante usuario;
+    private Administrador usuario;
 
     @FXML
     public void initialize() {
@@ -166,7 +165,7 @@ public class InicioController {
 
 
     @FXML
-    public void inicializarUsuario(Estudiante usuario) {
+    public void inicializarUsuario(Administrador usuario) {
         this.usuario = usuario;
 
         // Guardar el usuario en el singleton
@@ -209,33 +208,18 @@ public class InicioController {
         LabelTipo.setText(tipo);
         LabelValoracion.setText("★ " + valoracion);
     }
-    @FXML
-    private void irAChat(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/mensajes.fxml"));
-            Parent configView = loader.load();
 
-            Scene scene = new Scene(configView);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
     @FXML
     private void irAGruposEstudio(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/gruposEstudio.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/GruposDeEstudioAdmin.fxml"));
             Parent configView = loader.load();
 
-            GruposDeEstudioController controller = loader.getController();
+            GruposDeEstudioAdminController controller = loader.getController();
 
             // PASAR el usuario (que tienes en 'usuario' o usa PerfilUsuario.getUsuarioActual())
             if (usuario != null) {
-                controller.setUsuarioActual(usuario);
+                controller.setAdministradorActual(usuario);
                 System.out.println("Usuario enviado a GruposDeEstudioController: " + usuario.getNombre());
             } else {
                 System.out.println("usuario en InicioController es null");
@@ -252,27 +236,12 @@ public class InicioController {
     }
 
 
-    @FXML
-    private void irASugerencias(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/sugerencias.fxml"));
-            Parent configView = loader.load();
-
-            Scene scene = new Scene(configView);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
 
     @FXML
     private void irAConfig(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/Configuracion.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/ConfiguracionAdmin.fxml"));
             Parent configView = loader.load();
 
             Scene scene = new Scene(configView);
@@ -289,7 +258,7 @@ public class InicioController {
     private void irASolicitudesAyuda(ActionEvent event) {
         try {
 
-            URL configUrl = getClass().getResource("/co/edu/uniquindio/red_social/solicitudes.fxml");
+            URL configUrl = getClass().getResource("/co/edu/uniquindio/red_social/solicitudesAyudaAdmin.fxml");
             System.out.println("URL config: " + configUrl);
             FXMLLoader loader = new FXMLLoader(configUrl);
             Parent configView = loader.load();
@@ -306,27 +275,6 @@ public class InicioController {
         }
     }
 
-    @FXML
-    private void irAContenidos(ActionEvent event) {
-        try {
-
-            URL configUrl = getClass().getResource("/co/edu/uniquindio/red_social/TusContenidos.fxml");
-            System.out.println("URL Logo: " + configUrl);
-            FXMLLoader loader = new FXMLLoader(configUrl);
-            Parent configView = loader.load();
-
-            if (root != null) {
-                root.getChildren().clear();
-                root.getChildren().add(configView);
-            } else {
-                System.err.println("El contenedor principal es null.");
-            }
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
 
 }
