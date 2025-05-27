@@ -8,10 +8,7 @@ class Arista {
     int etiquetaX, etiquetaY;
     boolean amigos, amigosMutuos, interesesComunes, gruposComunes, valoracionesSimilares;
 
-    public Arista(Estudiante e, Estudiante e2) {
-        this.origen = new GNodo(e);
-        this.destino = new GNodo(e2);
-    }
+
 
     public Arista(GNodo origen, GNodo destino) {
         this.origen = origen;
@@ -19,12 +16,6 @@ class Arista {
         this.etiqueta = "N0";
     }
 
-    public Arista(GNodo origen, GNodo destino, String etiqueta) {
-        this.origen = origen;
-        this.destino = destino;
-        this.etiqueta = etiqueta;
-        calcularPosicionEtiqueta();
-    }
 
     public void calcularPosicionEtiqueta() {
         etiquetaX = (origen.x + destino.x) / 2;

@@ -9,7 +9,7 @@ public class GrafoSwing {
 
 
         ventana.add(panel);
-        ventana.setSize(600, 500);
+        ventana.setSize(800, 800);
         ventana.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         ventana.setVisible(true);
     }

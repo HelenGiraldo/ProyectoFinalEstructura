@@ -9,16 +9,9 @@ class GNodo {
 
     public GNodo(Estudiante estudiante) {
         this.estudiante = estudiante;
-        this.nombre = estudiante.getNombre();
+        this.nombre = estudiante.getId()+" "+estudiante.getNombre();
         this.x = 100;
         this.y = 100;
-    }
-
-
-    public GNodo(String nombre, int x, int y) {
-        this.nombre = nombre;
-        this.x = x;
-        this.y = y;
     }
 
     @Override

@@ -139,18 +139,39 @@ public class CreacionGrafo {
     }
 
     public void crearNodos() {
-        int x = 100, y = 100;
-        for (Estudiante estudiante : redSocial.getEstudiantes()) {
+        int centroX = 400;  // Centro del panel
+        int centroY = 300;
+        int panelMargin = 80; // Margen mínimo
+
+        ListaSimplementeEnlazada<Estudiante> listaEstudiantes = new ListaSimplementeEnlazada<>(redSocial.getEstudiantes());
+        int totalEstudiantes = listaEstudiantes.size();
+
+        // Calcular radio automáticamente basado en el número de nodos
+        int radio = calcularRadioOptimo(totalEstudiantes, centroX, centroY, panelMargin);
+
+        double anguloEntreNodos = 2 * Math.PI / totalEstudiantes;
+        double anguloInicial = -Math.PI/2; // Empezar desde arriba (12 o'clock)
+
+        for (int i = 0; i < totalEstudiantes; i++) {
+            Estudiante estudiante = listaEstudiantes.get(i);
             GNodo nodo = new GNodo(estudiante);
-            nodo.x = x;
-            nodo.y = y;
+
+            double angulo = anguloInicial + i * anguloEntreNodos;
+            nodo.x = centroX + (int)(radio * Math.cos(angulo));
+            nodo.y = centroY + (int)(radio * Math.sin(angulo));
+
             estudiantes.add(nodo);
-            x += 100;
-            if (x > 700) {
-                x = 100;
-                y += 100;
-            }
         }
+    }
+
+    private int calcularRadioOptimo(int numNodos, int centroX, int centroY, int margin) {
+        // Radio mínimo basado en el tamaño del panel
+        int maxWidth = Math.min(centroX, centroY) - margin;
+
+        // Radio basado en el número de nodos (ajustar según necesidades)
+        int radioBase = 80 + (int)(Math.sqrt(numNodos) * 20);
+
+        return Math.min(radioBase, maxWidth);
     }
 
     public void crearGrafo() {
