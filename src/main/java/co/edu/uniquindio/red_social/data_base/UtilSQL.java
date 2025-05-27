@@ -21,6 +21,90 @@ public class UtilSQL {
     static boolean save = true;
 
 
+    private static Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(url, user, password);
+    }
+
+
+    public static ListaSimplementeEnlazada<Calificacion> obtenerCalificacionesPorContenido(String idContenido) {
+        ListaSimplementeEnlazada<Calificacion> listaCalificaciones = new ListaSimplementeEnlazada<>();
+        String sql = "SELECT id, valoracion, autor FROM Calificaciones WHERE id_publicacion = ?";
+
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, idContenido);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                String idCalificacion = rs.getString("id");
+                int valoracion = rs.getInt("valoracion");
+                String autorId = rs.getString("autor");  // Aquí uso autor en vez de usuario_id
+
+                // Obtener usuario desde RedSocial (lista cargada)
+                Estudiante usuario = RedSocial.getInstance().obtenerEstudiantePorId(autorId);
+
+                if (usuario != null) {
+                    Calificacion calificacion = new Calificacion(valoracion, usuario, null);
+                    calificacion.setId(idCalificacion);
+                    listaCalificaciones.add(calificacion);
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return listaCalificaciones;
+    }
+
+
+    public static ListaSimplementeEnlazada<Contenido> cargarContenidosDelGrupo(String idGrupo) {
+        ListaSimplementeEnlazada<Contenido> contenidos = new ListaSimplementeEnlazada<>();
+
+        String sql = "SELECT c.id, c.tipo_contenido, c.titulo, c.tema, c.descripcion, " +
+                "c.contenido, c.id_autor, c.id_grupo FROM publicaciones c " +
+                "WHERE c.id_grupo = ?";
+
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, idGrupo);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                String id = rs.getString("id");
+                String tipo = rs.getString("tipo_contenido");
+                String titulo = rs.getString("titulo");
+                String tema = rs.getString("tema");
+                String descripcion = rs.getString("descripcion");
+                String contenidoPath = rs.getString("contenido");
+                String idAutor = rs.getString("id_autor");
+
+                Estudiante autor = RedSocial.getInstance().obtenerEstudiantePorId(idAutor);
+                File archivoContenido = contenidoPath != null ? new File(contenidoPath) : null;
+
+                if (autor != null) {
+                    Contenido contenido = new Contenido(
+                            tipo,
+                            titulo,
+                            tema,
+                            descripcion,
+                            autor,
+                            archivoContenido,
+                            null // El grupo se asigna después
+                    );
+                    contenido.setId(id);
+                    contenidos.add(contenido);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return contenidos;
+    }
+
 
 
     public static int insertarEstudiante(Estudiante e) {
@@ -1030,7 +1114,6 @@ public class UtilSQL {
                 idGenerado = generatedKeys.getInt(1);
                 solicitud.setId(String.valueOf(idGenerado));
             }
-            solicitud.setId(String.valueOf(idGenerado));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -1103,15 +1186,7 @@ public class UtilSQL {
                 if (estudiante != null) {
                     SolicitudAyuda solicitud = new SolicitudAyuda(mensaje, estudiante, titulo, prioridad, estado);
                     solicitud.setId(id);
-                    int prioridadInt = 0;
-                    if (prioridad.equalsIgnoreCase("normal")) {
-                        prioridadInt = 1;
-                    } else if (prioridad.equalsIgnoreCase("urgente")) {
-                        prioridadInt = 2;
-                    } else if (prioridad.equalsIgnoreCase("muy urgente")) {
-                        prioridadInt = 3;
-                    }
-                    RedSocial.getInstance().getSolicitudesAyuda().add(solicitud,prioridadInt);
+                    RedSocial.getInstance().getSolicitudesAyuda().add(solicitud);
                 }
             }
 
@@ -1120,5 +1195,190 @@ public class UtilSQL {
         }
 
     }
+
+
+
+    public static int insertarSolucion(Solucion solucion) {
+        if (!save || solucion == null || solucion.getEstudianteImplicado() == null) {
+            return -1;
+        }
+
+        String sql = "INSERT INTO soluciones (texto, id_usuario) VALUES (?, ?)";
+        int idGenerado = -1;
+
+        try (Connection conn = DriverManager.getConnection(url, user, password);
+             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            stmt.setString(1, solucion.getTexto());
+            stmt.setInt(2, Integer.parseInt(solucion.getEstudianteImplicado().getId()));
+
+            stmt.executeUpdate();
+
+            ResultSet rs = stmt.getGeneratedKeys();
+            if (rs.next()) {
+                idGenerado = rs.getInt(1);
+                solucion.setId(String.valueOf(idGenerado));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return idGenerado;
+    }
+
+    public static boolean eliminarSolucion(Solucion solucion) {
+        if (!save || solucion == null || solucion.getId() == null) {
+            return false;
+        }
+
+        String sql = "DELETE FROM soluciones WHERE id = ?";
+
+        try (Connection conn = DriverManager.getConnection(url, user, password);
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, Integer.parseInt(solucion.getId()));
+            return stmt.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+    }
+
+
+
+    public static void obtenerSolucionesPorUsuario(Estudiante usuario) {
+        if (!save || usuario == null || usuario.getId() == null) {
+            return;
+        }
+
+        String sql = "SELECT id, texto FROM soluciones WHERE id_usuario = ?";
+
+        try (Connection conn = DriverManager.getConnection(url, user, password);
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, Integer.parseInt(usuario.getId()));
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Solucion solucion = new Solucion(rs.getString("texto"), usuario);
+                    solucion.setId(rs.getString("id"));
+                    usuario.getSoluciones().add(solucion); // Asume que hay una lista en Estudiante
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al obtener soluciones del usuario", e);
+        }
+    }
+
+
+    public static int insertarPreferencia(Estudiante usuario, String preferenciaTexto) {
+        if (!save || usuario == null || usuario.getId() == null || preferenciaTexto == null) {
+            return -1;
+        }
+
+        String sql = "INSERT INTO preferencias (texto, id_usuario) VALUES (?, ?)";
+        int idGenerado = -1;
+
+        try (Connection conn = DriverManager.getConnection(url, user, password);
+             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            stmt.setString(1, preferenciaTexto);
+            stmt.setInt(2, Integer.parseInt(usuario.getId()));
+
+            stmt.executeUpdate();
+
+            ResultSet rs = stmt.getGeneratedKeys();
+            if (rs.next()) {
+                idGenerado = rs.getInt(1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return idGenerado;
+    }
+
+    public static boolean eliminarPreferencia(Estudiante usuario, String preferenciaTexto) {
+        if (!save || usuario == null || usuario.getId() == null || preferenciaTexto == null) {
+            return false;
+        }
+
+        String sql = "DELETE FROM preferencias WHERE texto = ? AND id_usuario = ?";
+
+        try (Connection conn = DriverManager.getConnection(url, user, password);
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, preferenciaTexto);
+            stmt.setInt(2, Integer.parseInt(usuario.getId()));
+
+            return stmt.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
+    public static void obtenerPreferenciasPorUsuario(Estudiante usuario) {
+        if (!save || usuario == null || usuario.getId() == null) {
+            return;
+        }
+
+        String sql = "SELECT texto FROM preferencias WHERE id_usuario = ?";
+
+        try (Connection conn = DriverManager.getConnection(url, user, password);
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, Integer.parseInt(usuario.getId()));
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    String texto = rs.getString("texto");
+                    usuario.getPreferencias().add(texto); // Asume que es una lista de String
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al obtener preferencias del usuario", e);
+        }
+    }
+
+    public static void obtenerTodasLasPreferencias() {
+        if (!save) {
+            return;
+        }
+
+        String sql = "SELECT texto, id_usuario FROM preferencias";
+
+        try (Connection conn = DriverManager.getConnection(url, user, password);
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                String texto = rs.getString("texto");
+                String idUsuario = rs.getString("id_usuario");
+
+                Estudiante estudiante = RedSocial.getInstance().obtenerEstudiantePorId(idUsuario);
+
+                if (estudiante != null) {
+                    estudiante.getPreferencias().add(texto);
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al obtener todas las preferencias", e);
+        }
+    }
+
+
+
+
+
 
 }

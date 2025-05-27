@@ -1,5 +1,6 @@
 package co.edu.uniquindio.red_social.controllers;
 
+import co.edu.uniquindio.red_social.clases.usuarios.Administrador;
 import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
 import co.edu.uniquindio.red_social.clases.usuarios.PerfilUsuario;
 import javafx.event.ActionEvent;
@@ -21,10 +22,10 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
 
-import static co.edu.uniquindio.red_social.data_base.UtilSQL.actualizarEstudiante;
+import static co.edu.uniquindio.red_social.data_base.UtilSQL.actualizarAdministrador;
 
 
-public class ConfiguracionController {
+public class ConfiguracionAdminController {
 
     @FXML
     private ToggleButton MensajesButton;
@@ -117,7 +118,7 @@ public class ConfiguracionController {
     public void initialize() {
         configuracionPerfilButton.setSelected(true);
 
-        Estudiante estudiante = (Estudiante) PerfilUsuario.getUsuarioActual();
+        Administrador estudiante = (Administrador) PerfilUsuario.getUsuarioActual();
         PerfilUsuario perfil = PerfilUsuario.getInstancia();
 
         if (estudiante != null) {
@@ -172,10 +173,10 @@ public class ConfiguracionController {
         String nuevaContraseña = textFieldContraseñaNueva.getText();
         String contraseñaAnterior = textFieldAnterior.getText();
 
-        Estudiante estudiante = (Estudiante) PerfilUsuario.getInstancia().getUsuarioActual();
+        Administrador administrador = (Administrador) PerfilUsuario.getInstancia().getUsuarioActual();
 
         if (!nuevaContraseña.isBlank()) {
-            if (!estudiante.getContrasena().equals(contraseñaAnterior)) {
+            if (!administrador.getContrasena().equals(contraseñaAnterior)) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
                 alert.setHeaderText("Contraseña incorrecta");
@@ -183,12 +184,12 @@ public class ConfiguracionController {
                 alert.showAndWait();
                 return;
             }
-            estudiante.setContrasena(nuevaContraseña);
+            administrador.setContrasena(nuevaContraseña);
         }
 
-        estudiante.setNombre(nuevoNombre);
-        estudiante.setApellido(nuevoApellido);
-        estudiante.setEmail(nuevoEmail);
+        administrador.setNombre(nuevoNombre);
+        administrador.setApellido(nuevoApellido);
+        administrador.setEmail(nuevoEmail);
 
         // Procesar la imagen del ImageView
         Image imagenActual = profileImage.getImage();
@@ -199,7 +200,7 @@ public class ConfiguracionController {
 
                 // Ruta de destino en resources
                 String extension = archivoOriginal.getName().substring(archivoOriginal.getName().lastIndexOf("."));
-                String nombreArchivoNuevo = "imagen_perfil" + estudiante.getId() + extension;
+                String nombreArchivoNuevo = "imagen_perfil" + administrador.getId() + extension;
 
                 File destino = new File("src/main/resources/co/edu/uniquindio/red_social/usuarios/imagenes_perfil", nombreArchivoNuevo);
 
@@ -215,10 +216,10 @@ public class ConfiguracionController {
                         java.nio.file.StandardCopyOption.REPLACE_EXISTING
                 );
 
-                // Guardar la ruta relativa (puedes ajustarla si usas base de datos)
-                estudiante.setImagenPerfil(destino);
 
-                // También actualizar la interfaz con la nueva ruta
+                administrador.setImagenPerfil(destino);
+
+
                 Image imagenNueva = new Image(destino.toURI().toString());
                 profileImage.setImage(imagenNueva);
 
@@ -228,7 +229,7 @@ public class ConfiguracionController {
             }
         }
 
-        actualizarEstudiante(estudiante);
+        actualizarAdministrador(administrador);
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Éxito");
@@ -336,33 +337,13 @@ public class ConfiguracionController {
             e.printStackTrace();
         }
     }
-    @FXML
-    private void irAChat(ActionEvent event) {
-        try {
 
-            URL configUrl = getClass().getResource("/co/edu/uniquindio/red_social/mensajes.fxml");
-            System.out.println("URL config: " + configUrl);
-            FXMLLoader loader = new FXMLLoader(configUrl);
-            Parent configView = loader.load();
-
-            if (root != null) {
-                root.getChildren().clear();
-                root.getChildren().add(configView);
-            } else {
-                System.err.println("El contenedor principal es null.");
-            }
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     @FXML
     private void irAInicio(ActionEvent event) {
         try {
             // Obtener la URL de la vista a cargar
-            URL configUrl = getClass().getResource("/co/edu/uniquindio/red_social/Inicio.fxml");
+            URL configUrl = getClass().getResource("/co/edu/uniquindio/red_social/InicioAdmin.fxml");
             if (configUrl == null) {
                 throw new IOException("Vista no encontrada");
             }
@@ -386,7 +367,7 @@ public class ConfiguracionController {
     @FXML
     private void irAGruposEstudio(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/gruposEstudio.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/GruposDeEstudioAdmin.fxml"));
             Parent configView = loader.load();
 
             Scene scene = new Scene(configView);
@@ -398,29 +379,13 @@ public class ConfiguracionController {
             e.printStackTrace();
         }
 
-    }
-
-    @FXML
-    private void irASugerencias(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/sugerencias.fxml"));
-            Parent configView = loader.load();
-
-            Scene scene = new Scene(configView);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
 
     @FXML
     private void irASolicitudesAyuda(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/solicitudes.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/solicitudesAyudaAdmin.fxml"));
             Parent configView = loader.load();
 
             Scene scene = new Scene(configView);
@@ -433,28 +398,6 @@ public class ConfiguracionController {
         }
     }
 
-
-    @FXML
-    private void irAContenidos(ActionEvent event) {
-        try {
-
-            URL configUrl = getClass().getResource("/co/edu/uniquindio/red_social/TusContenidos.fxml");
-            System.out.println("URL Logo: " + configUrl);
-            FXMLLoader loader = new FXMLLoader(configUrl);
-            Parent configView = loader.load();
-
-            if (root != null) {
-                root.getChildren().clear();
-                root.getChildren().add(configView);
-            } else {
-                System.err.println("El contenedor principal es null.");
-            }
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
 
 

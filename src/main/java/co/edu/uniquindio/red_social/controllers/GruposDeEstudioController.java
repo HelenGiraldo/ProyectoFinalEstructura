@@ -176,6 +176,7 @@ public class GruposDeEstudioController {
 
     @FXML
     private void initialize() {
+        gruposEstudioButton.setSelected(true);
         calificarButtton.setDisable(true);
 
         calificarButtton.setOnAction(this::calificarContenido);
@@ -711,7 +712,7 @@ public class GruposDeEstudioController {
     @FXML
     private void irASugerencias(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/Configuracion.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/sugerencias.fxml"));
             Parent configView = loader.load();
 
             Scene scene = new Scene(configView);

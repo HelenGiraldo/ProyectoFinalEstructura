@@ -116,3 +116,19 @@ CREATE TABLE IF NOT EXISTS solicitudes_ayuda (
     FOREIGN KEY (id_user) REFERENCES usuarios(id)
 );
 
+CREATE TABLE IF NOT EXISTS soluciones (
+                                          id INT NOT NULL AUTO_INCREMENT,
+                                          texto TEXT NOT NULL,
+                                          id_usuario INT NOT NULL,
+                                          PRIMARY KEY (id),
+                                          FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS preferencias (
+                                            id INT NOT NULL AUTO_INCREMENT,
+                                            texto TEXT NOT NULL,
+                                            id_usuario INT NOT NULL,
+                                            PRIMARY KEY (id),
+                                            FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE
+);
+

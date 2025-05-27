@@ -69,17 +69,18 @@ public class GruposDeEstudioAdminController {
 
     // Variables de control
     private ToggleGroup grupoGrupos = new ToggleGroup();
-    private Administrador administradorActual;
+    private Administrador usuarioActual;
     private GrupoService grupoService = GrupoService.getInstance();
     private ArbolBinario<Contenido> arbolContenido;
 
     @FXML
     private void initialize() {
+        gruposEstudioButton.setSelected(true);
         cargarGrupos();
     }
 
     public void setAdministradorActual(Administrador administrador) {
-        this.administradorActual = administrador;
+        this.usuarioActual = administrador;
         cargarGrupos();
     }
 
@@ -232,34 +233,20 @@ public class GruposDeEstudioAdminController {
         }
     }
 
-    @FXML
-    private void irAChat(ActionEvent event) {
-        navegarAVentana("/co/edu/uniquindio/red_social/mensajes.fxml", event);
-    }
 
     @FXML
     private void irAInicio(ActionEvent event) {
-        navegarAVentana("/co/edu/uniquindio/red_social/gruposEstudio.fxml", event);
-    }
-
-    @FXML
-    private void irASugerencias(ActionEvent event) {
-        navegarAVentana("/co/edu/uniquindio/red_social/Configuracion.fxml", event);
+        navegarAVentana("/co/edu/uniquindio/red_social/InicioAdmin.fxml", event);
     }
 
     @FXML
     private void irAConfig(ActionEvent event) {
-        navegarAVentana("/co/edu/uniquindio/red_social/Configuracion.fxml", event);
+        navegarAVentana("/co/edu/uniquindio/red_social/configuracionAdmin.fxml", event);
     }
 
     @FXML
     private void irASolicitudesAyuda(ActionEvent event) {
-        navegarAVentana("/co/edu/uniquindio/red_social/solicitudes.fxml", event);
-    }
-
-    @FXML
-    private void irAContenidos(ActionEvent event) {
-        navegarAVentana("/co/edu/uniquindio/red_social/TusContenidos.fxml", event);
+        navegarAVentana("/co/edu/uniquindio/red_social/solicitudesAyudaAdmin.fxml", event);
     }
 
     private void navegarAVentana(String fxmlPath, ActionEvent event) {

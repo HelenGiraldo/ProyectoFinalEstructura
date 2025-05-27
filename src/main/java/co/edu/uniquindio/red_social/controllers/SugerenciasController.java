@@ -1,5 +1,6 @@
 package co.edu.uniquindio.red_social.controllers;
 
+import co.edu.uniquindio.red_social.clases.RedSocial;
 import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -108,17 +109,11 @@ public class SugerenciasController {
 
     private Estudiante usuario;
 
-
-
     @FXML
-    void irAChat(ActionEvent event) {
-
+    private void initialize() {
+        SugerenciasButton.setSelected(true);
     }
 
-    @FXML
-    void irAConfig(ActionEvent event) {
-
-    }
 
     @FXML
     private void irAGruposEstudio(ActionEvent event) {
@@ -147,18 +142,52 @@ public class SugerenciasController {
     }
 
     @FXML
+    void irAContenido(ActionEvent event) {
+        navegar("/co/edu/uniquindio/red_social/TusContenidos.fxml", event);
+    }
+
+    @FXML
+    void irAGrupoEStudio(ActionEvent event) {
+        navegar("/co/edu/uniquindio/red_social/gruposEstudio.fxml", event);
+
+    }
+
+    @FXML
+    void irASolitudesAyuda(ActionEvent event) {
+        navegar("/co/edu/uniquindio/red_social/solicitudes.fxml", event);
+    }
+
+    @FXML
+    void irAChat(ActionEvent event) {
+        navegar("/co/edu/uniquindio/red_social/mensajes.fxml", event);
+
+    }
+
+    @FXML
+    void irAConfig(ActionEvent event) {
+        navegar("/co/edu/uniquindio/red_social/Configuracion.fxml", event);
+    }
+
+    @FXML
     void irAInicio(ActionEvent event) {
-
+        navegar("/co/edu/uniquindio/red_social/Inicio.fxml", event);
     }
 
-    @FXML
-    void irASolicitudesAyuda(ActionEvent event) {
+    RedSocial redSocial = RedSocial.getInstance();
 
-    }
+    private void navegar(String url, ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(url));
+            Parent configView = loader.load();
 
-    @FXML
-    void irASugerencias(ActionEvent event) {
+            Scene scene = new Scene(configView);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
 
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
