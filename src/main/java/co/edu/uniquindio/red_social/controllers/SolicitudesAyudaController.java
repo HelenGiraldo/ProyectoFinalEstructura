@@ -220,7 +220,7 @@ public class SolicitudesAyudaController {
         for(SolicitudAyuda solicitudAyuda: redSocial.getSolicitudesAyuda()){
             if(!solicitudAyuda.getTitulo().toLowerCase().contains(campoBusqueda.getText().toLowerCase()) )
             {
-               continue;
+                continue;
             }
             String nombreEstudiante = solicitudAyuda.getEstudiante().getNombre();
             String importancia = solicitudAyuda.getPrioridad();

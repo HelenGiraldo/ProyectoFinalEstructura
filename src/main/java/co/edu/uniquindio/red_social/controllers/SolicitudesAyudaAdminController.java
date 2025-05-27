@@ -1,13 +1,40 @@
 package co.edu.uniquindio.red_social.controllers;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
+
+import co.edu.uniquindio.red_social.clases.RedSocial;
+import co.edu.uniquindio.red_social.clases.social.SolicitudAyuda;
+import co.edu.uniquindio.red_social.clases.usuarios.PerfilUsuario;
+import co.edu.uniquindio.red_social.util.SolicitudActual;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 public class SolicitudesAyudaAdminController {
+
+    @FXML
+    private ResourceBundle resources;
+
+    @FXML
+    private URL location;
 
     @FXML
     private VBox AnchorPaneContenedorSolicitudes;
@@ -19,25 +46,28 @@ public class SolicitudesAyudaAdminController {
     private ToggleButton InicioButton;
 
     @FXML
-    private ToggleButton MensajesButton;
-
-    @FXML
     private ToggleButton SolicitudesDeAyudaButton;
-
-    @FXML
-    private ToggleButton SugerenciasButton;
 
     @FXML
     private Label TextFieldTitle;
 
     @FXML
+    private Label adminLabel;
+
+    @FXML
     private Button botonBuscar;
+
+    @FXML
+    private Button botonBuscar1;
+
+    @FXML
+    private HBox botonResolver;
 
     @FXML
     private TextField campoBusqueda;
 
     @FXML
-    private ComboBox<?> comboFiltro;
+    private ComboBox<String> comboFiltro;
 
     @FXML
     private ToggleButton configuracionPerfilButton;
@@ -67,9 +97,6 @@ public class SolicitudesAyudaAdminController {
     private Label importanciaLabel;
 
     @FXML
-    private ToggleButton misContenidosButton;
-
-    @FXML
     private Label nombreEstudiante2Label;
 
     @FXML
@@ -77,6 +104,8 @@ public class SolicitudesAyudaAdminController {
 
     @FXML
     private Button resolverButton;
+
+    private SolicitudAyuda solicitudSeleccionada;
 
     @FXML
     private AnchorPane root;
@@ -94,11 +123,6 @@ public class SolicitudesAyudaAdminController {
     private Label tituloLabel2;
 
     @FXML
-    void irAChat(ActionEvent event) {
-
-    }
-
-    @FXML
     void irAConfig(ActionEvent event) {
 
     }
@@ -108,4 +132,204 @@ public class SolicitudesAyudaAdminController {
 
     }
 
+    @FXML
+    void onBuscar(ActionEvent event) {
+        if(comboFiltro.getValue() == null|| comboFiltro.getValue().isEmpty()) {
+            cargarSolicitudes();
+            return;
+        }
+        limpiarSolicitudes();
+
+        for(SolicitudAyuda solicitudAyuda: redSocial.getSolicitudesAyuda()){
+            if(!solicitudAyuda.getTitulo().toLowerCase().contains(campoBusqueda.getText().toLowerCase()) )
+            {
+                continue;
+            }
+            String nombreEstudiante = solicitudAyuda.getEstudiante().getNombre();
+            String importancia = solicitudAyuda.getPrioridad();
+            String titulo = solicitudAyuda.getTitulo();
+            String contenido = solicitudAyuda.getMensaje();
+            String id = solicitudAyuda.getId();
+            agregarSolicitud(nombreEstudiante, importancia, titulo, contenido,id);        }
+    }
+
+    @FXML
+    void onBuscarFiltro(ActionEvent event) {
+
+
+        if(comboFiltro.getValue() == null|| comboFiltro.getValue().isEmpty()) {
+            cargarSolicitudes();
+            return;
+        }
+        limpiarSolicitudes();
+        for(SolicitudAyuda solicitudAyuda: redSocial.getSolicitudesAyuda()){
+            if(!solicitudAyuda.getPrioridad().toLowerCase().trim().equals(comboFiltro.getValue().toLowerCase().trim()) )
+            {
+                continue;
+            }
+            String nombreEstudiante = solicitudAyuda.getEstudiante().getNombre();
+            String importancia = solicitudAyuda.getPrioridad();
+            String titulo = solicitudAyuda.getTitulo();
+            String contenido = solicitudAyuda.getMensaje();
+            String id = solicitudAyuda.getId();
+            agregarSolicitud(nombreEstudiante, importancia, titulo, contenido,id);
+        }
+    }
+
+    @FXML
+    void onResolver(ActionEvent event) {
+        if(solicitudSeleccionada == null){
+            adminLabel.setText("Ninguna solicitud seleccionada");
+        }else{
+            SolicitudActual.getInstance().setSolicitudAyuda(solicitudSeleccionada);
+            navegar("/co/edu/uniquindio/red_social/resolverSolicitud.fxml", event);
+        }
+
+    }
+
+    RedSocial redSocial = RedSocial.getInstance();
+
+    private void navegar(String url, ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(url));
+            Parent configView = loader.load();
+
+            Scene scene = new Scene(configView);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void initialize() {
+        System.out.println(redSocial.getSolicitudesAyuda().size());
+        adminLabel.setText(PerfilUsuario.getUsuarioActual().getNombre());
+        redSocial.getSolicitudesAyuda().show();
+        cargarComboBox();
+        cargarSolicitudes();
+    }
+
+    private void cargarComboBox() {
+        comboFiltro.getItems().addAll("Muy urgente", "Urgente", "Normal");
+        comboFiltro.setValue("Normal");
+
+    }
+
+    public void cargarSolicitudes() {
+        limpiarSolicitudes();
+        for(SolicitudAyuda solicitudAyuda: redSocial.getSolicitudesAyuda()){
+            String nombreEstudiante = solicitudAyuda.getEstudiante().getNombre();
+            String importancia = solicitudAyuda.getPrioridad();
+            String titulo = solicitudAyuda.getTitulo();
+            String contenido = solicitudAyuda.getMensaje();
+            String id = solicitudAyuda.getId();
+            agregarSolicitud(nombreEstudiante, importancia, titulo, contenido, id);
+        }
+    }
+
+    public void agregarSolicitud(String nombreEstudiante, String importancia, String titulo, String contenido, String id) {
+        HBox hboxSolicitud = new HBox();
+        hboxSolicitud.setPrefSize(173, 100);
+        HBox.setMargin(hboxSolicitud, new Insets(0, 20, 20, 0));
+
+        // Añade un evento de clic a cada solicitud
+        hboxSolicitud.setOnMouseClicked(event -> {
+            // Buscar la solicitud correspondiente en la lista
+            System.out.println("Seleccionada " + titulo );
+            for(SolicitudAyuda solicitud : redSocial.getSolicitudesAyuda()) {
+                System.out.println(id);
+                if(solicitud.getId().equals(id)) {
+                    solicitudSeleccionada = solicitud;
+                    break;
+                }
+            }
+
+            // Cambiar el estilo para mostrar la selección
+            resetearEstilosSeleccion();
+            hboxSolicitud.getStyleClass().add("solicitud-seleccionada");
+
+            // Mostrar detalles en la sección derecha si existe
+            if(hBoxDerecha != null) {
+                nombreEstudianteLabel.setText(nombreEstudiante);
+                importanciaLabel.setText(importancia);
+                tituloLabel.setText(titulo);
+                ContenidoSolicitudLabel.setText(contenido);
+            }
+        });
+        switch (importancia.toLowerCase()) {
+            case "muy urgente":
+                hboxSolicitud.getStyleClass().add("card-solicitud-muy-urgente");
+                break;
+            case "urgente":
+                hboxSolicitud.getStyleClass().add("card-solicitud-urgente");
+                break;
+            default:
+                hboxSolicitud.getStyleClass().add("card-solicitud-normal");
+                break;
+        }
+
+        VBox vboxPrincipal = new VBox(5);
+        vboxPrincipal.setPrefSize(140, 17);
+
+        Label nombreLabel = new Label(nombreEstudiante);
+        nombreLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
+
+        VBox vboxImportancia = new VBox();
+        Label importanciaLabel = new Label("Importancia: " + importancia);
+        importanciaLabel.setStyle("-fx-font-style: italic;");
+
+        VBox vboxContenido = new VBox(3);
+        Label tituloLabel = new Label(titulo);
+        tituloLabel.setStyle("-fx-font-weight: bold;");
+        Label contenidoLabel = new Label(contenido);
+        contenidoLabel.setWrapText(true);
+
+        vboxImportancia.getChildren().add(importanciaLabel);
+        vboxContenido.getChildren().addAll(tituloLabel, contenidoLabel);
+        vboxPrincipal.getChildren().addAll(nombreLabel, vboxImportancia, vboxContenido);
+        hboxSolicitud.getChildren().add(vboxPrincipal);
+
+        if (AnchorPaneContenedorSolicitudes.getChildren().isEmpty()) {
+            HBox nuevaFila = new HBox();
+            nuevaFila.getChildren().add(hboxSolicitud);
+            AnchorPaneContenedorSolicitudes.getChildren().add(nuevaFila);
+        } else {
+            HBox ultimaFila = (HBox) AnchorPaneContenedorSolicitudes.getChildren().get(
+                    AnchorPaneContenedorSolicitudes.getChildren().size() - 1);
+
+            if (ultimaFila.getChildren().size() < 2) {
+                ultimaFila.getChildren().add(hboxSolicitud);
+            } else {
+                HBox nuevaFila = new HBox();
+                nuevaFila.getChildren().add(hboxSolicitud);
+                AnchorPaneContenedorSolicitudes.getChildren().add(nuevaFila);
+            }
+        }
+    }
+
+    private void resetearEstilosSeleccion() {
+        for(Node node : AnchorPaneContenedorSolicitudes.getChildren()) {
+            if(node instanceof HBox) {
+                for(Node child : ((HBox)node).getChildren()) {
+                    if(child instanceof HBox) {
+                        child.getStyleClass().remove("solicitud-seleccionada");
+                    }
+                }
+            }
+        }
+    }
+
+
+
+    public void limpiarSolicitudes() {
+        AnchorPaneContenedorSolicitudes.getChildren().clear();
+    }
+
+    @FXML
+    public void irAGrupoEStudio(ActionEvent actionEvent) {
+    }
 }

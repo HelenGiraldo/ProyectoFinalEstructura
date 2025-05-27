@@ -22,16 +22,11 @@ public class App2 {
         UtilSQL.cargarMiembrosDeGrupos();
         UtilSQL.cargarGrupos();
         UtilSQL.obtenerTodosLosChats();
-        red.getEstudiantes().show();
-        System.out.println(red.getEstudiantes().size());
+        red.getAdministradores().show();
+        System.out.println(red.getAdministradores().size());
         System.out.println("---------------------------------");
 
-        Estudiante estudiante = red.getEstudiantes().get(0);
-        Estudiante estudiante2 = red.getEstudiantes().get(2);
-        estudiante.getContactos().show();
-        estudiante.enviarSolicitud(estudiante2);
-        estudiante2.aceptarSolicitud(estudiante2.getSolicitudesRecibidas().get(0));
-        estudiante.getChats().show();
+
 
     }
 }

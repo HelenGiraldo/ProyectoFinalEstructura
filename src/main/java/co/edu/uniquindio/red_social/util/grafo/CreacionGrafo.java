@@ -1,5 +1,6 @@
 package co.edu.uniquindio.red_social.util.grafo;
 
+import co.edu.uniquindio.red_social.App3;
 import co.edu.uniquindio.red_social.clases.RedSocial;
 import co.edu.uniquindio.red_social.clases.contenidos.Calificacion;
 import co.edu.uniquindio.red_social.clases.contenidos.Contenido;
@@ -11,44 +12,65 @@ public class CreacionGrafo {
 
     RedSocial redSocial = RedSocial.getInstance();
     ListaSimplementeEnlazada<Arista> aristas = new ListaSimplementeEnlazada<>();
+    ListaSimplementeEnlazada<GNodo> estudiantes = new ListaSimplementeEnlazada<>();
+    static CreacionGrafo grafo;
 
-    public Arista agregarConexion(Estudiante estudiante1, Estudiante estudiante2) {
-        if (estudiante1 != null && estudiante2 != null) {
-            Arista arista = new Arista(estudiante1, estudiante2);
-            aristas.add(arista);
-            return arista;
+
+
+    public static CreacionGrafo getInstance() {
+        if (grafo == null) {
+            grafo = new CreacionGrafo();
         }
-        return null;
+        return grafo;
     }
 
     public void generarConexionesAutomaticas() {
-        ListaSimplementeEnlazada<Estudiante> estudiantes = redSocial.getEstudiantes();
         for (int i = 0; i < estudiantes.size(); i++) {
-            Estudiante estudiante1 = estudiantes.get(i);
+            GNodo estudiante1 = estudiantes.get(i);
             for (int j = i + 1; j < estudiantes.size(); j++) {
-                Estudiante estudiante2 = estudiantes.get(j);
+                GNodo estudiante2 = estudiantes.get(j);
+                Arista arista = new Arista(estudiante1, estudiante2);
 
-                if (!sonAmigos(estudiante1, estudiante2)) {
-                    // Conexión por intereses comunes
-                    if (tienenInteresesComunes(estudiante1, estudiante2)) {
-                        agregarConexion(estudiante1, estudiante2);
-                    }
-
-                    // Conexión por grupos de estudio comunes
-                    if (tienenGruposComunes(estudiante1, estudiante2)) {
-                        agregarConexion(estudiante1, estudiante2);
-                    }
-
-                    // Conexión por valoraciones similares
-                    if (tienenValoracionesSimilares(estudiante1, estudiante2)) {
-                        agregarConexion(estudiante1, estudiante2);
-                    }
-                }else{
-                    Arista arista = agregarConexion(estudiante1, estudiante2);
+                // Solo crear una arista por par de nodos
+                if (sonAmigos(estudiante1.estudiante, estudiante2.estudiante)) {
                     arista.amigos = true;
+                } else if (tienenInteresesComunes(estudiante1.estudiante, estudiante2.estudiante)) {
+                    arista.interesesComunes = true;
+                } else if (tienenGruposComunes(estudiante1.estudiante, estudiante2.estudiante)) {
+                    arista.gruposComunes = true;
+                } else if (tienenValoracionesSimilares(estudiante1.estudiante, estudiante2.estudiante)) {
+                    arista.valoracionesSimilares = true;
+                }
+
+                // Solo añadir si cumple al menos un criterio
+                if (arista.amigos || arista.interesesComunes ||
+                        arista.gruposComunes || arista.valoracionesSimilares) {
+                    aristas.add(arista);
                 }
             }
         }
+    }
+
+    public ListaSimplementeEnlazada<Estudiante> recomedarEstudiantes(Estudiante estudiante){
+        ListaSimplementeEnlazada<Estudiante> sugerecnias = new ListaSimplementeEnlazada<>();
+        for(Estudiante est: RedSocial.getInstance().getEstudiantes()){
+            if(sonAmigos(est,estudiante)){
+                return null;
+            }
+            if(amigosMutuos(est,estudiante)){
+                sugerecnias.add(est);
+            }else
+            if(tienenInteresesComunes(est,estudiante)){
+                sugerecnias.add(est);
+            }else if(tienenGruposComunes(est,estudiante)){
+                sugerecnias.add(est);
+            }else if(tienenValoracionesSimilares(estudiante, est)){
+                sugerecnias.add(est);
+            }
+
+        }
+        return sugerecnias;
+
     }
 
 
@@ -109,4 +131,36 @@ public class CreacionGrafo {
         }
         return false;
     }
+
+    public void crearNodos() {
+        int x = 100, y = 100;
+        for (Estudiante estudiante : redSocial.getEstudiantes()) {
+            GNodo nodo = new GNodo(estudiante);
+            nodo.x = x;
+            nodo.y = y;
+            estudiantes.add(nodo);
+            x += 100;
+            if (x > 700) {
+                x = 100;
+                y += 100;
+            }
+        }
+    }
+
+    public void crearGrafo() {
+        crearNodos();
+        generarConexionesAutomaticas();
+        estudiantes.show();
+        CreacionGrafo creacionGrafo = CreacionGrafo.getInstance();
+       GrafoSwing.main();
+
+    }
+
+    public static void main(String[] args) {
+        App3.iniciarDatos();
+        CreacionGrafo creacionGrafo = CreacionGrafo.getInstance();
+        creacionGrafo.crearGrafo();
+    }
+
+
 }

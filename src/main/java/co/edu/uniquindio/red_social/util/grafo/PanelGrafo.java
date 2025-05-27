@@ -9,8 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 class PanelGrafo extends JPanel implements MouseListener, MouseMotionListener {
-    List<GNodo> nodos = new ArrayList<>();
-    List<Arista> aristas = new ArrayList<>();
+
 
     // Paleta de colores moderna
     private final Color COLOR_FONDO = new Color(240, 240, 245);
@@ -30,27 +29,17 @@ class PanelGrafo extends JPanel implements MouseListener, MouseMotionListener {
     private GNodo nodoSeleccionado = null;
     private Arista etiquetaSeleccionada = null;
     private int offsetX, offsetY;
+    private final CreacionGrafo grafo = CreacionGrafo.getInstance();
 
     public PanelGrafo() {
+        grafo.estudiantes.show();
         addMouseListener(this);
         addMouseMotionListener(this);
         setBackground(COLOR_FONDO);
         setPreferredSize(new Dimension(800, 600));
     }
 
-    public void agregarNodo(GNodo nodo) {
-        nodos.add(nodo);
-    }
 
-    public void agregarArista(GNodo origen, GNodo destino) {
-        aristas.add(new Arista(origen, destino));
-    }
-
-    public void agregarArista(GNodo origen, GNodo destino, String etiqueta) {
-        Arista arista = new Arista(origen, destino, etiqueta);
-        arista.calcularPosicionEtiqueta(); // Calcular posición inicial
-        aristas.add(arista);
-    }
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -72,7 +61,7 @@ class PanelGrafo extends JPanel implements MouseListener, MouseMotionListener {
         g2d.setStroke(new BasicStroke(1.5f));
         g2d.setColor(COLOR_ARISTA);
 
-        for (Arista a : aristas) {
+        for (Arista a : grafo.aristas) {
             // Dibujar línea entre nodos
             g2d.drawLine(a.origen.x, a.origen.y, a.destino.x, a.destino.y);
 
@@ -111,34 +100,44 @@ class PanelGrafo extends JPanel implements MouseListener, MouseMotionListener {
     }
 
     private void dibujarNodos(Graphics2D g2d) {
+        System.out.println("Total nodos a dibujar: " + grafo.estudiantes.size());
         FontMetrics fm = g2d.getFontMetrics();
+        int colorIndex = 0;
 
-        for (int i = 0; i < nodos.size(); i++) {
-            GNodo n = nodos.get(i);
-            Color colorNodo = COLORES_NODOS[i % COLORES_NODOS.length];
+        for (GNodo n : grafo.estudiantes) {
+            // Asignar color rotatorio
+            Color colorNodo = COLORES_NODOS[colorIndex % COLORES_NODOS.length];
+            colorIndex++;
 
-            // Relleno del nodo
-            g2d.setColor(colorNodo);
-            g2d.fillOval(n.x - 20, n.y - 20, 40, 40);
+            System.out.println("Dibujando nodo: " + n.nombre + " en (" + n.x + "," + n.y + ")");
 
-            // Borde del nodo
-            g2d.setColor(COLOR_BORDE_NODO);
-            g2d.setStroke(new BasicStroke(2f));
-            g2d.drawOval(n.x - 20, n.y - 20, 40, 40);
-
-            // Texto del nodo (centrado)
-            g2d.setColor(COLOR_TEXTO);
-            int textoAncho = fm.stringWidth(n.nombre);
-            int textoAlto = fm.getHeight();
-            g2d.drawString(n.nombre, n.x - textoAncho/2, n.y + textoAlto/4);
+            // Dibujar nodo
+            dibujarNodoIndividual(g2d, n, colorNodo, fm);
         }
+    }
+
+    private void dibujarNodoIndividual(Graphics2D g2d, GNodo n, Color colorNodo, FontMetrics fm) {
+        // Relleno del nodo
+        g2d.setColor(colorNodo);
+        g2d.fillOval(n.x - 20, n.y - 20, 40, 40);
+
+        // Borde del nodo
+        g2d.setColor(COLOR_BORDE_NODO);
+        g2d.setStroke(new BasicStroke(2f));
+        g2d.drawOval(n.x - 20, n.y - 20, 40, 40);
+
+        // Texto del nodo (centrado)
+        g2d.setColor(COLOR_TEXTO);
+        int textoAncho = fm.stringWidth(n.nombre);
+        int textoAlto = fm.getHeight();
+        g2d.drawString(n.nombre, n.x - textoAncho/2, n.y + textoAlto/4);
     }
 
     // ==== Eventos del Mouse ====
     @Override
     public void mousePressed(MouseEvent e) {
         // Primero verificar si se está seleccionando una etiqueta
-        for (Arista a : aristas) {
+        for (Arista a : grafo.aristas) {
             if (a.etiqueta != null && !a.etiqueta.isEmpty()) {
                 FontMetrics fm = getFontMetrics(getFont());
                 int textoAncho = fm.stringWidth(a.etiqueta);
@@ -162,16 +161,15 @@ class PanelGrafo extends JPanel implements MouseListener, MouseMotionListener {
         }
 
         // Si no se seleccionó una etiqueta, verificar nodos
-        for (GNodo n : nodos) {
+        for (GNodo n : grafo.estudiantes) {
             if (e.getX() >= n.x - 20 && e.getX() <= n.x + 20 &&
                     e.getY() >= n.y - 20 && e.getY() <= n.y + 20) {
                 nodoSeleccionado = n;
                 offsetX = e.getX() - n.x;
                 offsetY = e.getY() - n.y;
 
-                // Traer al frente el nodo seleccionado
-                nodos.remove(n);
-                nodos.add(n);
+                grafo.estudiantes.remove(n);
+                grafo.estudiantes.add(n);
                 break;
             }
         }
@@ -197,7 +195,7 @@ class PanelGrafo extends JPanel implements MouseListener, MouseMotionListener {
             nodoSeleccionado.y = e.getY() - offsetY;
 
             // Recalcular posiciones de etiquetas para aristas conectadas
-            for (Arista a : aristas) {
+            for (Arista a : grafo.aristas) {
                 if (a.origen == nodoSeleccionado || a.destino == nodoSeleccionado) {
                     a.calcularPosicionEtiqueta();
                 }

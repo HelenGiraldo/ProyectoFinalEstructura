@@ -4,8 +4,7 @@ module co.edu.uniquindio.red_social {
     requires java.sql;
     requires java.desktop;
     requires jakarta.mail;
-
-
+    requires jdk.jshell;
 
 
     opens co.edu.uniquindio.red_social to javafx.fxml;

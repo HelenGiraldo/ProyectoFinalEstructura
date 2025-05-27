@@ -6,6 +6,7 @@ import co.edu.uniquindio.red_social.clases.interfaces.AdministracionEstudiante;
 import co.edu.uniquindio.red_social.clases.interfaces.AdministracionGrupo;
 import co.edu.uniquindio.red_social.clases.social.Grupo;
 import co.edu.uniquindio.red_social.clases.social.SolicitudAyuda;
+import co.edu.uniquindio.red_social.clases.social.Solucion;
 import co.edu.uniquindio.red_social.clases.usuarios.Administrador;
 import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
 import co.edu.uniquindio.red_social.data_base.UtilSQL;
@@ -14,6 +15,8 @@ import co.edu.uniquindio.red_social.estructuras.ColaDePrioridad;
 import co.edu.uniquindio.red_social.estructuras.ListaSimplementeEnlazada;
 import co.edu.uniquindio.red_social.util.Email;
 import co.edu.uniquindio.red_social.util.EstudianteActual;
+import co.edu.uniquindio.red_social.util.grafo.CreacionGrafo;
+
 import java.io.File;
 import java.util.Iterator;
 
@@ -30,6 +33,7 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo,
     private ListaSimplementeEnlazada<Grupo> grupos;
     private ArbolBinario<Contenido> contenidos;
     private ColaDePrioridad<SolicitudAyuda> solicitudesAyuda;
+    private ListaSimplementeEnlazada<Solucion> soluciones;
 
     private static RedSocial redSocial;
 
@@ -42,6 +46,7 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo,
         this.grupos = new ListaSimplementeEnlazada<>();
         this.contenidos = new ArbolBinario<>();
         this.solicitudesAyuda = new ColaDePrioridad<>();
+        this.soluciones = new ListaSimplementeEnlazada<>();
     }
 
     /**
@@ -161,11 +166,10 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo,
      * @return true si se creó correctamente, false en caso contrario.
      */
     public boolean crearAdministrador(String id, String nombre, String apellido, String correo, String contrasena, File fotoPerfil) {
+        System.out.println("Creando " + nombre + " " + apellido + " " + correo + " " + contrasena);
         Administrador nuevoAdministrador = new Administrador(id, nombre, apellido, correo, contrasena, fotoPerfil);
-        if (administradorExisteCorreo(correo) == null) {
-            return administradores.add(nuevoAdministrador);
-        }
-        return false;
+        return administradores.add(nuevoAdministrador);
+
     }
 
     /**
@@ -529,6 +533,11 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo,
 
     public void limpiarPublicaciones() {
         this.contenidos.clear();
+    }
+
+    public ListaSimplementeEnlazada<Estudiante> crearSugerencias(Estudiante estudiante) {
+        CreacionGrafo grafo = CreacionGrafo.getInstance();
+        return grafo.recomedarEstudiantes(estudiante);
     }
 
 

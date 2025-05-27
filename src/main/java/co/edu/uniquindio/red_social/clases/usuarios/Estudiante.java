@@ -7,10 +7,12 @@ import co.edu.uniquindio.red_social.clases.interfaces.AdministracionContenido;
 import co.edu.uniquindio.red_social.clases.social.Chat;
 import co.edu.uniquindio.red_social.clases.social.Grupo;
 import co.edu.uniquindio.red_social.clases.social.SolicitudAmistad;
+import co.edu.uniquindio.red_social.clases.social.Solucion;
 import co.edu.uniquindio.red_social.data_base.UtilSQL;
 import co.edu.uniquindio.red_social.estructuras.ArbolBinario;
 import co.edu.uniquindio.red_social.estructuras.BNodo;
 import co.edu.uniquindio.red_social.estructuras.ListaSimplementeEnlazada;
+import jdk.jshell.execution.Util;
 
 import java.io.File;
 
@@ -26,6 +28,7 @@ public class Estudiante extends Usuario implements AdministracionContenido {
     private ArbolBinario<Contenido> contenidos;
     private ListaSimplementeEnlazada<Grupo> grupos;
     private ListaSimplementeEnlazada<Chat> chats;
+    private ListaSimplementeEnlazada<Solucion> soluciones;
     private String id;
 
 
@@ -37,6 +40,7 @@ public class Estudiante extends Usuario implements AdministracionContenido {
         this.contenidos = new ArbolBinario<>();
         this.grupos = new ListaSimplementeEnlazada<>();
         this.chats = new ListaSimplementeEnlazada<>();
+        this.soluciones = new ListaSimplementeEnlazada<>();
     }
 
     public Estudiante(String id, String nombre,String apellido, String correo, String contrasena, File fotoPerfil) {
@@ -48,6 +52,7 @@ public class Estudiante extends Usuario implements AdministracionContenido {
         this.contenidos = new ArbolBinario<>();
         this.grupos = new ListaSimplementeEnlazada<>();
         this.chats = new ListaSimplementeEnlazada<>();
+        this.soluciones = new ListaSimplementeEnlazada<>();
     }
 
 
@@ -85,6 +90,7 @@ public class Estudiante extends Usuario implements AdministracionContenido {
      */
     public boolean anadirPreferencia(String preferencia) {
         if (!preferencias.contains(preferencia)) {
+            UtilSQL.insertarPreferencia(this, preferencia);
             return  preferencias.add(preferencia);
         }
         return false;
@@ -97,6 +103,7 @@ public class Estudiante extends Usuario implements AdministracionContenido {
      */
     public boolean eliminarPreferencia(String preferencia) {
         if (preferencias.contains(preferencia)) {
+            UtilSQL.eliminarPreferencia(this, preferencia);
             preferencias.remove(preferencia);
             return true;
         }
@@ -353,6 +360,17 @@ public class Estudiante extends Usuario implements AdministracionContenido {
         contenido.calificar(new Calificacion(valoracion,this, contenido));
     }
 
+    public boolean agregarSolucion(Solucion solucion) {
+        boolean a= soluciones.add(solucion);
+        UtilSQL.insertarSolucion(solucion);
+        return a;
+    }
+
+    public boolean eliminarSolucion(Solucion solucion){
+        boolean a = soluciones.remove(solucion);
+        UtilSQL.eliminarSolucion(solucion);
+        return a;
+    }
 
     // Getters y Setters
 
@@ -421,6 +439,13 @@ public class Estudiante extends Usuario implements AdministracionContenido {
         return imagenPerfil.getPath();
     }
 
+    public ListaSimplementeEnlazada<Solucion> getSoluciones() {
+        return soluciones;
+    }
+
+    public void setSoluciones(ListaSimplementeEnlazada<Solucion> soluciones) {
+        this.soluciones = soluciones;
+    }
 
     @Override
     public String toString() {

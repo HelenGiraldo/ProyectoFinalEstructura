@@ -21,90 +21,6 @@ public class UtilSQL {
     static boolean save = true;
 
 
-    private static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(url, user, password);
-    }
-
-
-    public static ListaSimplementeEnlazada<Calificacion> obtenerCalificacionesPorContenido(String idContenido) {
-        ListaSimplementeEnlazada<Calificacion> listaCalificaciones = new ListaSimplementeEnlazada<>();
-        String sql = "SELECT id, valoracion, autor FROM Calificaciones WHERE id_publicacion = ?";
-
-        try (Connection conn = getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            pstmt.setString(1, idContenido);
-            ResultSet rs = pstmt.executeQuery();
-
-            while (rs.next()) {
-                String idCalificacion = rs.getString("id");
-                int valoracion = rs.getInt("valoracion");
-                String autorId = rs.getString("autor");  // Aquí uso autor en vez de usuario_id
-
-                // Obtener usuario desde RedSocial (lista cargada)
-                Estudiante usuario = RedSocial.getInstance().obtenerEstudiantePorId(autorId);
-
-                if (usuario != null) {
-                    Calificacion calificacion = new Calificacion(valoracion, usuario, null);
-                    calificacion.setId(idCalificacion);
-                    listaCalificaciones.add(calificacion);
-                }
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return listaCalificaciones;
-    }
-
-
-    public static ListaSimplementeEnlazada<Contenido> cargarContenidosDelGrupo(String idGrupo) {
-        ListaSimplementeEnlazada<Contenido> contenidos = new ListaSimplementeEnlazada<>();
-
-        String sql = "SELECT c.id, c.tipo_contenido, c.titulo, c.tema, c.descripcion, " +
-                "c.contenido, c.id_autor, c.id_grupo FROM publicaciones c " +
-                "WHERE c.id_grupo = ?";
-
-        try (Connection conn = getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            pstmt.setString(1, idGrupo);
-            ResultSet rs = pstmt.executeQuery();
-
-            while (rs.next()) {
-                String id = rs.getString("id");
-                String tipo = rs.getString("tipo_contenido");
-                String titulo = rs.getString("titulo");
-                String tema = rs.getString("tema");
-                String descripcion = rs.getString("descripcion");
-                String contenidoPath = rs.getString("contenido");
-                String idAutor = rs.getString("id_autor");
-
-                Estudiante autor = RedSocial.getInstance().obtenerEstudiantePorId(idAutor);
-                File archivoContenido = contenidoPath != null ? new File(contenidoPath) : null;
-
-                if (autor != null) {
-                    Contenido contenido = new Contenido(
-                            tipo,
-                            titulo,
-                            tema,
-                            descripcion,
-                            autor,
-                            archivoContenido,
-                            null // El grupo se asigna después
-                    );
-                    contenido.setId(id);
-                    contenidos.add(contenido);
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return contenidos;
-    }
-
 
 
     public static int insertarEstudiante(Estudiante e) {
@@ -1114,6 +1030,7 @@ public class UtilSQL {
                 idGenerado = generatedKeys.getInt(1);
                 solicitud.setId(String.valueOf(idGenerado));
             }
+            solicitud.setId(String.valueOf(idGenerado));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -1186,7 +1103,15 @@ public class UtilSQL {
                 if (estudiante != null) {
                     SolicitudAyuda solicitud = new SolicitudAyuda(mensaje, estudiante, titulo, prioridad, estado);
                     solicitud.setId(id);
-                    RedSocial.getInstance().getSolicitudesAyuda().add(solicitud);
+                    int prioridadInt = 0;
+                    if (prioridad.equalsIgnoreCase("normal")) {
+                        prioridadInt = 1;
+                    } else if (prioridad.equalsIgnoreCase("urgente")) {
+                        prioridadInt = 2;
+                    } else if (prioridad.equalsIgnoreCase("muy urgente")) {
+                        prioridadInt = 3;
+                    }
+                    RedSocial.getInstance().getSolicitudesAyuda().add(solicitud,prioridadInt);
                 }
             }
 

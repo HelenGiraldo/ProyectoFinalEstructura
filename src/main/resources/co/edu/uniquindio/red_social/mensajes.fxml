@@ -15,135 +15,135 @@
 <?import javafx.scene.layout.VBox?>
 
 <AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.red_social.controllers.ChatController">
-    <children>
-        <BorderPane layoutX="3.0" layoutY="6.0" prefHeight="387.0" prefWidth="594.0">
-            <top>
-                <VBox prefHeight="65.0" prefWidth="594.0" BorderPane.alignment="CENTER">
-                    <children>
-                        <HBox prefHeight="65.0" prefWidth="107.0">
-                            <children>
-                                <HBox prefHeight="65.0" prefWidth="174.0">
-                                    <children>
-                                        <Label fx:id="TextFieldTitle" prefHeight="90.0" prefWidth="160.0" styleClass="title-label" stylesheets="@styles.css" text="ThinkTogether" />
-                                    </children>
-                                </HBox>
-                                <HBox prefHeight="65.0" prefWidth="30.0" />
-                                <HBox prefHeight="65.0" prefWidth="157.0">
-                                    <children>
-                                        <Label fx:id="TextFieldSaludo" prefHeight="64.0" prefWidth="157.0" styleClass="title-label-saludo" stylesheets="@styles.css" text="Chatea" />
-                                    </children>
-                                </HBox>
-                                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="124.0">
-                                    <children>
-                                        <TextField fx:id="campoBusqueda" prefHeight="33.0" prefWidth="73.0" styleClass="label-busqueda" stylesheets="@styles.css">
-                                            <opaqueInsets>
-                                                <Insets />
-                                            </opaqueInsets>
-                                        </TextField>
-                                        <Button fx:id="botonBuscar" minWidth="47.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="47.0" styleClass="boton-buscar" stylesheets="@styles.css" text="🔍">
-                                            <opaqueInsets>
-                                                <Insets />
-                                            </opaqueInsets>
-                                        </Button>
-                                    </children>
-                                </HBox>
-                                <HBox prefHeight="66.0" prefWidth="60.0" />
-                                <ImageView fx:id="imagenPerfil" fitHeight="65.0" fitWidth="68.0">
-                                    <image>
-                                        <Image url="@imagenes/imagePerfil.png" />
-                                    </image>
-                                </ImageView>
-                            </children>
+   <children>
+      <BorderPane layoutX="3.0" layoutY="6.0" prefHeight="387.0" prefWidth="594.0">
+         <top>
+            <VBox prefHeight="65.0" prefWidth="594.0" BorderPane.alignment="CENTER">
+               <children>
+                  <HBox prefHeight="65.0" prefWidth="107.0">
+                     <children>
+                        <HBox prefHeight="65.0" prefWidth="174.0">
+                           <children>
+                              <Label fx:id="TextFieldTitle" prefHeight="90.0" prefWidth="160.0" styleClass="title-label" stylesheets="@styles.css" text="ThinkTogether" />
+                           </children>
                         </HBox>
-                    </children>
-                </VBox>
-            </top>
-            <left>
-                <VBox prefHeight="322.0" prefWidth="192.0" BorderPane.alignment="CENTER">
-                    <children>
-                        <ToggleButton fx:id="InicioButton" mnemonicParsing="false" onAction="#irAInicio" prefHeight="37.0" prefWidth="161.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Inicio" />
-                        <ToggleButton fx:id="misContenidosButton" mnemonicParsing="false" onAction="#irAContenidos" prefHeight="43.0" prefWidth="132.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Mis Contenidos" />
-                        <ToggleButton fx:id="gruposEstudioButton" mnemonicParsing="false" onAction="#irAGruposEstudio" prefHeight="42.0" prefWidth="151.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Grupos estudio" />
-                        <ToggleButton fx:id="MensajesButton" mnemonicParsing="false" prefHeight="42.0" prefWidth="161.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Mensajes" />
-                        <ToggleButton fx:id="SugerenciasButton" mnemonicParsing="false" onAction="#irASugerencias" prefHeight="38.0" prefWidth="159.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Sugerencias" />
-                        <ToggleButton fx:id="SolicitudesDeAyudaButton" mnemonicParsing="false" onAction="#irASolicitudesAyuda" prefHeight="40.0" prefWidth="160.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Solicitudes de ayuda" />
-                        <ToggleButton fx:id="configuracionPerfilButton" mnemonicParsing="false" onAction="#irAConfig" prefHeight="39.0" prefWidth="161.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Configuracion perfil" />
-                    </children>
-                </VBox>
-            </left>
-            <center>
-                <HBox prefHeight="322.0" prefWidth="390.0" BorderPane.alignment="CENTER">
-                    <children>
-                        <VBox fx:id="chatListVBoxFondoUno" prefHeight="322.0" prefWidth="108.0" stylesheets="@stylesChat.css">
-                            <children>
-                                <ScrollPane fx:id="scrollPaneChats" fitToHeight="true" fitToWidth="true" prefHeight="322.0" prefWidth="100.0" stylesheets="@styles.css">
-                                    <content>
-                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="302.0" prefWidth="97.0">
-                                            <children>
-                                                <VBox fx:id="userchatListVBox" layoutX="-12.0" layoutY="-9.0" prefHeight="314.0" prefWidth="112.0">
-                                                    <children>
-                                                        <ToggleButton fx:id="buttonUser2" mnemonicParsing="false" prefHeight="42.0" prefWidth="112.0" styleClass="sidebar-button-chat" stylesheets="@stylesChat.css" />
-                                                        <ToggleButton fx:id="buttonUser3" mnemonicParsing="false" prefHeight="42.0" prefWidth="112.0" styleClass="sidebar-button-chat" stylesheets="@stylesChat.css" />
-                                                    </children>
-                                                </VBox>
-                                            </children>
-                                        </AnchorPane>
-                                    </content>
-                                </ScrollPane>
-                            </children>
-                        </VBox>
-                        <HBox prefHeight="322.0" prefWidth="299.0" stylesheets="@stylesChat.css">
-                            <children>
-                                <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="322.0" prefWidth="325.0">
-                                    <content>
-                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="320.0" prefWidth="287.0">
-                                            <children>
-                                                <VBox fx:id="chatListVBoxFondoDos" prefHeight="304.0" prefWidth="279.0" stylesheets="@stylesChat.css">
-                                                    <children>
-                                                        <HBox fx:id="HboxAvatarNombre" prefHeight="44.0" prefWidth="300.0" stylesheets="@stylesChat.css">
-                                                            <children>
-                                                                <ImageView fx:id="AvatarCompañero" fitHeight="43.0" fitWidth="49.0" pickOnBounds="true" preserveRatio="true" styleClass="avatar">
-                                                                    <image>
-                                                                        <Image url="@imagenes/imagePerfil.png" />
-                                                                    </image>
-                                                                </ImageView>
-                                                                <Label fx:id="LabelUser2" prefHeight="19.0" prefWidth="273.0" styleClass="contact-name" stylesheets="@stylesChat.css" text="No tienes contactos" />
-                                                            </children>
-                                                        </HBox>
-                                                        <VBox fx:id="chatSpace" alignment="BOTTOM_LEFT" prefHeight="258.0" prefWidth="264.0">
-                                                            <children>
-                                                                <ScrollPane fx:id="scrollPaneContenedorMensajes" prefHeight="180.0" prefWidth="247.0">
-                                                                    <content>
-                                                                        <AnchorPane prefHeight="32.0" prefWidth="80.0">
-                                                                            <VBox fx:id="contenedorMensajes" prefHeight="32.0" prefWidth="237.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="-157.0" AnchorPane.topAnchor="0" />
-                                                                        </AnchorPane>
-                                                                    </content>
-                                                                </ScrollPane>
-                                                                <HBox prefHeight="48.0" prefWidth="247.0">
-                                                                    <children>
-                                                                        <HBox prefHeight="42.0" prefWidth="13.0" />
-                                                                        <TextField fx:id="messageTextField" prefHeight="27.0" prefWidth="219.0" promptText="Ingresa un mensaje" stylesheets="@stylesChat.css" />
-                                                                        <HBox prefHeight="42.0" prefWidth="13.0" />
-                                                                        <Button fx:id="sendButton" mnemonicParsing="false" onAction="#enviarMensaje" prefHeight="35.0" prefWidth="59.0" text="&gt;" />
-                                                                    </children>
-                                                                </HBox>
-                                                            </children>
-                                                        </VBox>
-                                                    </children>
-                                                </VBox>
-                                            </children>
-                                        </AnchorPane>
-                                    </content>
-                                </ScrollPane>
-                            </children>
+                        <HBox prefHeight="65.0" prefWidth="30.0" />
+                        <HBox prefHeight="65.0" prefWidth="157.0">
+                           <children>
+                              <Label fx:id="TextFieldSaludo" prefHeight="64.0" prefWidth="157.0" styleClass="title-label-saludo" stylesheets="@styles.css" text="Chatea" />
+                           </children>
                         </HBox>
-                    </children>
-                </HBox>
-            </center>
-        </BorderPane>
-    </children>
-    <stylesheets>
-        <URL value="@styleInicioRegistro.css" />
-        <URL value="@stylesChat.css" />
-    </stylesheets>
+                        <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="124.0">
+                           <children>
+                              <TextField fx:id="campoBusqueda" prefHeight="33.0" prefWidth="73.0" styleClass="label-busqueda" stylesheets="@styles.css">
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                              </TextField>
+                              <Button fx:id="botonBuscar" minWidth="47.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="47.0" styleClass="boton-buscar" stylesheets="@styles.css" text="🔍">
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                              </Button>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="66.0" prefWidth="60.0" />
+                        <ImageView fx:id="imagenPerfil" fitHeight="65.0" fitWidth="68.0">
+                           <image>
+                              <Image url="@imagenes/imagePerfil.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </top>
+         <left>
+            <VBox prefHeight="322.0" prefWidth="192.0" BorderPane.alignment="CENTER">
+               <children>
+                  <ToggleButton fx:id="InicioButton" mnemonicParsing="false" onAction="#irAInicio" prefHeight="37.0" prefWidth="161.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Inicio" />
+                  <ToggleButton fx:id="misContenidosButton" mnemonicParsing="false" onAction="#irAContenidos" prefHeight="43.0" prefWidth="132.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Mis Contenidos" />
+                  <ToggleButton fx:id="gruposEstudioButton" mnemonicParsing="false" onAction="#irAGruposEstudio" prefHeight="42.0" prefWidth="151.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Grupos estudio" />
+                  <ToggleButton fx:id="MensajesButton" mnemonicParsing="false" prefHeight="42.0" prefWidth="161.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Mensajes" />
+                  <ToggleButton fx:id="SugerenciasButton" mnemonicParsing="false" onAction="#irASugerencias" prefHeight="38.0" prefWidth="159.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Sugerencias" />
+                  <ToggleButton fx:id="SolicitudesDeAyudaButton" mnemonicParsing="false" onAction="#irASolicitudesAyuda" prefHeight="40.0" prefWidth="160.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Solicitudes de ayuda" />
+                  <ToggleButton fx:id="configuracionPerfilButton" mnemonicParsing="false" onAction="#irAConfig" prefHeight="39.0" prefWidth="161.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Configuracion perfil" />
+               </children>
+            </VBox>
+         </left>
+         <center>
+            <HBox prefHeight="322.0" prefWidth="390.0" BorderPane.alignment="CENTER">
+               <children>
+                  <VBox fx:id="chatListVBoxFondoUno" prefHeight="322.0" prefWidth="108.0" stylesheets="@stylesChat.css">
+                     <children>
+                        <ScrollPane fx:id="scrollPaneChats" fitToHeight="true" fitToWidth="true" prefHeight="322.0" prefWidth="100.0" stylesheets="@styles.css">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="302.0" prefWidth="97.0">
+                                 <children>
+                                    <VBox fx:id="userchatListVBox" layoutX="-12.0" layoutY="-9.0" prefHeight="314.0" prefWidth="112.0">
+                                       <children>
+                                          <ToggleButton fx:id="buttonUser2" mnemonicParsing="false" prefHeight="42.0" prefWidth="112.0" styleClass="sidebar-button-chat" stylesheets="@stylesChat.css" />
+                                          <ToggleButton fx:id="buttonUser3" mnemonicParsing="false" prefHeight="42.0" prefWidth="112.0" styleClass="sidebar-button-chat" stylesheets="@stylesChat.css" />
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </AnchorPane>
+                          </content>
+                        </ScrollPane>
+                     </children>
+                  </VBox>
+                  <HBox prefHeight="322.0" prefWidth="299.0" stylesheets="@stylesChat.css">
+                     <children>
+                        <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="322.0" prefWidth="325.0">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="320.0" prefWidth="287.0">
+                                 <children>
+                                    <VBox fx:id="chatListVBoxFondoDos" prefHeight="304.0" prefWidth="279.0" stylesheets="@stylesChat.css">
+                                       <children>
+                                          <HBox fx:id="HboxAvatarNombre" prefHeight="44.0" prefWidth="300.0" stylesheets="@stylesChat.css">
+                                             <children>
+                                                <ImageView fx:id="AvatarCompañero" fitHeight="43.0" fitWidth="49.0" pickOnBounds="true" preserveRatio="true" styleClass="avatar">
+                                                   <image>
+                                                      <Image url="@imagenes/imagePerfil.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <Label fx:id="LabelUser2" prefHeight="19.0" prefWidth="273.0" styleClass="contact-name" stylesheets="@stylesChat.css" text="No tienes contactos" />
+                                             </children>
+                                          </HBox>
+                                          <VBox fx:id="chatSpace" alignment="BOTTOM_LEFT" prefHeight="258.0" prefWidth="264.0">
+                                             <children>
+                                                <ScrollPane fx:id="scrollPaneContenedorMensajes" prefHeight="180.0" prefWidth="247.0">
+                                                   <content>
+                                                      <AnchorPane prefHeight="32.0" prefWidth="80.0">
+                                                         <VBox fx:id="contenedorMensajes" prefHeight="32.0" prefWidth="237.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="-157.0" AnchorPane.topAnchor="0" />
+                                                      </AnchorPane>
+                                                   </content>
+                                                </ScrollPane>
+                                                <HBox prefHeight="48.0" prefWidth="247.0">
+                                                   <children>
+                                                      <HBox prefHeight="42.0" prefWidth="13.0" />
+                                                      <TextField fx:id="messageTextField" prefHeight="27.0" prefWidth="219.0" promptText="Ingresa un mensaje" stylesheets="@stylesChat.css" />
+                                                      <HBox prefHeight="42.0" prefWidth="13.0" />
+                                                      <Button fx:id="sendButton" mnemonicParsing="false" onAction="#enviarMensaje" prefHeight="35.0" prefWidth="59.0" text="&gt;" />
+                                                   </children>
+                                                </HBox>
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </AnchorPane>
+                          </content>
+                        </ScrollPane>
+                     </children>
+                  </HBox>
+               </children>
+            </HBox>
+         </center>
+      </BorderPane>
+   </children>
+   <stylesheets>
+      <URL value="@styleInicioRegistro.css" />
+      <URL value="@stylesChat.css" />
+   </stylesheets>
 </AnchorPane>
