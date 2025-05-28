@@ -5,6 +5,7 @@ import co.edu.uniquindio.red_social.clases.interfaces.AdministracionAdministrado
 import co.edu.uniquindio.red_social.clases.interfaces.AdministracionEstudiante;
 import co.edu.uniquindio.red_social.clases.interfaces.AdministracionGrupo;
 import co.edu.uniquindio.red_social.clases.social.Grupo;
+import co.edu.uniquindio.red_social.clases.social.SolicitudAmistad;
 import co.edu.uniquindio.red_social.clases.social.SolicitudAyuda;
 import co.edu.uniquindio.red_social.clases.social.Solucion;
 import co.edu.uniquindio.red_social.clases.usuarios.Administrador;
@@ -13,6 +14,7 @@ import co.edu.uniquindio.red_social.data_base.UtilSQL;
 import co.edu.uniquindio.red_social.estructuras.ArbolBinario;
 import co.edu.uniquindio.red_social.estructuras.ColaDePrioridad;
 import co.edu.uniquindio.red_social.estructuras.ListaSimplementeEnlazada;
+import co.edu.uniquindio.red_social.util.ContadorPreferencias;
 import co.edu.uniquindio.red_social.util.Email;
 import co.edu.uniquindio.red_social.util.EstudianteActual;
 import co.edu.uniquindio.red_social.util.grafo.CreacionGrafo;
@@ -537,8 +539,93 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo,
 
     public ListaSimplementeEnlazada<Estudiante> crearSugerencias(Estudiante estudiante) {
         CreacionGrafo grafo = CreacionGrafo.getInstance();
-        return grafo.recomedarEstudiantes(estudiante);
+
+        ListaSimplementeEnlazada<Estudiante> posibles = grafo.recomedarEstudiantes(estudiante);
+        ListaSimplementeEnlazada<Estudiante> sugerencias = new ListaSimplementeEnlazada<>();
+        for(Estudiante est : posibles) {
+           if(!sugerencias.contains(est) && !solicitudYaEnviada(estudiante,est) ) {
+               sugerencias.add(est);
+           }
+        }
+        return posibles;
     }
+
+    public boolean solicitudYaEnviada(Estudiante estudiante, Estudiante objetivo) {
+        for (SolicitudAmistad sol : objetivo.getSolicitudesRecibidas()) {
+            if (sol.getEstudianteSolicitante().equals(estudiante)) {
+                return true;
+            }
+        }
+
+        for (SolicitudAmistad sol : estudiante.getSolicitudesRecibidas()) {
+            if (sol.getEstudianteSolicitante().equals(objetivo)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public String obtenerConexiónEstudiante(Estudiante estudiante, Estudiante objetivo) {
+        CreacionGrafo grafo = CreacionGrafo.getInstance();
+        ListaSimplementeEnlazada<Estudiante> visitados = new ListaSimplementeEnlazada<>();
+        ListaSimplementeEnlazada<Estudiante> conexiones = new ListaSimplementeEnlazada<>();
+
+        conexiones = obtenerConexionesEstudiante(estudiante, objetivo, visitados, conexiones, false, grafo);
+
+    return " ";
+    }
+
+    public ListaSimplementeEnlazada<Estudiante> obtenerConexionesEstudiante(Estudiante estudianteActual,Estudiante objetivo, ListaSimplementeEnlazada visitados, ListaSimplementeEnlazada<Estudiante> conexiones, boolean alcanzado, CreacionGrafo grafo) {
+        ListaSimplementeEnlazada<Estudiante> conexionesN = new ListaSimplementeEnlazada<>(conexiones);
+        for(Estudiante est : grafo.conexionesEstudiante(estudianteActual)) {
+            if(!visitados.contains(est)) {
+                if(est.equals(objetivo)) {
+                    return conexionesN;
+                }
+            }
+
+        }
+        return conexionesN;
+
+    }
+
+
+    public ListaSimplementeEnlazada<String> obtenerGruposAutomaticos(){
+        ContadorPreferencias nuevosGrupos = new ContadorPreferencias();
+        for(Estudiante est : this.estudiantes) {
+            System.out.println(est);
+            for(String preferencia : est.getPreferencias()) {
+                nuevosGrupos.put(preferencia);
+            }
+        }
+        nuevosGrupos.getPreferencias().show();
+        ListaSimplementeEnlazada<String> posibles = nuevosGrupos.getPreferenciasComunes();
+        ListaSimplementeEnlazada<String> grupos2 = new ListaSimplementeEnlazada<>();
+        for(String posible : posibles) {
+            for(Grupo grupo : grupos) {
+                if(!grupo.getNombre().equals(posible) && !grupos2.contains(posible)) {
+
+                    grupos2.add(posible);
+                }
+            }
+        }
+        return grupos2;
+    }
+
+    public int cuantosTienenPreferencia(String preferencia) {
+        int contador = 0;
+        for (Estudiante estudiante : estudiantes) {
+            for(String pref : estudiante.getPreferencias()) {
+                if (pref.equals(preferencia)) {
+                    contador++;
+                }
+            }
+        }
+        return contador;
+    }
+
+
+
 
 
 
@@ -614,6 +701,12 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo,
         this.solicitudesAyuda = solicitudesAyuda;
     }
 
+    public ListaSimplementeEnlazada<Solucion> getSoluciones() {
+        return soluciones;
+    }
+    public void setSoluciones(ListaSimplementeEnlazada<Solucion> soluciones) {
+        this.soluciones = soluciones;
+    }
 
 
 }

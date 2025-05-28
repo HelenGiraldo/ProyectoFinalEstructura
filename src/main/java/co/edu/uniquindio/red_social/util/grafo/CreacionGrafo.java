@@ -52,11 +52,8 @@ public class CreacionGrafo {
     }
 
     public ListaSimplementeEnlazada<Estudiante> recomedarEstudiantes(Estudiante estudiante){
-        System.out.println("Pablo");
         ListaSimplementeEnlazada<Estudiante> sugerecnias = new ListaSimplementeEnlazada<>();
-        RedSocial.getInstance().getEstudiantes().show();
         for(Estudiante est: RedSocial.getInstance().getEstudiantes()){
-            System.out.println("Estudiante: " + est.getNombre() + " - " + est.getId()+ " Pref: " + tienenInteresesComunes(estudiante,est));
             if(sonAmigos(est,estudiante)||est.equals(estudiante)){
                 continue;
             }
@@ -72,7 +69,31 @@ public class CreacionGrafo {
             }
 
         }
-        System.out.println("SIsas");
+        return sugerecnias;
+
+    }
+
+    public ListaSimplementeEnlazada<Estudiante> conexionesEstudiante(Estudiante estudiante){
+        ListaSimplementeEnlazada<Estudiante> sugerecnias = new ListaSimplementeEnlazada<>();
+        for(Estudiante est: RedSocial.getInstance().getEstudiantes()){
+            if(est.equals(estudiante)){
+                continue;
+            }
+            if(sonAmigos(est,estudiante)){
+                sugerecnias.add(est);
+            }else
+            if(amigosMutuos(est,estudiante)){
+                sugerecnias.add(est);
+            }else
+            if(tienenInteresesComunes(est,estudiante)){
+                sugerecnias.add(est);
+            }else if(tienenGruposComunes(est,estudiante)){
+                sugerecnias.add(est);
+            }else if(tienenValoracionesSimilares(estudiante, est)){
+                sugerecnias.add(est);
+            }
+
+        }
         return sugerecnias;
 
     }
@@ -143,7 +164,7 @@ public class CreacionGrafo {
         int centroY = 300;
         int panelMargin = 80; // Margen mínimo
 
-        ListaSimplementeEnlazada<Estudiante> listaEstudiantes = new ListaSimplementeEnlazada<>(redSocial.getEstudiantes());
+        ListaSimplementeEnlazada<Estudiante> listaEstudiantes = new ListaSimplementeEnlazada<>( redSocial.getEstudiantes());
         int totalEstudiantes = listaEstudiantes.size();
 
         // Calcular radio automáticamente basado en el número de nodos
@@ -173,6 +194,7 @@ public class CreacionGrafo {
 
         return Math.min(radioBase, maxWidth);
     }
+
 
     public void crearGrafo() {
         crearNodos();
