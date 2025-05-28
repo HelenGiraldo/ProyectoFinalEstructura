@@ -795,6 +795,7 @@ public class UtilSQL {
                         contenido,
                         grupo
                 );
+                System.out.println(nuevaPublicacion);
 
                 // 6. Establecer el ID usando el método setId()
                 try {
@@ -802,6 +803,7 @@ public class UtilSQL {
 
                     // 7. Agregar a RedSocial
                     redSocial.agregarPublicacion(nuevaPublicacion);
+                    autor.getContenidos().add(nuevaPublicacion);
 
                     // 8. Si pertenece a un grupo, agregar al árbol del grupo
                     if (grupo != null) {

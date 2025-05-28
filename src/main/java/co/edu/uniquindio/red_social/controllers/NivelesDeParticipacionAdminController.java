@@ -1,6 +1,8 @@
 package co.edu.uniquindio.red_social.controllers;
 
 import co.edu.uniquindio.red_social.clases.RedSocial;
+import co.edu.uniquindio.red_social.clases.contenidos.Contenido;
+import co.edu.uniquindio.red_social.clases.social.Grupo;
 import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
 import co.edu.uniquindio.red_social.estructuras.ListaSimplementeEnlazada;
 import javafx.collections.FXCollections;
@@ -133,11 +135,24 @@ public class NivelesDeParticipacionAdminController {
     }
     @FXML
     void irAction(ActionEvent event){
+        if(comboBoxEstudiante.getValue() == null) {
+            return;
+        }
         Estudiante estudianteSeleccionado = comboBoxEstudiante.getValue();
+        estudianteSeleccionado.getContenidos().recorrerInorden().show();
         nombreLabel.setText(estudianteSeleccionado.getNombre());
         IdLabel.setText(String.valueOf(estudianteSeleccionado.getId()));
         publicacionesLabel.setText(String.valueOf(estudianteSeleccionado.getContenidos().getPeso()));
-        amigosLabel.setText(String.valueOf(estudianteSeleccionado.getContactos().size()));
+        RedSocial redSocial = RedSocial.getInstance();
+        int publicaciones = 0;
+        for(Grupo grupo : redSocial.getGrupos()) {
+            for(Contenido contenido : grupo.getContenidos().recorrerInorden()) {
+                if(contenido.getAutor().equals(estudianteSeleccionado)) {
+                    publicaciones += 1;
+                }
+            }
+        }
+        amigosLabel.setText(String.valueOf(estudianteSeleccionado.getContactos().size()+ publicaciones));
         valoracionesLabel.setText(String.valueOf(estudianteSeleccionado.valoracionesPublicacion()));
         gruposLabel.setText(String.valueOf(estudianteSeleccionado.getGrupos().size()));
     }

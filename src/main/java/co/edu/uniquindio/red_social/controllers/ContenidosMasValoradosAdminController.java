@@ -6,8 +6,10 @@ import java.util.ResourceBundle;
 
 import co.edu.uniquindio.red_social.clases.RedSocial;
 import co.edu.uniquindio.red_social.clases.contenidos.Contenido;
+import co.edu.uniquindio.red_social.clases.social.Grupo;
 import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
 import co.edu.uniquindio.red_social.estructuras.ListaSimplementeEnlazada;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -119,11 +121,16 @@ public class ContenidosMasValoradosAdminController {
 
     @FXML
     void initialize() {
-        tituloTableColumn.setCellValueFactory(new PropertyValueFactory<>("titulo"));
-        valoracionTableColumn.setCellValueFactory(new PropertyValueFactory<>("contenido"));
+        tituloTableColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getTitulo()));
+
+        valoracionTableColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(String.valueOf(cellData.getValue().getCalificacionPromedio())));
+
         numeroValoracionesColumn.setCellValueFactory(cellData -> {
-            int size = cellData.getValue().getCalificaciones().size();
-            return javafx.beans.binding.Bindings.createStringBinding(() -> String.valueOf(size));
+            ListaSimplementeEnlazada<?> calificaciones = cellData.getValue().getCalificaciones();
+            int size = calificaciones != null ? calificaciones.size() : 0;
+            return new SimpleStringProperty(String.valueOf(size));
         });
 
         cargarContenidos();
@@ -137,11 +144,17 @@ public class ContenidosMasValoradosAdminController {
                 contenidos.add(contenido);
             }
         }
-
+        for(Grupo grupo : redSocial.getGrupos()) {
+            for(Contenido contenido : grupo.getContenidos().recorrerInorden()) {
+                contenidos.add(contenido);
+            }
+        }
 
         for(Contenido contenido : contenidos) {
             contenidosObservable.add(contenido);
         }
+
+
 
         contenidosMasValoradosTable.setItems(contenidosObservable);
     }

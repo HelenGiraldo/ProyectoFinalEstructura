@@ -204,6 +204,8 @@ public class PublicarController {
 
         pause.play();
 
+
+
         System.out.println("Contenido agregado: " + nuevoContenido.getTitulo());
         System.out.println("Tamaño actual del árbol: " + ContenidosController.getArbol().recorrerInorden().size());
 
