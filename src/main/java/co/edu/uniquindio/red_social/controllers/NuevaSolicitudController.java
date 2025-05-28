@@ -93,6 +93,15 @@ public class NuevaSolicitudController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/solicitudes.fxml"));
             Parent configView = loader.load();
+            SolicitudesAyudaController controller = loader.getController();
+            // PASAR el usuario (que tienes en 'usuario' o usa PerfilUsuario.getUsuarioActual())
+            Estudiante usuario = (Estudiante) PerfilUsuario.getUsuarioActual();
+            if (usuario != null) {
+                controller.setUsuarioActual(usuario);
+                System.out.println("Usuario enviado a SolicitudesAyudaController: " + usuario.getNombre());
+            } else {
+                System.out.println("usuario en NuevaSolicitudController es null");
+            }
 
             Scene scene = new Scene(configView);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

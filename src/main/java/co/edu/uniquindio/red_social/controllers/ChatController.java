@@ -26,6 +26,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -153,11 +154,34 @@ public class ChatController implements  ChatObserver {
         MensajesButton.setSelected(true);
 
 
-        if (imagenPerfil != null) {
-            double radius = imagenPerfil.getFitWidth() / 2;
-            Circle clip = new Circle(radius, radius, radius);
-            imagenPerfil.setClip(clip);
+        Platform.runLater(() -> {
+            if (imagenPerfil != null) {
+                double radius = imagenPerfil.getFitWidth() / 2;
+                Circle clip = new Circle(radius, radius, radius);
+                imagenPerfil.setClip(clip);
+            }
+        });
+
+        PerfilUsuario perfil = PerfilUsuario.getInstancia();
+
+
+        perfil.imagenPerfilProperty().addListener((obs, oldImg, newImg) -> {
+            if (newImg != null) {
+                imagenPerfil.setImage(newImg);
+            }
+        });
+
+
+        System.out.println("Imagen de perfil: " + perfil.getImagenPerfil());
+        // Mostrar imagen actual si ya existe
+        if (perfil.getImagenPerfil() != null) {
+            imagenPerfil.setImage(perfil.getImagenPerfil());
         }
+
+        File file = PerfilUsuario.getUsuarioActual().getImagenPerfil();
+        Image imagen = new Image(file.toURI().toString());
+        imagenPerfil.setImage(imagen);
+
 
         if (estudianteActual.getChats().isEmpty()) {
 
@@ -176,11 +200,6 @@ public class ChatController implements  ChatObserver {
             scrollPaneContenedorMensajes.layout();
             scrollPaneContenedorMensajes.setVvalue(1.0);
         });
-
-        PerfilUsuario perfil = PerfilUsuario.getInstancia();
-        if (perfil.getImagenPerfil() != null) {
-            imagenPerfil.setImage(perfil.getImagenPerfil());
-        }
 
 
     }
@@ -495,6 +514,15 @@ public class ChatController implements  ChatObserver {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/Configuracion.fxml"));
             Parent configView = loader.load();
 
+            ConfiguracionController controller = loader.getController();
+
+            if (usuario != null) {
+                controller.setUsuarioActual(usuario);
+                System.out.println("Usuario enviado a ConfiguracionController: " + usuario.getNombre());
+            } else {
+                System.out.println("usuario en InicioController es null");
+            }
+
             Scene scene = new Scene(configView);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);
@@ -513,6 +541,15 @@ public class ChatController implements  ChatObserver {
             System.out.println("URL config: " + configUrl);
             FXMLLoader loader = new FXMLLoader(configUrl);
             Parent configView = loader.load();
+            SolicitudesAyudaController controller = loader.getController();
+            // PASAR el usuario (que tienes en 'usuario' o usa PerfilUsuario.getUsuarioActual())
+            if (usuario != null) {
+                controller.setUsuarioActual(usuario);
+                System.out.println("Usuario enviado a SolicitudesAyudaController: " + usuario.getNombre());
+            } else {
+                System.out.println("usuario en InicioController es null");
+            }
+
 
             if (root != null) {
                 root.getChildren().clear();
@@ -534,6 +571,14 @@ public class ChatController implements  ChatObserver {
             System.out.println("URL Logo: " + configUrl);
             FXMLLoader loader = new FXMLLoader(configUrl);
             Parent configView = loader.load();
+            ContenidosController controller = loader.getController();
+            // PASAR el usuario (que tienes en 'usuario' o usa PerfilUsuario.getUsuarioActual())
+            if (usuario != null) {
+                controller.setUsuarioActual(usuario);
+                System.out.println("Usuario enviado a TusContenidosController: " + usuario.getNombre());
+            } else {
+                System.out.println("usuario en InicioController es null");
+            }
 
             if (root != null) {
                 root.getChildren().clear();

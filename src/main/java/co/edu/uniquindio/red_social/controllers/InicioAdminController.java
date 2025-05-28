@@ -147,6 +147,8 @@ public class InicioAdminController {
                 double radius = imagenPerfil.getFitWidth() / 2;
                 Circle clip = new Circle(radius, radius, radius);
                 imagenPerfil.setClip(clip);
+
+
             }
         });
 
@@ -165,7 +167,7 @@ public class InicioAdminController {
         this.usuario = usuario;
 
         // Guardar el usuario en el singleton
-        PerfilUsuario.getInstancia().setUsuarioActual(usuario);
+//        PerfilUsuario.getInstancia().setUsuarioActual(usuario);
 
         // Actualizar la UI con los datos del usuario
         cargarDatosUsuario();

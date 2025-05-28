@@ -7,6 +7,8 @@ import java.util.ResourceBundle;
 import co.edu.uniquindio.red_social.clases.RedSocial;
 import co.edu.uniquindio.red_social.clases.social.SolicitudAyuda;
 import co.edu.uniquindio.red_social.clases.social.Solucion;
+import co.edu.uniquindio.red_social.clases.usuarios.Administrador;
+import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
 import co.edu.uniquindio.red_social.util.SolicitudActual;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -67,6 +69,14 @@ public class ResolverSolicitudController {
     @FXML
     private Label volverLabel;
 
+    private Administrador usuario;
+
+    public void setUsuarioActual(Administrador usuario) {
+        this.usuario = usuario;
+    }
+
+
+
     @FXML
     void enviarSolucion() {
         if(solucionPropuestaField.textProperty().getValue().isEmpty()){
@@ -86,6 +96,14 @@ public class ResolverSolicitudController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(url));
             Parent configView = loader.load();
+            SolicitudesAyudaAdminController controller = loader.getController();
+            // PASAR el usuario (que tienes en 'usuario' o usa PerfilUsuario.getUsuarioActual())
+            if (usuario != null) {
+                controller.setUsuarioActual(usuario);
+                System.out.println("Usuario enviado a SolicitudesAyudaAdminController: " + usuario.getNombre());
+            } else {
+                System.out.println("usuario en InicioController es null");
+            }
 
             Scene scene = new Scene(configView);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

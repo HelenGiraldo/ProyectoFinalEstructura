@@ -165,8 +165,6 @@ public class InicioController {
         });
 
 
-
-
         System.out.println("Imagen de perfil: " + perfil.getImagenPerfil());
         // Mostrar imagen actual si ya existe
         if (perfil.getImagenPerfil() != null) {
@@ -176,13 +174,6 @@ public class InicioController {
         Image imagen = new Image(file.toURI().toString());
         imagenPerfil.setImage(imagen);
 
-        // Inicializar usuario desde PerfilUsuario si no está seteado
-        if (usuario == null) {
-            Usuario usuarioActual = PerfilUsuario.getUsuarioActual();
-            if (usuarioActual instanceof Estudiante) {
-                this.usuario = (Estudiante) usuarioActual;
-            }
-        }
 
         actualizarSaludo();
         actualizarUltimoContenidoGeneral();
@@ -335,6 +326,14 @@ public class InicioController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/mensajes.fxml"));
             Parent configView = loader.load();
+            ChatController controller = loader.getController();
+            // PASAR el usuario (que tienes en 'usuario' o usa PerfilUsuario.getUsuarioActual())
+            if (usuario != null) {
+                controller.setUsuarioActual(usuario);
+                System.out.println("Usuario enviado a MensajesController: " + usuario.getNombre());
+            } else {
+                System.out.println("usuario en InicioController es null");
+            }
 
             Scene scene = new Scene(configView);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -379,6 +378,15 @@ public class InicioController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/sugerencias.fxml"));
             Parent configView = loader.load();
+            SugerenciasController controller = loader.getController();
+            // PASAR el usuario (que tienes en 'usuario' o usa PerfilUsuario.getUsuarioActual())
+            if (usuario != null) {
+                controller.setUsuarioActual(usuario);
+                System.out.println("Usuario enviado a SugerenciasController: " + usuario.getNombre());
+            } else {
+                System.out.println("usuario en InicioController es null");
+            }
+
 
             Scene scene = new Scene(configView);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -396,6 +404,14 @@ public class InicioController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/Configuracion.fxml"));
             Parent configView = loader.load();
+            ConfiguracionController controller = loader.getController();
+            // PASAR el usuario (que tienes en 'usuario' o usa PerfilUsuario.getUsuarioActual())
+            if (usuario != null) {
+                controller.setUsuarioActual(usuario);
+                System.out.println("Usuario enviado a ConfiguracionController: " + usuario.getNombre());
+            } else {
+                System.out.println("usuario en InicioController es null");
+            }
 
             Scene scene = new Scene(configView);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -415,6 +431,14 @@ public class InicioController {
             System.out.println("URL config: " + configUrl);
             FXMLLoader loader = new FXMLLoader(configUrl);
             Parent configView = loader.load();
+            SolicitudesAyudaController controller = loader.getController();
+            // PASAR el usuario (que tienes en 'usuario' o usa PerfilUsuario.getUsuarioActual())
+            if (usuario != null) {
+                controller.setUsuarioActual(usuario);
+                System.out.println("Usuario enviado a SolicitudesAyudaController: " + usuario.getNombre());
+            } else {
+                System.out.println("usuario en InicioController es null");
+            }
 
             if (root != null) {
                 root.getChildren().clear();
@@ -437,6 +461,14 @@ public class InicioController {
             FXMLLoader loader = new FXMLLoader(configUrl);
             Parent configView = loader.load();
 
+            ContenidosController controller = loader.getController();
+            // PASAR el usuario (que tienes en 'usuario' o usa PerfilUsuario.getUsuarioActual())
+            if (usuario != null) {
+                controller.setUsuarioActual(usuario);
+                System.out.println("Usuario enviado a TusContenidosController: " + usuario.getNombre());
+            } else {
+                System.out.println("usuario en InicioController es null");
+            }
             if (root != null) {
                 root.getChildren().clear();
                 root.getChildren().add(configView);

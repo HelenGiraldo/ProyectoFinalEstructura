@@ -124,6 +124,13 @@ public class ContenidosController {
     @FXML
     private VBox vBoxTodosContenidos;
 
+    private Estudiante usuario;
+
+    public void setUsuarioActual(Estudiante usuario) {
+        this.usuario = usuario;
+    }
+
+
 
     private static final ArbolBinario<Contenido> arbolContenidos = new ArbolBinario<>();
     private static final ListaSimplementeEnlazada<Contenido> listaContenidos = new ListaSimplementeEnlazada<>();
@@ -425,6 +432,20 @@ public class ContenidosController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/sugerencias.fxml"));
             Parent configView = loader.load();
+            // Obtener el controlador
+            SugerenciasController controller = loader.getController();
+            // Obtener el usuario actual (de la instancia de PerfilUsuario)
+            Estudiante usuarioActual = (Estudiante) PerfilUsuario.getUsuarioActual();
+            // Verificar que el usuario existe
+            if (usuarioActual != null) {
+                // Pasar el usuario al controlador
+                controller.setUsuarioActual(usuarioActual);
+                System.out.println("Usuario enviado a SugerenciasController: " + usuarioActual.getNombre());
+            } else {
+                System.out.println("Error: No hay usuario autenticado");
+                mostrarAlerta("Error", "No hay usuario autenticado");
+                return;
+            }
 
             Scene scene = new Scene(configView);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -442,6 +463,20 @@ public class ContenidosController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/solicitudesAyuda.fxml"));
             Parent configView = loader.load();
+            // Obtener el controlador
+            SolicitudesAyudaController controller = loader.getController();
+            // Obtener el usuario actual (de la instancia de PerfilUsuario)
+            Estudiante usuarioActual = (Estudiante) PerfilUsuario.getUsuarioActual();
+            // Verificar que el usuario existe
+            if (usuarioActual != null) {
+                // Pasar el usuario al controlador
+                controller.setUsuarioActual(usuarioActual);
+                System.out.println("Usuario enviado a SolicitudesAyudaController: " + usuarioActual.getNombre());
+            } else {
+                System.out.println("Error: No hay usuario autenticado");
+                mostrarAlerta("Error", "No hay usuario autenticado");
+                return;
+            }
 
             Scene scene = new Scene(configView);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
