@@ -67,6 +67,9 @@ public class Grupo {
         return false;
     }
 
+    public int getCantidadMiembros() {
+        return miembros.size();
+    }
 
     public boolean agregarPublicacion(Contenido contenido) {
         if (contenido == null || contenido.getTema() == null) {

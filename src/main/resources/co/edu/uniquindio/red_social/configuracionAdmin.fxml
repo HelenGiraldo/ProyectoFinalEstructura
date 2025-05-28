@@ -151,7 +151,7 @@
                                              <children>
                                                 <Button fx:id="buttonGuardar" mnemonicParsing="false" onAction="#guardar" prefHeight="29.0" prefWidth="74.0" styleClass="boton-guardar" text="Guardar" />
                                              </children></HBox>
-                                          <Button fx:id="buttonCerrarSesion1" mnemonicParsing="false" onAction="#irALogo" styleClass="boton-cerrar-sesion" text="Cerrar Sesion" />
+                                          <Button fx:id="buttonCerrarSesion" mnemonicParsing="false" onAction="#irALogo" styleClass="boton-cerrar-sesion" text="Cerrar Sesion" />
                                        </children>
                                     </HBox>
                                  </children>

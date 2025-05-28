@@ -113,6 +113,13 @@ public class ConfiguracionController {
     @FXML
     private AnchorPane root;
 
+
+    private Estudiante usuario;
+
+    public void setUsuarioActual(Estudiante usuario) {
+        this.usuario = usuario;
+    }
+
     @FXML
     public void initialize() {
         configuracionPerfilButton.setSelected(true);

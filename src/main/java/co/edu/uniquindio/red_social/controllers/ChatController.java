@@ -134,12 +134,18 @@ public class ChatController implements  ChatObserver {
     @FXML
     private AnchorPane root;
 
+    private Estudiante usuario;
+
+    public void setUsuarioActual(Estudiante usuario) {
+        this.usuario = usuario;
+    }
+
     ToggleGroup grupoUsuarios = new ToggleGroup();
 
     Estudiante estudianteActual = (Estudiante) PerfilUsuario.getUsuarioActual();
     Chat chatActual;
 
-    private Estudiante usuario;
+
 
     @FXML
     public void initialize() {

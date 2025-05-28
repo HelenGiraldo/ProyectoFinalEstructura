@@ -2,6 +2,7 @@ package co.edu.uniquindio.red_social.controllers;
 
 import co.edu.uniquindio.red_social.clases.RedSocial;
 import co.edu.uniquindio.red_social.clases.social.SolicitudAyuda;
+import co.edu.uniquindio.red_social.clases.usuarios.Administrador;
 import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
 import co.edu.uniquindio.red_social.clases.usuarios.PerfilUsuario;
 import javafx.event.ActionEvent;
@@ -120,6 +121,12 @@ public class SolicitudesAyudaController {
     @FXML
     private Label titulo2;
 
+    private Estudiante usuario;
+
+    public void setUsuarioActual(Estudiante usuario) {
+        this.usuario = usuario;
+    }
+
 
 
     @FXML
@@ -147,6 +154,7 @@ public class SolicitudesAyudaController {
     @FXML
     void irAInicio(ActionEvent event) {
         navegar("/co/edu/uniquindio/red_social/Inicio.fxml", event);
+
     }
 
     RedSocial redSocial = RedSocial.getInstance();
@@ -155,6 +163,17 @@ public class SolicitudesAyudaController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(url));
             Parent configView = loader.load();
+            Object controller = loader.getController();
+
+            if (controller instanceof GruposDeEstudioController) {
+                ((GruposDeEstudioController) controller).setUsuarioActual(usuario);
+                System.out.println("Usuario enviado a GruposDeEstudioAdminController: " + usuario.getNombre());
+            } else if (controller instanceof InicioController) {
+                ((InicioController) controller).setUsuarioActual(usuario);
+                System.out.println("Usuario enviado a InicioController: " + usuario.getNombre());
+            } else if (controller instanceof ConfiguracionController) {
+                ((ConfiguracionController) controller).setUsuarioActual(usuario);
+            } // Agrega otros controladores según el destino
 
             Scene scene = new Scene(configView);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -165,6 +184,7 @@ public class SolicitudesAyudaController {
             e.printStackTrace();
         }
     }
+
 
     @FXML
     private void initialize() {

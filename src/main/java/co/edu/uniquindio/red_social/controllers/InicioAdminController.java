@@ -131,6 +131,11 @@ public class InicioAdminController {
 
     private Administrador usuario;
 
+    public void setAdministradorActual(Administrador administrador) {
+        this.usuario = administrador;
+        inicializarUsuario(administrador);
+    }
+
     @FXML
     public void initialize() {
         InicioButton.setSelected(true);
@@ -158,9 +163,11 @@ public class InicioAdminController {
             imagenPerfil.setImage(perfil.getImagenPerfil());
         }
         File file = PerfilUsuario.getUsuarioActual().getImagenPerfil();
-        Image imagen = new Image(file.toURI().toString());
-        imagenPerfil.setImage(imagen);
-        actualizarSaludo();
+        if (file != null && file.exists()) {
+            Image imagen = new Image(file.toURI().toString());
+            imagenPerfil.setImage(imagen);
+        }
+
     }
 
 
@@ -219,7 +226,7 @@ public class InicioAdminController {
 
             // PASAR el usuario (que tienes en 'usuario' o usa PerfilUsuario.getUsuarioActual())
             if (usuario != null) {
-                controller.setAdministradorActual(usuario);
+                controller.setUsuarioActual(usuario);
                 System.out.println("Usuario enviado a GruposDeEstudioController: " + usuario.getNombre());
             } else {
                 System.out.println("usuario en InicioController es null");

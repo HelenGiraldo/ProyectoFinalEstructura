@@ -4,6 +4,7 @@ import co.edu.uniquindio.red_social.clases.RedSocial;
 import co.edu.uniquindio.red_social.clases.contenidos.Contenido;
 import co.edu.uniquindio.red_social.clases.social.Grupo;
 import co.edu.uniquindio.red_social.clases.usuarios.Administrador;
+import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
 import co.edu.uniquindio.red_social.data_base.UtilSQL;
 import co.edu.uniquindio.red_social.estructuras.ArbolBinario;
 import co.edu.uniquindio.red_social.estructuras.ListaSimplementeEnlazada;
@@ -73,13 +74,17 @@ public class GruposDeEstudioAdminController {
     private GrupoService grupoService = GrupoService.getInstance();
     private ArbolBinario<Contenido> arbolContenido;
 
+    private Administrador usuario;
+
+
+
     @FXML
     private void initialize() {
         gruposEstudioButton.setSelected(true);
         cargarGrupos();
     }
 
-    public void setAdministradorActual(Administrador administrador) {
+    public void setUsuarioActual(Administrador administrador) {
         this.usuarioActual = administrador;
         cargarGrupos();
     }
@@ -236,37 +241,42 @@ public class GruposDeEstudioAdminController {
 
     @FXML
     private void irAInicio(ActionEvent event) {
-        navegarAVentana("/co/edu/uniquindio/red_social/InicioAdmin.fxml", event);
+        navegar("/co/edu/uniquindio/red_social/InicioAdmin.fxml", event);
     }
 
     @FXML
     private void irAConfig(ActionEvent event) {
-        navegarAVentana("/co/edu/uniquindio/red_social/configuracionAdmin.fxml", event);
+        navegar("/co/edu/uniquindio/red_social/configuracionAdmin.fxml", event);
     }
 
     @FXML
     private void irASolicitudesAyuda(ActionEvent event) {
-        navegarAVentana("/co/edu/uniquindio/red_social/solicitudesAyudaAdmin.fxml", event);
+        navegar("/co/edu/uniquindio/red_social/solicitudesAyudaAdmin.fxml", event);
     }
 
-    private void navegarAVentana(String fxmlPath, ActionEvent event) {
+    private void navegar(String url, ActionEvent event) {
         try {
-            URL configUrl = getClass().getResource(fxmlPath);
-            FXMLLoader loader = new FXMLLoader(configUrl);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(url));
             Parent configView = loader.load();
+            Object controller = loader.getController();
 
-            if (root != null) {
-                root.getChildren().clear();
-                root.getChildren().add(configView);
-            } else {
-                Scene scene = new Scene(configView);
-                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                stage.setScene(scene);
-                stage.show();
-            }
+            if (controller instanceof GruposDeEstudioAdminController) {
+                ((GruposDeEstudioAdminController) controller).setUsuarioActual(usuario);
+                System.out.println("Usuario enviado a GruposDeEstudioAdminController: " + usuario.getNombre());
+            } else if (controller instanceof InicioAdminController) {
+                ((InicioAdminController) controller).setAdministradorActual(usuario);
+                System.out.println("Usuario enviado a InicioController: " + usuario.getNombre());
+            } else if (controller instanceof ConfiguracionAdminController) {
+                ((ConfiguracionAdminController) controller).setAdministradorActual(usuario);
+            } // Agrega otros controladores según el destino
+
+            Scene scene = new Scene(configView);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+
         } catch (IOException e) {
             e.printStackTrace();
-            mostrarAlerta("Error", "No se pudo cargar la ventana: " + fxmlPath);
         }
     }
 }

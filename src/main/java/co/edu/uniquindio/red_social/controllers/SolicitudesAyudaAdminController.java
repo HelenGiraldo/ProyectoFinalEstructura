@@ -125,13 +125,16 @@ public class SolicitudesAyudaAdminController {
 
     private Administrador usuario;
 
+    public void setUsuarioActual(Administrador administrador) {
+        this.usuario = administrador;
+    }
+
+
+
     @FXML
     private void initialize() {
 
         SolicitudesDeAyudaButton.setSelected(true);
-
-
-        this.usuario = usuario;
 
         // Guardar el usuario en el singleton
         PerfilUsuario.getInstancia().setUsuarioActual(usuario);
@@ -160,7 +163,7 @@ public class SolicitudesAyudaAdminController {
             String titulo = solicitudAyuda.getTitulo();
             String contenido = solicitudAyuda.getMensaje();
             String id = solicitudAyuda.getId();
-            agregarSolicitud(nombreEstudiante, importancia, titulo, contenido,id);        }
+            agregarSolicitud(nombreEstudiante, importancia, titulo, contenido,id);   }
     }
 
     @FXML
@@ -343,7 +346,7 @@ public class SolicitudesAyudaAdminController {
             GruposDeEstudioAdminController controller = loader.getController();
 
             if (usuario != null) {
-                controller.setAdministradorActual(usuario);
+                controller.setUsuarioActual(usuario);
                 System.out.println("Usuario enviado a GruposDeEstudioController: " + usuario.getNombre());
             } else {
                 System.out.println("usuario en InicioController es null");
@@ -368,6 +371,16 @@ public class SolicitudesAyudaAdminController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/configuracionAdmin.fxml"));
             Parent configView = loader.load();
 
+            ConfiguracionAdminController controller = loader.getController();
+
+            if (usuario != null) {
+                controller.setAdministradorActual(usuario);
+                System.out.println("Usuario enviado a GruposDeEstudioController: " + usuario.getNombre());
+            } else {
+                System.out.println("usuario en InicioController es null");
+            }
+
+
             Scene scene = new Scene(configView);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);
@@ -386,6 +399,14 @@ public class SolicitudesAyudaAdminController {
             System.out.println("URL config: " + configUrl);
             FXMLLoader loader = new FXMLLoader(configUrl);
             Parent configView = loader.load();
+
+            InicioAdminController controller = loader.getController();
+            if (usuario != null) {
+                controller.setAdministradorActual(usuario);
+                System.out.println("Usuario enviado a InicioAdminController: " + usuario.getNombre());
+            } else {
+                System.out.println("usuario en InicioController es null");
+            }
 
             if (root != null) {
                 root.getChildren().clear();

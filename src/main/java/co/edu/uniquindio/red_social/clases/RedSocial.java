@@ -11,6 +11,7 @@ import co.edu.uniquindio.red_social.clases.usuarios.Administrador;
 import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
 import co.edu.uniquindio.red_social.data_base.UtilSQL;
 import co.edu.uniquindio.red_social.estructuras.ArbolBinario;
+import co.edu.uniquindio.red_social.estructuras.BNodo;
 import co.edu.uniquindio.red_social.estructuras.ColaDePrioridad;
 import co.edu.uniquindio.red_social.estructuras.ListaSimplementeEnlazada;
 import co.edu.uniquindio.red_social.util.Email;
@@ -18,6 +19,7 @@ import co.edu.uniquindio.red_social.util.EstudianteActual;
 import co.edu.uniquindio.red_social.util.grafo.CreacionGrafo;
 
 import java.io.File;
+import java.time.LocalDateTime;
 import java.util.Iterator;
 
 /**
@@ -65,11 +67,11 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo,
     /**
      * Crea un nuevo estudiante en la red social.
      *
-     * @param nombre      El nombre del estudiante.
-     * @param apellido    El apellido del estudiante.
-     * @param correo      El correo electrónico del estudiante.
-     * @param contrasena  La contraseña del estudiante.
-     * @param fotoPerfil  La foto de perfil del estudiante.
+     * @param nombre     El nombre del estudiante.
+     * @param apellido   El apellido del estudiante.
+     * @param correo     El correo electrónico del estudiante.
+     * @param contrasena La contraseña del estudiante.
+     * @param fotoPerfil La foto de perfil del estudiante.
      * @return El nuevo estudiante creado, o null si ya existe un estudiante con el mismo correo.
      */
     @Override
@@ -98,15 +100,15 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo,
     }
 
     /**
-        * Crea un nuevo estudiante en la red social.
-        *
-        * @param id          El ID del estudiante.
-        * @param nombre      El nombre del estudiante.
-        * @param apellido    El apellido del estudiante.
-        * @param correo      El correo electrónico del estudiante.
-        * @param contrasena  La contraseña del estudiante.
-        * @param fotoPerfil  La foto de perfil del estudiante.
-        * @return true si se creó correctamente, false en caso contrario.
+     * Crea un nuevo estudiante en la red social.
+     *
+     * @param id         El ID del estudiante.
+     * @param nombre     El nombre del estudiante.
+     * @param apellido   El apellido del estudiante.
+     * @param correo     El correo electrónico del estudiante.
+     * @param contrasena La contraseña del estudiante.
+     * @param fotoPerfil La foto de perfil del estudiante.
+     * @return true si se creó correctamente, false en caso contrario.
      */
     public boolean crearEstudiante(String id, String nombre, String apellido, String correo, String contrasena, File fotoPerfil) {
         Estudiante nuevoEstudiante = new Estudiante(id, nombre, apellido, correo, contrasena, fotoPerfil);
@@ -134,11 +136,11 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo,
     /**
      * Crea un nuevo administrador en la red social.
      *
-     * @param nombre      El nombre del administrador.
-     * @param apellido    El apellido del administrador.
-     * @param correo      El correo electrónico del administrador.
-     * @param contrasena  La contraseña del administrador.
-     * @param fotoPerfil  La foto de perfil del administrador.
+     * @param nombre     El nombre del administrador.
+     * @param apellido   El apellido del administrador.
+     * @param correo     El correo electrónico del administrador.
+     * @param contrasena La contraseña del administrador.
+     * @param fotoPerfil La foto de perfil del administrador.
      * @return El nuevo administrador creado, o null si ya existe un administrador con el mismo correo.
      */
     @Override
@@ -157,12 +159,12 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo,
     /**
      * Crea un nuevo administrador en la red social.
      *
-     * @param id          El ID del administrador.
-     * @param nombre      El nombre del administrador.
-     * @param apellido    El apellido del administrador.
-     * @param correo      El correo electrónico del administrador.
-     * @param contrasena  La contraseña del administrador.
-     * @param fotoPerfil  La foto de perfil del administrador.
+     * @param id         El ID del administrador.
+     * @param nombre     El nombre del administrador.
+     * @param apellido   El apellido del administrador.
+     * @param correo     El correo electrónico del administrador.
+     * @param contrasena La contraseña del administrador.
+     * @param fotoPerfil La foto de perfil del administrador.
      * @return true si se creó correctamente, false en caso contrario.
      */
     public boolean crearAdministrador(String id, String nombre, String apellido, String correo, String contrasena, File fotoPerfil) {
@@ -269,13 +271,12 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo,
     /**
      * Crea un grupo en la red social.
      *
-     * @param nombreGrupo   El nombre del grupo.
-     * @param descripcion   La descripción del grupo.
-     * @param tipoGrupo     El tipo de grupo (público o privado).
-     * @param publico       Indica si el grupo es público o privado.
+     * @param nombreGrupo El nombre del grupo.
+     * @param descripcion La descripción del grupo.
+     * @param tipoGrupo   El tipo de grupo (público o privado).
+     * @param publico     Indica si el grupo es público o privado.
      * @return true si se creó correctamente, false en caso contrario.
      */
-
 
 
     @Override
@@ -311,7 +312,7 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo,
     @Override
     public boolean eliminarGrupo(Grupo grupo) {
         grupo.eliminarGrupo();
-       UtilSQL.eliminarGrupo(grupo.getId());
+        UtilSQL.eliminarGrupo(grupo.getId());
         return grupos.remove(grupo);
     }
 
@@ -339,7 +340,7 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo,
     /**
      * Agrega un miembro a un grupo.
      *
-     * @param grupo  El grupo al que se agregará el miembro.
+     * @param grupo   El grupo al que se agregará el miembro.
      * @param miembro El miembro a agregar.
      * @return true si se agregó correctamente, false en caso contrario.
      */
@@ -352,7 +353,7 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo,
     /**
      * Elimina un miembro de un grupo.
      *
-     * @param grupo  El grupo del que se eliminará el miembro.
+     * @param grupo   El grupo del que se eliminará el miembro.
      * @param miembro El miembro a eliminar.
      * @return true si se eliminó correctamente, false en caso contrario.
      */
@@ -364,7 +365,7 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo,
     /**
      * Inicia sesión en la red social.
      *
-     * @param correo    El correo electrónico del estudiante.
+     * @param correo     El correo electrónico del estudiante.
      * @param contrasena La contraseña del estudiante.
      * @return true si el inicio de sesión fue exitoso, false en caso contrario.
      */
@@ -407,7 +408,7 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo,
             contenido.setId(idOriginal); // Revertir el cambio
         }
 
-        if(!contenidos.contains(contenido)) {
+        if (!contenidos.contains(contenido)) {
             contenido.setId(id);
             contenidos.add(contenido);
             contenido.getAutor().publicarContenido(contenido, contenido.getGrupo(), id);
@@ -435,15 +436,15 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo,
     /**
      * Agrega una solicitud de ayuda a la cola de prioridad.
      *
-     * @param mensaje   El mensaje de la solicitud de ayuda.
+     * @param mensaje    El mensaje de la solicitud de ayuda.
      * @param estudiante El estudiante que realiza la solicitud.
-     * @param titulo    El título de la solicitud de ayuda.
-     * @param prioridad La prioridad de la solicitud (alta, media, baja).
+     * @param titulo     El título de la solicitud de ayuda.
+     * @param prioridad  La prioridad de la solicitud (alta, media, baja).
      * @return La solicitud de ayuda agregada.
      */
 
     public SolicitudAyuda agregarSolicitudAyuda(String mensaje, Estudiante estudiante, String titulo, String prioridad) {
-       int prioridadInt = 0;
+        int prioridadInt = 0;
         if (prioridad.equalsIgnoreCase("normal")) {
             prioridadInt = 1;
         } else if (prioridad.equalsIgnoreCase("urgente")) {
@@ -452,9 +453,9 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo,
             prioridadInt = 3;
         }
         SolicitudAyuda solicitudAyuda = new SolicitudAyuda(mensaje, estudiante, titulo, prioridad);
-         solicitudesAyuda.add(solicitudAyuda, prioridadInt);
-         UtilSQL.crearSolicitudAyuda(solicitudAyuda);
-         return solicitudAyuda;
+        solicitudesAyuda.add(solicitudAyuda, prioridadInt);
+        UtilSQL.crearSolicitudAyuda(solicitudAyuda);
+        return solicitudAyuda;
     }
 
     /**
@@ -540,6 +541,96 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo,
         return grafo.recomedarEstudiantes(estudiante);
     }
 
+    /**
+     * Obtiene el último contenido publicado en toda la red social
+     * @return El contenido más recientemente agregado o null si no hay contenidos
+     */
+    public Contenido obtenerUltimoContenido() {
+        if (contenidos == null || contenidos.isEmpty()) {
+            return null;
+        }
+
+        // Usamos el método público del árbol
+        BNodo<Contenido> nodoMayor = contenidos.obtenerNodoMayor();
+        return nodoMayor != null ? nodoMayor.getValor() : null;
+    }
+
+    /**
+     * Obtiene el último contenido publicado por un usuario específico
+     * @param usuarioId ID del usuario
+     * @return El contenido más reciente del usuario o null si no tiene contenidos
+     */
+    public Contenido obtenerUltimoContenidoDeUsuario(String usuarioId) {
+        Estudiante estudiante = obtenerEstudiantePorId(usuarioId);
+        if (estudiante == null || estudiante.getContenidos() == null || estudiante.getContenidos().isEmpty()) {
+            return null;
+        }
+
+        // Usamos el método público del árbol
+        BNodo<Contenido> nodoMayor = estudiante.getContenidos().obtenerNodoMayor();
+        return nodoMayor != null ? nodoMayor.getValor() : null;
+    }
+
+    /**
+     * Cuenta cuántos contenidos ha publicado un usuario
+     * @param usuarioId ID del usuario
+     * @return Cantidad de contenidos publicados por el usuario
+     */
+    public int contarContenidosDeUsuario(String usuarioId) {
+        Estudiante estudiante = obtenerEstudiantePorId(usuarioId);
+        if (estudiante == null || estudiante.getContenidos() == null) {
+            return 0;
+        }
+        return estudiante.getContenidos().getPeso();
+    }
+    /**
+     * Obtiene grupos sugeridos para un usuario basado en sus intereses y grupos disponibles
+     * @param usuarioId ID del usuario
+     * @return Lista de grupos sugeridos (públicos donde el usuario no es miembro)
+     */
+    public ListaSimplementeEnlazada<Grupo> obtenerGruposSugeridos(String usuarioId) {
+        ListaSimplementeEnlazada<Grupo> sugeridos = new ListaSimplementeEnlazada<>();
+
+        if (grupos == null || grupos.isEmpty() || usuarioId == null) {
+            return sugeridos;
+        }
+
+        // Primero recolectar los grupos sugeridos sin modificar la lista original
+        for (Grupo grupo : grupos) {
+            if (grupo != null && grupo.isPublico() && !grupo.esMiembro(obtenerEstudiantePorId(usuarioId))) {
+                sugeridos.add(grupo);
+            }
+        }
+
+        // Ordenación manual (alternativa sin usar remove)
+        ListaSimplementeEnlazada<Grupo> ordenados = new ListaSimplementeEnlazada<>();
+        while (!sugeridos.isEmpty()) {
+            Grupo mayor = null;
+            int maxMiembros = -1;
+
+            // Encontrar el grupo con más miembros
+            for (Grupo grupo : sugeridos) {
+                if (grupo.getMiembros().size() > maxMiembros) {
+                    maxMiembros = grupo.getMiembros().size();
+                    mayor = grupo;
+                }
+            }
+
+            if (mayor != null) {
+                ordenados.add(mayor);
+                // Crear nueva lista sin el grupo mayor
+                ListaSimplementeEnlazada<Grupo> nuevaLista = new ListaSimplementeEnlazada<>();
+                for (Grupo grupo : sugeridos) {
+                    if (!grupo.equals(mayor)) {
+                        nuevaLista.add(grupo);
+                    }
+                }
+                sugeridos = nuevaLista;
+            }
+        }
+
+        return ordenados;
+    }
 
 
 

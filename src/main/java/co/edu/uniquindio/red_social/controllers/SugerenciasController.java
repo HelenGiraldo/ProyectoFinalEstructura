@@ -109,6 +109,10 @@ public class SugerenciasController {
 
     private Estudiante usuario;
 
+    public void setUsuarioActual(Estudiante usuario) {
+        this.usuario = usuario;
+    }
+
     @FXML
     private void initialize() {
         SugerenciasButton.setSelected(true);
@@ -179,6 +183,24 @@ public class SugerenciasController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(url));
             Parent configView = loader.load();
+            Object controller = loader.getController();
+
+            if (controller instanceof GruposDeEstudioController) {
+                ((GruposDeEstudioController) controller).setUsuarioActual(usuario);
+                System.out.println("Usuario enviado a GruposDeEstudioAdminController: " + usuario.getNombre());
+            } else if (controller instanceof InicioController) {
+                ((InicioController) controller).setUsuarioActual(usuario);
+                System.out.println("Usuario enviado a InicioController: " + usuario.getNombre());
+            } else if (controller instanceof ConfiguracionController) {
+                ((ConfiguracionController) controller).setUsuarioActual(usuario);
+            } // Agrega otros controladores según el destino
+            else if (controller instanceof ChatController) {
+                ((ChatController) controller).setUsuarioActual(usuario);
+            } else if (controller instanceof SolicitudesAyudaController) {
+                ((SolicitudesAyudaController) controller).setUsuarioActual(usuario);
+            } else if (controller instanceof SugerenciasController) {
+                ((SugerenciasController) controller).setUsuarioActual(usuario);
+            }
 
             Scene scene = new Scene(configView);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
