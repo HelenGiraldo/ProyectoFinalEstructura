@@ -91,7 +91,8 @@ public class NivelesDeParticipacionAdminController {
 
         } catch (IOException e) {
             e.printStackTrace();
-        }    }
+        }
+    }
 
     @FXML
     void irACaminoMasCorto(ActionEvent event) {
@@ -113,6 +114,7 @@ public class NivelesDeParticipacionAdminController {
 
     @FXML
     void irAMasValorados(ActionEvent event) {
+        navegar("/co/edu/uniquindio/red_social/ContenidosMasValorados.fxml", event);
 
     }
     private void navegar(String url, ActionEvent event) {

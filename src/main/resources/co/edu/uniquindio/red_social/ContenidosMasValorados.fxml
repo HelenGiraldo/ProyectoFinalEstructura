@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.red_social.controllers.ContenidosMasValoradosAdminController">
+   <children>
+      <BorderPane layoutX="3.0" layoutY="6.0" prefHeight="387.0" prefWidth="594.0">
+         <top>
+            <VBox prefHeight="65.0" prefWidth="594.0" BorderPane.alignment="CENTER">
+               <children>
+                  <HBox prefHeight="65.0" prefWidth="107.0">
+                     <children>
+                        <HBox prefHeight="74.0" prefWidth="286.0">
+                           <children>
+                              <VBox prefHeight="74.0" prefWidth="234.0">
+                                 <children>
+                                    <Label fx:id="contenidosLabel" prefHeight="46.0" prefWidth="258.0" styleClass="title-label" stylesheets="@styleTusContenidos.css" text="contenidos " />
+                                    <VBox prefHeight="200.0" prefWidth="100.0">
+                                       <children>
+                                          <HBox prefHeight="100.0" prefWidth="200.0">
+                                             <children>
+                                                <HBox prefHeight="28.0" prefWidth="86.0" />
+                                                <Label fx:id="masValoradosLabel" prefHeight="28.0" prefWidth="161.0" styleClass="header-label-saludo" stylesheets="@stylesChat.css" text="mas valorados" />
+                                             </children>
+                                          </HBox>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="74.0" prefWidth="139.0" />
+                        <HBox prefHeight="74.0" prefWidth="178.0">
+                           <children>
+                              <Label fx:id="TextFieldTitle" prefHeight="74.0" prefWidth="159.0" styleClass="title-label" stylesheets="@styles.css" text="ThinkTogether" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </top>
+         <center>
+            <ScrollPane fx:id="scrollPrincipal" fitToHeight="true" fitToWidth="true" stylesheets="@styles.css" BorderPane.alignment="CENTER">
+               <content>
+                  <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="289.0" prefWidth="399.0">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="320.0" prefWidth="287.0">
+                           <children>
+                              <VBox fx:id="chatListVBoxFondoDos" prefHeight="248.0" prefWidth="554.0" stylesheets="@stylesChat.css">
+                                 <children>
+                                    <VBox fx:id="chatSpace" prefHeight="247.0" prefWidth="500.0">
+                                       <children>
+                                          <VBox prefHeight="44.0" prefWidth="334.0">
+                                             <children>
+                                                <HBox prefHeight="100.0" prefWidth="200.0">
+                                                   <children>
+                                                      <HBox prefHeight="29.0" prefWidth="140.0">
+                                                         <children>
+                                                            <HBox prefHeight="29.0" prefWidth="12.0" />
+                                                            <Button fx:id="buttonMasConexiones" mnemonicParsing="false" onAction="#irAEstudiantesMasConexiones" prefHeight="29.0" prefWidth="117.0" styleClass="button-Estadisticas" stylesheets="@styleTusContenidos.css" text="mas conexiones" />
+                                                         </children>
+                                                      </HBox>
+                                                      <HBox prefHeight="29.0" prefWidth="113.0">
+                                                         <children>
+                                                            <HBox prefHeight="29.0" prefWidth="21.0" />
+                                                            <Button fx:id="buttonCaminoCorto" mnemonicParsing="false" onAction="#irACaminoMasCorto" prefHeight="29.0" prefWidth="120.0" styleClass="boton-guardar" stylesheets="@stylesConfig.css" text="camino corto " />
+                                                            <HBox prefHeight="29.0" prefWidth="21.0" />
+                                                         </children>
+                                                      </HBox>
+                                                      <HBox prefHeight="29.0" prefWidth="116.0">
+                                                         <children>
+                                                            <HBox prefHeight="29.0" prefWidth="21.0" />
+                                                            <Button fx:id="buttonComunidades" mnemonicParsing="false" onAction="#irADeteccionComunidades" prefHeight="29.0" prefWidth="107.0" styleClass="boton-cerrar-sesion" stylesheets="@stylesConfig.css" text="comunidades" />
+                                                            <HBox prefHeight="29.0" prefWidth="21.0" />
+                                                         </children>
+                                                      </HBox>
+                                                      <HBox prefHeight="29.0" prefWidth="147.0">
+                                                         <children>
+                                                            <Button fx:id="buttonParticipacion" mnemonicParsing="false" onAction="#irANivelesParticipacion" prefHeight="29.0" prefWidth="97.0" styleClass="button-Estadisticas" stylesheets="@styleTusContenidos.css" text="participacion" />
+                                                         </children>
+                                                      </HBox>
+                                                   </children>
+                                                </HBox>
+                                             </children>
+                                          </VBox>
+                                          <ScrollPane fx:id="scrollPaneContenedorContenidos">
+                                             <content>
+                                                <TableView fx:id="contenidosMasValoradosTable" prefHeight="167.0" prefWidth="478.0" stylesheets="@styleSugerencias.css">
+                                                   <columns>
+                                                      <TableColumn fx:id="tituloTableColumn" prefWidth="115.0" text="titulo" />
+                                                      <TableColumn fx:id="valoracionTableColumn" prefWidth="176.0" text="valoracion promedio" />
+                                                      <TableColumn fx:id="numeroValoracionesColumn" prefWidth="172.0" text="numero de valoraciones" />
+                                                   </columns>
+                                                </TableView>
+                                             </content>
+                                          </ScrollPane>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </VBox>
+                              <Label fx:id="handlevolver" layoutX="7.0" layoutY="242.0" onMouseClicked="#handleVolver" styleClass="handle-Volver" text="Volver" />
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </ScrollPane>
+               </content>
+            </ScrollPane>
+         </center>
+      </BorderPane>
+   </children>
+   <stylesheets>
+      <URL value="@styleInicioRegistro.css" />
+      <URL value="@styles.css" />
+   </stylesheets>
+</AnchorPane>

@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import javax.swing.*;
 import java.io.IOException;
 
 public class App extends Application {
@@ -20,6 +21,30 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
+
+        int respuesta = JOptionPane.showConfirmDialog(
+                null,
+                "¿Quieres iniciar los datos?",
+                "Inicio de datos",
+                JOptionPane.YES_NO_OPTION
+        );
+
+        // Capturar la respuesta
+        boolean iniciarDatos = (respuesta == JOptionPane.YES_OPTION);
+
+        // Mostrar resultado
+        if (iniciarDatos) {
+            iniciarDatos();
+            JOptionPane.showMessageDialog(null, "Has seleccionado Sí. Iniciando datos...");
+            // Aquí iría el código para iniciar los datos
+        } else {
+            JOptionPane.showMessageDialog(null, "Has seleccionado No. ");
+            // Aquí iría el código para la opción No
+        }
+        launch();
+    }
+
+    public static void iniciarDatos() {
         RedSocial red = RedSocial.getInstance("Think Together");
         UtilSQL.obtenerEstudiantes();
         UtilSQL.obtenerGrupos();
@@ -33,6 +58,5 @@ public class App extends Application {
         UtilSQL.obtenerTodasLasSolicitudes();
         UtilSQL.obtenerTodasLasPreferencias();
         red.getEstudiantes().show();
-        launch();
     }
 }

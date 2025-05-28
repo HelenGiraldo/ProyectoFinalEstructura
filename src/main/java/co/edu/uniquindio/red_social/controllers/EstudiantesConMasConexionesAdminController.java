@@ -113,6 +113,7 @@ public class EstudiantesConMasConexionesAdminController {
 
     @FXML
     void irAMasValorados(ActionEvent event) {
+        navegar("/co/edu/uniquindio/red_social/ContenidosMasValorados.fxml", event);
 
     }
 

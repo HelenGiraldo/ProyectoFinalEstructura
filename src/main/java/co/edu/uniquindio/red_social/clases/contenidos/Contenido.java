@@ -117,7 +117,11 @@ public class Contenido implements Comparable<Contenido> {
     }
 
 
-
+    /**
+     * Agrega una calificación al contenido, actualizando el promedio de calificaciones.
+     * @param calificacion La calificación a agregar.
+     * @return true si la calificación fue agregada exitosamente, false si ya existe una calificación del mismo usuario.
+     */
     public boolean calificar(Calificacion calificacion){
         for(Calificacion c : calificaciones){
             if(c.getUsuario().getId().equals(calificacion.getUsuario().getId())){
@@ -134,7 +138,11 @@ public class Contenido implements Comparable<Contenido> {
         return false;
     }
 
-
+    /**
+     * Agrega una calificación al contenido, actualizando el promedio de calificaciones.
+     * @param calificacion La calificación a agregar.
+     * @return true si la calificación fue agregada exitosamente, false si ya existe una calificación del mismo usuario.
+     */
     public boolean agregarCalificacion(Calificacion calificacion) {
         for(Calificacion c : calificaciones){
             if(c.getUsuario().getId().equals(calificacion.getUsuario().getId())){
@@ -149,6 +157,11 @@ public class Contenido implements Comparable<Contenido> {
         return false;
     }
 
+    /**
+     * Elimina una calificación del contenido, actualizando el promedio de calificaciones.
+     * @param calificacion La calificación a eliminar.
+     * @return true si la calificación fue eliminada exitosamente, false si no existe.
+     */
     public boolean eliminarCalificacion(Calificacion calificacion) {
         if (calificaciones.contains(calificacion)) {
             calificaciones.remove(calificacion);
@@ -158,6 +171,10 @@ public class Contenido implements Comparable<Contenido> {
         return false;
     }
 
+    /**
+     * Verifica si el contenido tiene calificaciones.
+     * @return true si tiene calificaciones, false en caso contrario.
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

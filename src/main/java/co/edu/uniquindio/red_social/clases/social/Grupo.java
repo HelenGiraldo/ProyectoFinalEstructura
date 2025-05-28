@@ -30,6 +30,9 @@ public class Grupo {
         this.id = id;
     }
 
+    /* * Método para crear un grupo con un ID generado automáticamente.
+     * Este método es útil cuando se necesita un ID único para el grupo.
+     */
     public boolean agregarMiembro( Estudiante miembro) {
         if (!miembros.contains(miembro)) {
             miembro.anadirGrupo(this);
@@ -40,12 +43,9 @@ public class Grupo {
     public boolean eliminarMiembro(Estudiante miembro) {
         if (miembro == null) return false;
 
-        // Buscar por ID en lugar de por referencia de objeto
         for (Estudiante m : miembros) {
             if (m.getId().equals(miembro.getId())) {
-                // Primero eliminar de la base de datos
                 if (UtilSQL.eliminarUsuarioDeGrupo(miembro.getId(), this.getId())) {
-                    // Luego eliminar de las estructuras en memoria
                     miembro.eliminarGrupo(this);
                     miembro.eliminarPublicacionGrupo(this);
                     return miembros.remove(m);
@@ -74,7 +74,6 @@ public class Grupo {
             return false;
         }
 
-        // El árbol binario automáticamente ordenará por tema (gracias al compareTo)
         this.contenidos.insertar(contenido);
 
         // Debug

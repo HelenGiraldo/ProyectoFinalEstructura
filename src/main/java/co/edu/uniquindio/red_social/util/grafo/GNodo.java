@@ -2,7 +2,7 @@ package co.edu.uniquindio.red_social.util.grafo;
 
 import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
 
-class GNodo {
+public class GNodo {
     int x, y;
     String nombre;
     Estudiante estudiante;

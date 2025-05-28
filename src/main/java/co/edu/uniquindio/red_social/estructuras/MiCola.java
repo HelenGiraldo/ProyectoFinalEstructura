@@ -51,6 +51,9 @@ public class MiCola<T>{
         return frente.getValue();
     }
 
+    public boolean estaVacia() {
+        return isEmpty();
+    }
     public boolean isEmpty() {
         return frente == null;
     }

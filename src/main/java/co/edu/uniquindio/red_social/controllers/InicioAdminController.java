@@ -271,5 +271,23 @@ public class InicioAdminController {
     }
 
 
+    public void irAEstadisticas(ActionEvent event) {
+        try {
 
+            URL configUrl = getClass().getResource("/co/edu/uniquindio/red_social/CaminoMasCorto.fxml");
+            System.out.println("URL config: " + configUrl);
+            FXMLLoader loader = new FXMLLoader(configUrl);
+            Parent configView = loader.load();
+
+            if (root != null) {
+                root.getChildren().clear();
+                root.getChildren().add(configView);
+            } else {
+                System.err.println("El contenedor principal es null.");
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
