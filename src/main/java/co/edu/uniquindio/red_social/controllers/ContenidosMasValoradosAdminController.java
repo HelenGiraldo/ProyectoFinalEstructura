@@ -119,7 +119,6 @@ public class ContenidosMasValoradosAdminController {
 
     @FXML
     void initialize() {
-        // Configurar las columnas de la tabla
         tituloTableColumn.setCellValueFactory(new PropertyValueFactory<>("titulo"));
         valoracionTableColumn.setCellValueFactory(new PropertyValueFactory<>("contenido"));
         numeroValoracionesColumn.setCellValueFactory(cellData -> {
@@ -127,14 +126,12 @@ public class ContenidosMasValoradosAdminController {
             return javafx.beans.binding.Bindings.createStringBinding(() -> String.valueOf(size));
         });
 
-        // Cargar los contenidos en la tabla
         cargarContenidos();
     }
 
     private void cargarContenidos() {
         ListaSimplementeEnlazada<Contenido> contenidos = new ListaSimplementeEnlazada<>();
 
-        // Obtener todos los contenidos de todos los estudiantes
         for(Estudiante estudiante : redSocial.getEstudiantes()) {
             for(Contenido contenido : estudiante.getContenidos().recorrerInorden()) {
                 contenidos.add(contenido);
@@ -142,12 +139,10 @@ public class ContenidosMasValoradosAdminController {
         }
 
 
-        // Agregar a la lista observable
         for(Contenido contenido : contenidos) {
             contenidosObservable.add(contenido);
         }
 
-        // Establecer los datos en la tabla
         contenidosMasValoradosTable.setItems(contenidosObservable);
     }
 

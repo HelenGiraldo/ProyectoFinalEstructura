@@ -77,7 +77,6 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo,
      */
     @Override
     public Estudiante crearEstudiante(String nombre, String apellido, String correo, String contrasena, File fotoPerfil) {
-        // Validaciones básicas
         if (nombre == null || nombre.isEmpty() ||
                 apellido == null || apellido.isEmpty() ||
                 correo == null || correo.isEmpty() ||
@@ -87,7 +86,6 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo,
         }
 
         try {
-            // Verifica que el archivo de imagen exista
             if (fotoPerfil == null || !fotoPerfil.exists()) {
                 System.err.println("Error: Imagen de perfil no válida");
                 return null;
@@ -387,7 +385,6 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo,
      * @return true si se agregó correctamente, false en caso contrario.
      */
     public void agregarPublicacion(Contenido contenido) {
-        // Verificar si ya existe una publicación con ese ID
         if (obtenerPublicacionPorId(contenido.getId()) != null) {
             throw new IllegalStateException("Ya existe una publicación con ID: " + contenido.getId());
         }
@@ -396,18 +393,15 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo,
 
 
     public boolean agregarPublicacion(Contenido contenido, String id) {
-        if (contenido == null) return false; // Cambiado para retornar boolean
+        if (contenido == null) return false;
 
-        // Verificar que no se modifique el ID
         String idOriginal = contenido.getId();
 
-        // Insertar en el árbol principal
         this.contenidos.insertar(contenido);
 
-        // Si el ID cambió, revertirlo
         if (!idOriginal.equals(contenido.getId())) {
             System.err.println("ADVERTENCIA: Se intentó modificar el ID de " + idOriginal + " a " + contenido.getId());
-            contenido.setId(idOriginal); // Revertir el cambio
+            contenido.setId(idOriginal);
         }
 
         if(!contenidos.contains(contenido)) {
@@ -498,7 +492,6 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo,
     public Grupo obtenerGrupoPorId(String id) {
         for (Grupo g : this.grupos) {
             if (g.getId().equals(id)) {
-                // Devuelve la instancia EXACTA que está en la lista principal
                 return g;
             }
         }
@@ -677,20 +670,17 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo,
             return sugeridos;
         }
 
-        // Primero recolectar los grupos sugeridos sin modificar la lista original
         for (Grupo grupo : grupos) {
             if (grupo != null && grupo.isPublico() && !grupo.esMiembro(obtenerEstudiantePorId(usuarioId))) {
                 sugeridos.add(grupo);
             }
         }
 
-        // Ordenación manual (alternativa sin usar remove)
         ListaSimplementeEnlazada<Grupo> ordenados = new ListaSimplementeEnlazada<>();
         while (!sugeridos.isEmpty()) {
             Grupo mayor = null;
             int maxMiembros = -1;
 
-            // Encontrar el grupo con más miembros
             for (Grupo grupo : sugeridos) {
                 if (grupo.getMiembros().size() > maxMiembros) {
                     maxMiembros = grupo.getMiembros().size();
@@ -700,7 +690,6 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo,
 
             if (mayor != null) {
                 ordenados.add(mayor);
-                // Crear nueva lista sin el grupo mayor
                 ListaSimplementeEnlazada<Grupo> nuevaLista = new ListaSimplementeEnlazada<>();
                 for (Grupo grupo : sugeridos) {
                     if (!grupo.equals(mayor)) {

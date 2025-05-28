@@ -144,7 +144,6 @@ public class ConfiguracionController {
                 }
             }
 
-            // Listener para cambios en la imagen
             perfil.imagenPerfilProperty().addListener((obs, oldImg, newImg) -> {
                 if (newImg != null) {
                     profileImage.setImage(newImg);
@@ -152,7 +151,6 @@ public class ConfiguracionController {
                 }
             });
 
-            // Si ya está en memoria
             if (perfil.getImagenPerfil() != null) {
                 profileImage.setImage(perfil.getImagenPerfil());
                 System.out.println("Imagen cargada desde memoria.");
@@ -190,35 +188,29 @@ public class ConfiguracionController {
         estudiante.setApellido(nuevoApellido);
         estudiante.setEmail(nuevoEmail);
 
-        // Procesar la imagen del ImageView
         Image imagenActual = profileImage.getImage();
         if (imagenActual != null) {
             try {
                 URI uri = new URI(imagenActual.getUrl());
                 File archivoOriginal = new File(uri);
 
-                // Ruta de destino en resources
                 String extension = archivoOriginal.getName().substring(archivoOriginal.getName().lastIndexOf("."));
                 String nombreArchivoNuevo = "imagen_perfil" + estudiante.getId() + extension;
 
                 File destino = new File("src/main/resources/co/edu/uniquindio/red_social/usuarios/imagenes_perfil", nombreArchivoNuevo);
 
-                // Crear carpeta si no existe
                 if (!destino.getParentFile().exists()) {
                     destino.getParentFile().mkdirs();
                 }
 
-                // Copiar archivo
                 java.nio.file.Files.copy(
                         archivoOriginal.toPath(),
                         destino.toPath(),
                         java.nio.file.StandardCopyOption.REPLACE_EXISTING
                 );
 
-                // Guardar la ruta relativa (puedes ajustarla si usas base de datos)
                 estudiante.setImagenPerfil(destino);
 
-                // También actualizar la interfaz con la nueva ruta
                 Image imagenNueva = new Image(destino.toURI().toString());
                 profileImage.setImage(imagenNueva);
 
@@ -283,7 +275,7 @@ public class ConfiguracionController {
                 );
 
                 Image nuevaImagen = new Image(archivoDestino.toURI().toString());
-                profileImage.setImage(nuevaImagen); // Solo actualiza la vista
+                profileImage.setImage(nuevaImagen);
 
                 System.out.println("Imagen cargada: " + archivoDestino.getAbsolutePath());
 
@@ -361,20 +353,17 @@ public class ConfiguracionController {
     @FXML
     private void irAInicio(ActionEvent event) {
         try {
-            // Obtener la URL de la vista a cargar
             URL configUrl = getClass().getResource("/co/edu/uniquindio/red_social/Inicio.fxml");
             if (configUrl == null) {
                 throw new IOException("Vista no encontrada");
             }
 
-            // Cargar la vista
             FXMLLoader loader = new FXMLLoader(configUrl);
             Parent configView = loader.load();
 
-            // Asegúrate de que root no es null
             if (root != null) {
-                root.getChildren().clear();  // Limpiar la vista actual
-                root.getChildren().add(configView);  // Agregar la nueva vista
+                root.getChildren().clear();
+                root.getChildren().add(configView);
             } else {
                 System.err.println("El contenedor principal es null.");
             }

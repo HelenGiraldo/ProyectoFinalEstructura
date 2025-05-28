@@ -314,7 +314,6 @@ public class SolicitudesAyudaController {
     public void cargarSolicitudesEjemplo() {
         limpiarSolicitudes();
 
-        // Agregar solicitudes de ejemplo
         agregarSolicitud("Juan Pérez", "normal", "Problema con matemáticas",
                 "Necesito ayuda con ecuaciones diferenciales para el examen final.");
         agregarSolicitud("Juan Pérez", "muy urgente", "Problema con matemáticas",

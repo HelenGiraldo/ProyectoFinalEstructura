@@ -122,19 +122,15 @@ public class RecibirSolicitudesController {
             solicitudesObservableList.add(solicitud);
         }
 
-        // Configurar las columnas de la tabla
         columnNombre.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getEstudianteSolicitante().getNombre()));
         columnApellido.setCellValueFactory(cellData -> new javafx.beans.property.SimpleStringProperty(cellData.getValue().getEstudianteSolicitante().getApellido()));
 
-        // Cargar los datos en la tabla
         tableSolicitudes.setItems(solicitudesObservableList);
 
-        // Listener para la selección de filas en la tabla
         tableSolicitudes.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             solicitudSeleccionada = newSelection;
             if (solicitudSeleccionada != null) {
                 System.out.println("Solicitud seleccionada de: " + solicitudSeleccionada.getEstudianteSolicitante().getNombre() + " " + solicitudSeleccionada.getEstudianteSolicitante().getApellido());
-                // Aquí puedes realizar acciones adicionales cuando se selecciona una solicitud
             }
         });
     }

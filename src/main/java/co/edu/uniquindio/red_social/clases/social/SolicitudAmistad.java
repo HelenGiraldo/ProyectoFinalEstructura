@@ -16,6 +16,10 @@ public class SolicitudAmistad {
         this.estudianteSolicitado = estudianteSolicitado;
     }
 
+    /**
+     * Acepta la solicitud de amistad, añadiendo ambos estudiantes como contactos
+     * y creando un chat entre ellos.
+     */
     public void aceptarSolicitud() {
         this.estado = true;
         estudianteSolicitante.anadirContacto(estudianteSolicitado);

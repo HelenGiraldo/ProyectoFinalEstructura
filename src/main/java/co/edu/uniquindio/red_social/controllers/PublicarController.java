@@ -124,30 +124,24 @@ public class PublicarController {
             }
         });
 
-        // Mostrar imagen actual si ya existe
         if (perfil.getImagenPerfil() != null) {
             imagenPerfil.setImage(perfil.getImagenPerfil());
         }
     }
 
     public void setGruposUsuario(List<Grupo> gruposUsuario) {
-        // Verificar que el ChoiceBox esté inicializado
         if (choiceBoxGrupo == null) {
             System.out.println("El ChoiceBox no está inicializado");
             return;
         }
 
-        // Limpiar y cargar los grupos
         choiceBoxGrupo.getItems().clear();
 
         if (gruposUsuario != null && !gruposUsuario.isEmpty()) {
-            // Agregar opción para publicación pública
-            choiceBoxGrupo.getItems().add(null); // null representa "Público"
+            choiceBoxGrupo.getItems().add(null);
 
-            // Agregar todos los grupos del usuario
             choiceBoxGrupo.getItems().addAll(gruposUsuario);
 
-            // Configurar cómo se muestran los grupos
             choiceBoxGrupo.setConverter(new StringConverter<Grupo>() {
                 @Override
                 public String toString(Grupo grupo) {
@@ -156,14 +150,13 @@ public class PublicarController {
 
                 @Override
                 public Grupo fromString(String string) {
-                    return null; // No necesario para este caso
+                    return null;
                 }
             });
 
         } else {
             System.out.println("El usuario no tiene grupos");
             choiceBoxGrupo.setDisable(true);
-            // No agregamos texto, solo lo deshabilitamos
         }
     }
 
@@ -220,7 +213,7 @@ public class PublicarController {
     private void handleAdjuntarArchivo() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Seleccionar archivo adjunto");
-        File archivo = fileChooser.showOpenDialog(stage);  // Mejor pasar el stage, no null
+        File archivo = fileChooser.showOpenDialog(stage);
 
         System.out.println("Archivo seleccionado: " + (archivo != null ? archivo.getAbsolutePath() : "ninguno"));
 
@@ -228,7 +221,6 @@ public class PublicarController {
             archivoAdjuntoSeleccionado = archivo;
             System.out.println("Archivo asignado a variable: " + archivoAdjuntoSeleccionado.getName());
 
-            // Actualizar texto label
             enlaceLabel.setText("Archivo adjunto: " + archivo.getName());
         } else {
             System.out.println("No se seleccionó archivo");

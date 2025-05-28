@@ -270,9 +270,7 @@ public class SolicitudesAyudaAdminController {
         hboxSolicitud.setPrefSize(173, 100);
         HBox.setMargin(hboxSolicitud, new Insets(0, 20, 20, 0));
 
-        // Añade un evento de clic a cada solicitud
         hboxSolicitud.setOnMouseClicked(event -> {
-            // Buscar la solicitud correspondiente en la lista
             System.out.println("Seleccionada " + titulo );
             for(SolicitudAyuda solicitud : redSocial.getSolicitudesAyuda()) {
                 System.out.println(id);
@@ -282,11 +280,9 @@ public class SolicitudesAyudaAdminController {
                 }
             }
 
-            // Cambiar el estilo para mostrar la selección
             resetearEstilosSeleccion();
             hboxSolicitud.getStyleClass().add("solicitud-seleccionada");
 
-            // Mostrar detalles en la sección derecha si existe
             if(hBoxDerecha != null) {
                 nombreEstudianteLabel.setText(nombreEstudiante);
                 importanciaLabel.setText(importancia);

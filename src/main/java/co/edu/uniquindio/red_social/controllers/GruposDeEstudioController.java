@@ -201,7 +201,6 @@ public class GruposDeEstudioController {
         });
 
         System.out.println("Imagen de perfil: " + perfil.getImagenPerfil());
-        // Mostrar imagen actual si ya existe
         if (perfil.getImagenPerfil() != null) {
             imagenPerfil.setImage(perfil.getImagenPerfil());
         }
@@ -222,49 +221,39 @@ public class GruposDeEstudioController {
             return;
         }
 
-        // Limpiar la interfaz
         gruposVBox.getChildren().clear();
         limpiarContenido();
         deshabilitarBotonesAccion();
         grupoActualLabel.setText("");
 
-        // Debug: Mostrar estado antes de cargar
         System.out.println("\n=== DEBUG PRE-CARGA ===");
         System.out.println("Grupos en memoria antes de cargar: " + RedSocial.getInstance().getGrupos().size());
 
-        // Recargar datos desde la base de datos
         try {
-            // 1. Limpiar datos existentes
             RedSocial.getInstance().getGrupos().clear();
 
-            // 2. Cargar grupos básicos
             UtilSQL.obtenerGrupos();
 
-            // Debug: Ver grupos recién cargados
             System.out.println("Grupos cargados desde BD: " + RedSocial.getInstance().getGrupos().size());
             for (Grupo g : RedSocial.getInstance().getGrupos()) {
                 System.out.println(" - " + g.getNombre() + " (ID: " + g.getId() + ")");
             }
 
-            // 3. Cargar miembros para cada grupo
             UtilSQL.cargarMiembrosDeGrupos();
 
-            // 4. Cargar contenidos para cada grupo
             for (Grupo grupo : RedSocial.getInstance().getGrupos()) {
                 ListaSimplementeEnlazada<Contenido> contenidos = UtilSQL.cargarContenidosDelGrupo(grupo.getId());
-                ArbolBinario<Contenido> arbolContenidos = grupo.getContenidos(); // Obtener el árbol existente
-                arbolContenidos.clear(); // Limpiar el árbol si es necesario
+                ArbolBinario<Contenido> arbolContenidos = grupo.getContenidos();
+                arbolContenidos.clear();
 
-// Insertar todos los contenidos en el árbol
                 for (Contenido contenido : contenidos) {
                     arbolContenidos.insertar(contenido);
                 }
 
-                // Debug por grupo
                 System.out.println("\nGrupo: " + grupo.getNombre());
                 System.out.println("Miembros: " + grupo.getMiembros().size());
                 System.out.println("Contenidos cargados: " + contenidos.size());
-                grupo.getContenidos().mostrarArbolCompleto(); // Mostrar estructura del árbol
+                grupo.getContenidos().mostrarArbolCompleto();
             }
 
         } catch (Exception e) {
@@ -273,7 +262,6 @@ public class GruposDeEstudioController {
             return;
         }
 
-        // Filtrar grupos según el modo (mis grupos o disponibles)
         ListaSimplementeEnlazada<Grupo> todosGrupos = RedSocial.getInstance().getGrupos();
         ListaSimplementeEnlazada<Grupo> gruposFiltrados = new ListaSimplementeEnlazada<>();
 
@@ -291,7 +279,6 @@ public class GruposDeEstudioController {
             }
         }
 
-        // Mostrar grupos en la interfaz
         if (gruposFiltrados.isEmpty()) {
             Label mensaje = new Label(mostrarMisGrupos ?
                     "No perteneces a ningún grupo" :
@@ -307,7 +294,6 @@ public class GruposDeEstudioController {
                 botonGrupo.setUserData(grupo);
                 botonGrupo.getStyleClass().add("sidebar-button-grupo");
 
-                // Resaltar si es el grupo actualmente seleccionado
                 if (grupoGrupos.getSelectedToggle() != null &&
                         grupo.equals(((ToggleButton) grupoGrupos.getSelectedToggle()).getUserData())) {
                     botonGrupo.setSelected(true);
@@ -315,7 +301,6 @@ public class GruposDeEstudioController {
 
                 botonGrupo.setOnAction(e -> {
                     if (botonGrupo.isSelected()) {
-                        // Debug al seleccionar grupo
                         System.out.println("\nGrupo seleccionado: " + grupo.getNombre());
                         System.out.println("HashCode: " + grupo.hashCode());
                         System.out.println("Contenidos en este grupo:");
@@ -333,13 +318,12 @@ public class GruposDeEstudioController {
             }
         }
 
-        // Actualizar estado de los botones de navegación
         buttonMisGrupos.setDisable(mostrarMisGrupos);
         buttonGruposDisponibles.setDisable(!mostrarMisGrupos);
     }
 
     private void limpiarContenido() {
-        scrollPaneContenedorContenidos.setContent(new VBox()); // Limpia el contenido mostrado
+        scrollPaneContenedorContenidos.setContent(new VBox());
     }
 
 
@@ -380,18 +364,15 @@ public class GruposDeEstudioController {
             return;
         }
 
-        // Verificar si el usuario es el autor del contenido
         if (contenidoSeleccionado.getAutor().equals(usuarioActual)) {
             mostrarAlerta("Información", "No puedes calificar tu propio contenido");
             return;
         }
 
-        // Crear diálogo de calificación
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setTitle("Calificar Contenido");
         dialog.setHeaderText("Califica: " + contenidoSeleccionado.getTitulo());
 
-        // Crear slider para la calificación
         Slider slider = new Slider(1, 5, 3);
         slider.setShowTickLabels(true);
         slider.setShowTickMarks(true);
@@ -414,10 +395,8 @@ public class GruposDeEstudioController {
         content.setPadding(new Insets(20));
         dialog.getDialogPane().setContent(content);
 
-        // Agregar botones
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 
-        // Mostrar diálogo y procesar resultado
         Optional<ButtonType> result = dialog.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             int valoracion = (int) slider.getValue();
@@ -427,7 +406,6 @@ public class GruposDeEstudioController {
 
     private void procesarCalificacion(int valoracion) {
         try {
-            // Crear nueva calificación
             Calificacion calificacion = new Calificacion(valoracion, usuarioActual, contenidoSeleccionado);
 
 
@@ -437,7 +415,6 @@ public class GruposDeEstudioController {
             }
 
 
-            // Validar si usuario ya calificó
             for (Calificacion c : contenidoSeleccionado.getCalificaciones()) {
                 if (c.getUsuario().equals(usuarioActual)) {
                     mostrarAlerta("Información", "Ya has calificado este contenido.");
@@ -445,7 +422,6 @@ public class GruposDeEstudioController {
                 }
             }
 
-            // Guardar en BD
             int idCalificacion = UtilSQL.agregarCalificacion(calificacion);
             System.out.println("ID calificación insertada: " + idCalificacion);
 
@@ -455,7 +431,6 @@ public class GruposDeEstudioController {
                 contenidoSeleccionado.setCalificacionPromedio(calcularPromedio(contenidoSeleccionado));
                 mostrarAlerta("Éxito", "Calificación registrada: " + valoracion + " estrellas");
 
-                // Actualizar la vista
                 Grupo grupoActual = (Grupo) ((ToggleButton) grupoGrupos.getSelectedToggle()).getUserData();
                 mostrarContenidoGrupo(grupoActual);
             } else {
@@ -485,7 +460,6 @@ public class GruposDeEstudioController {
 
         double promedio = suma / cantidad;
 
-        // Redondear a 1 decimal
         return Math.round(promedio * 10.0) / 10.0;
     }
 
@@ -513,7 +487,6 @@ public class GruposDeEstudioController {
         if (seleccionado != null) {
             Grupo grupo = (Grupo) seleccionado.getUserData();
 
-            // Verificar membresía tanto en BD como en memoria
             if (UtilSQL.usuarioEstaEnGrupo(usuarioActual.getId(), grupo.getId()) ||
                     grupo.esMiembro(usuarioActual)) {
                 mostrarAlerta("Información", "Ya eres miembro de este grupo");
@@ -522,15 +495,12 @@ public class GruposDeEstudioController {
 
             if (grupo.isPublico()) {
                 if (UtilSQL.agregarUsuarioAGrupo(usuarioActual.getId(), grupo.getId())) {
-                    // Actualizar en memoria
                     grupo.agregarMiembro(usuarioActual);
 
-                    // Forzar recarga desde BD
                     RedSocial.getInstance().getGrupos().clear();
                     UtilSQL.obtenerGrupos();
                     UtilSQL.cargarMiembrosDeGrupos();
 
-                    // Cambiar a "Mis grupos" y recargar
                     mostrandoMisGrupos = true;
                     cargarGrupos(usuarioActual, true);
 
@@ -563,18 +533,14 @@ public class GruposDeEstudioController {
         if (seleccionado != null) {
             Grupo grupo = (Grupo) seleccionado.getUserData();
 
-            // Verificar si el usuario es miembro
             if (grupo.esMiembro(usuarioActual)) {
                 if (UtilSQL.eliminarUsuarioDeGrupo(usuarioActual.getId(), grupo.getId())) {
-                    // Actualizar en memoria
                     grupo.eliminarMiembro(usuarioActual);
 
-                    // Forzar recarga desde BD
                     RedSocial.getInstance().getGrupos().clear();
                     UtilSQL.obtenerGrupos();
                     UtilSQL.cargarMiembrosDeGrupos();
 
-                    // Cambiar a vista de "Disponibles" y recargar
                     mostrandoMisGrupos = false;
                     cargarGrupos(usuarioActual, false);
 
@@ -616,25 +582,20 @@ public class GruposDeEstudioController {
         contenidoSeleccionado = null;
         calificarButtton.setDisable(true);
 
-        // Debug clave
         System.out.println("\n=== DEBUG DIRECTO ===");
         System.out.println("Grupo: " + grupoSeleccionado.getNombre());
         System.out.println("Contenidos en memoria:");
-        grupoSeleccionado.getContenidos().mostrarArbolCompleto(); // Asegúrate de que este método funcione
+        grupoSeleccionado.getContenidos().mostrarArbolCompleto();
 
-        // Crear contenedor UI
         VBox contenidosVBox = new VBox(10);
         contenidosVBox.setPadding(new Insets(10));
 
-        // Obtener contenidos como lista
         ListaSimplementeEnlazada<Contenido> contenidos = grupoSeleccionado.getContenidos().recorrerInorden();
 
-        // Mostrar en UI (sin agrupar por tema para simplificar)
         if (contenidos.isEmpty()) {
             contenidosVBox.getChildren().add(new Label("No hay contenidos en este grupo"));
         } else {
 
-            // Recorrer lista enlazada manualmente
             for (int i = 0; i < contenidos.size(); i++) {
                 Contenido contenido = contenidos.get(i);
                 ListaSimplementeEnlazada<Calificacion> calificaciones = UtilSQL.obtenerCalificacionesPorContenido(contenido.getId());
@@ -658,14 +619,12 @@ public class GruposDeEstudioController {
 
                     contenidosVBox.getChildren().add(tarjeta);
                 } catch (IOException e) {
-                    // Fallback básico
                     Label fallback = new Label(contenido.getTitulo() + " (" + contenido.getTema() + ")");
                     contenidosVBox.getChildren().add(fallback);
                 }
             }
         }
 
-        // Actualizar UI
         grupoActualLabel.setText(grupoSeleccionado.getNombre());
         scrollPaneContenedorContenidos.setContent(contenidosVBox);
         scrollPaneContenedorContenidos.setFitToWidth(true);

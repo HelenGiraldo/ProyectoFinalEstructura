@@ -272,14 +272,14 @@ public class SugerenciasController {
 
     private String procesarRutaImagen(String rutaOriginal) {
         if (rutaOriginal == null || rutaOriginal.isEmpty()) {
-            return "/imagenes/default.png"; // Ruta por defecto
+            return "/imagenes/default.png";
         }
 
         return rutaOriginal
                 .replace("src\\main\\resources", "")
                 .replace("src/main/resources", "")
                 .replace("\\", "/")
-                .replaceAll("^/+", "/"); // Asegurar que comience con un solo /
+                .replaceAll("^/+", "/");
     }
 
     private Image cargarImagen(String ruta) {
@@ -293,13 +293,10 @@ public class SugerenciasController {
 
     public void agregarUsuarioATarjetas(String nombre, ImageView imagenPerfil, String intereses, String id) {
         try {
-            // Crear la tarjeta
             HBox tarjetaUsuario = crearTarjetaUsuario(nombre, imagenPerfil, intereses, id);
 
-            // Obtener o crear el contenedor
             FlowPane contenedor = obtenerContenedor();
 
-            // Añadir la tarjeta al contenedor
             contenedor.getChildren().add(tarjetaUsuario);
 
         } catch (Exception e) {
@@ -317,17 +314,14 @@ public class SugerenciasController {
         tarjetaUsuario.setOnMouseEntered(e -> tarjetaUsuario.setStyle("-fx-background-color: #e8e8e8;"));
         tarjetaUsuario.setOnMouseExited(e -> tarjetaUsuario.setStyle("-fx-background-color: #f5f5f5;"));
 
-        // Configurar el evento de clic
         tarjetaUsuario.setOnMouseClicked(event -> {
             usuarioSeleccionado = red.obtenerEstudiantePorId(id);
             System.out.println("Usuario seleccionado: " + usuarioSeleccionado);
             tarjetaUsuario.setStyle("-fx-background-color: #d0d0d0;");
         });
 
-        // Configurar imagen
         configurarImagenPerfil(imagenPerfil);
 
-        // Crear contenido
         VBox contenido = new VBox(5, imagenPerfil, crearLabelNombre(nombre), crearLabelIntereses(intereses));
         contenido.setAlignment(Pos.CENTER);
         tarjetaUsuario.getChildren().add(contenido);

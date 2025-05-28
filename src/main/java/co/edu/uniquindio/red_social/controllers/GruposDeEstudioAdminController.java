@@ -34,7 +34,6 @@ import java.util.List;
 
 public class GruposDeEstudioAdminController {
 
-    // Elementos de la interfaz
     @FXML private HBox HboxGrupo1;
     @FXML private HBox HboxGrupo2;
     @FXML private HBox HboxTusContendiosContenido;
@@ -73,7 +72,6 @@ public class GruposDeEstudioAdminController {
     @FXML private AnchorPane root;
     @FXML private ScrollPane scrollPaneContenedorContenidos;
 
-    // Variables de control
     private ToggleGroup grupoGrupos = new ToggleGroup();
     private GrupoService grupoService = GrupoService.getInstance();
     private ArbolBinario<Contenido> arbolContenido;
@@ -122,12 +120,10 @@ public class GruposDeEstudioAdminController {
         grupoActualLabel.setText("");
 
         try {
-            // Recargar datos desde la base de datos
             RedSocial.getInstance().getGrupos().clear();
             UtilSQL.obtenerGrupos();
             UtilSQL.cargarMiembrosDeGrupos();
 
-            // Cargar contenidos para cada grupo
             for (Grupo grupo : RedSocial.getInstance().getGrupos()) {
                 ListaSimplementeEnlazada<Contenido> contenidos = UtilSQL.cargarContenidosDelGrupo(grupo.getId());
                 ArbolBinario<Contenido> arbolContenidos = grupo.getContenidos();
@@ -138,7 +134,6 @@ public class GruposDeEstudioAdminController {
                 }
             }
 
-            // Mostrar todos los grupos (el admin puede ver todos)
             for (Grupo grupo : RedSocial.getInstance().getGrupos()) {
                 ToggleButton botonGrupo = new ToggleButton(grupo.getNombre());
                 botonGrupo.setPrefWidth(150);
@@ -214,7 +209,6 @@ public class GruposDeEstudioAdminController {
                     controller.setContenido(contenido, arbolContenido.getPeso());
                     contenidosVBox.getChildren().add(tarjeta);
                 } catch (IOException e) {
-                    // Fallback básico con opción de eliminar (para admin)
                     HBox contenidoBox = new HBox(10);
                     Label contenidoLabel = new Label(contenido.getTitulo() + " - " + contenido.getAutor().getNombre());
 
@@ -222,7 +216,7 @@ public class GruposDeEstudioAdminController {
                     eliminarBtn.setOnAction(ex -> {
                         if (UtilSQL.eliminarPublicacion(contenido.getId())) {
                             grupo.eliminarPublicacion(contenido);
-                            mostrarContenidoGrupo(grupo); // Refrescar vista
+                            mostrarContenidoGrupo(grupo);
                             mostrarAlerta("Éxito", "Contenido eliminado correctamente");
                         }
                     });

@@ -153,7 +153,6 @@ public class ContenidosController {
             }
         });
 
-        // Mostrar imagen actual si ya existe
         if (perfil.getImagenPerfil() != null) {
             imagenPerfil.setImage(perfil.getImagenPerfil());
         }
@@ -165,57 +164,46 @@ public class ContenidosController {
 
 
     public void agregarContenido(Contenido contenido) {
-        // Guardar en la base de datos
         int idGenerado = UtilSQL.agregarPublicacion(contenido);
         if (idGenerado != -1) {
             contenido.setId(String.valueOf(idGenerado));
 
-            // Agregar a las estructuras locales
             arbolContenidos.insertar(contenido);
             listaContenidos.add(contenido);
 
-            // Mostrar en la vista
             mostrarContenidoEnVista(contenido);
             actualizarTotalPublicados();
 
-            // También agregar a RedSocial para mantener consistencia
             RedSocial.getInstance().agregarPublicacion(contenido,
                     contenido.getGrupo() != null ? contenido.getGrupo().getId() : null);
         }
     }
 
     private void refrescarVistaSinDuplicados() {
-        // 1. Limpiar solo la vista (NO los datos)
         vBoxTodosContenidos.getChildren().clear();
 
-        // 2. Obtener usuario actual
         Estudiante usuarioActual = (Estudiante) PerfilUsuario.getUsuarioActual();
         if (usuarioActual == null) return;
 
-        // 3. Obtener contenidos del usuario actual desde RedSocial
         ListaSimplementeEnlazada<Contenido> contenidosUsuario = new ListaSimplementeEnlazada<>();
         ListaSimplementeEnlazada<Contenido> todosContenidos = RedSocial.getInstance()
                 .getContenidos().recorrerInorden();
 
-        // Filtrar contenidos por usuario actual
         for (Contenido c : todosContenidos) {
             if (c.getAutor().equals(usuarioActual)) {
                 contenidosUsuario.add(c);
             }
         }
 
-        // 4. Sincronizar con el árbol local (solo contenidos del usuario)
         arbolContenidos.clear();
         for (Contenido c : contenidosUsuario) {
             arbolContenidos.insertar(c);
         }
 
-        // 5. Mostrar en vista
         for (Contenido contenido : contenidosUsuario) {
             mostrarContenidoEnVista(contenido);
         }
 
-        // 6. Actualizar contador
         actualizarTotalPublicados();
     }
 
@@ -244,7 +232,6 @@ public class ContenidosController {
             TarjetaContenidoController controller = loader.getController();
             int total = arbolContenidos.getPeso();
 
-            // Aquí tienes que llamar a setContenido para que la tarjeta se actualice con el contenido
             controller.setContenido(contenido, total);
 
             vBoxTodosContenidos.getChildren().add(tarjeta);
@@ -348,16 +335,13 @@ public class ContenidosController {
             PublicarController controller = loader.getController();
             Estudiante usuarioActual = (Estudiante) PerfilUsuario.getUsuarioActual();
 
-            // Convertir ListaSimplementeEnlazada a List para el ChoiceBox
             List<Grupo> gruposList = new ArrayList<>();
             for (int i = 0; i < usuarioActual.getGrupos().size(); i++) {
                 gruposList.add(usuarioActual.getGrupos().get(i));
             }
 
-            // Pasar los grupos al controlador
             controller.setGruposUsuario(gruposList);
 
-            // Configurar el stage y controlador
             controller.setStage(popupStage);
             controller.setContenidosController(this);
 
@@ -378,15 +362,11 @@ public class ContenidosController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/gruposEstudio.fxml"));
             Parent configView = loader.load();
 
-            // Obtener el controlador
             GruposDeEstudioController controller = loader.getController();
 
-            // Obtener el usuario actual (de la instancia de PerfilUsuario)
             Estudiante usuarioActual = (Estudiante) PerfilUsuario.getUsuarioActual();
 
-            // Verificar que el usuario existe
             if (usuarioActual != null) {
-                // Pasar el usuario al controlador
                 controller.setUsuarioActual(usuarioActual);
                 System.out.println("Usuario enviado a GruposDeEstudioController: " + usuarioActual.getNombre());
             } else {
@@ -395,7 +375,6 @@ public class ContenidosController {
                 return;
             }
 
-            // Configurar y mostrar la ventana
             Scene scene = new Scene(configView);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);
@@ -407,7 +386,6 @@ public class ContenidosController {
         }
     }
 
-    // Método auxiliar para mostrar alertas
     private void mostrarAlerta(String titulo, String mensaje) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(titulo);

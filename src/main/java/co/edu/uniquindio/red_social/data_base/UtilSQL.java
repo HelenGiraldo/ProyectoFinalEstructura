@@ -41,7 +41,6 @@ public class UtilSQL {
                 int valoracion = rs.getInt("valoracion");
                 String autorId = rs.getString("autor");  // Aquí uso autor en vez de usuario_id
 
-                // Obtener usuario desde RedSocial (lista cargada)
                 Estudiante usuario = RedSocial.getInstance().obtenerEstudiantePorId(autorId);
 
                 if (usuario != null) {

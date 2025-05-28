@@ -26,7 +26,7 @@ import java.io.IOException;
 
 public class RegistroController {
 
-    private File archivoImagenSeleccionada;  // NUEVO atributo
+    private File archivoImagenSeleccionada;
 
     @FXML
     private Label LabelNombre;
@@ -94,7 +94,6 @@ public class RegistroController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/Login.fxml"));
             Parent newRoot = loader.load();
 
-            // Obtener la ventana actual (stage)
             Stage stage = (Stage) handleVolver.getScene().getWindow();
             Scene newScene = new Scene(newRoot);
             stage.setScene(newScene);
@@ -135,7 +134,6 @@ public class RegistroController {
         }
 
 
-        // Registrar usuario
         RedSocial redSocial = RedSocial.getInstance();
 
         if (esAdmin) {
@@ -154,11 +152,9 @@ public class RegistroController {
 
 
 
-        // Registrar estudiante
 
         Estudiante estudiante= redSocial.crearEstudiante(nombre, apellido, email, password, new File("src/main/resources/co/edu/uniquindio/red_social/imagenes/imagePerfil.png"));
 
-        // Verifica que el estudiante no sea null
         if (estudiante == null) {
             labelRegistroValidacion.setText("Error al crear el estudiante.");
             return;
@@ -168,10 +164,9 @@ public class RegistroController {
         int idGenerado = UtilSQL.insertarEstudiante(estudiante);
         if (idGenerado == -1) {
             labelRegistroValidacion.setText("Error al registrar el usuario en la base de datos.");
-            return;  // Terminar aquí si no pudo insertar
+            return;
         }
 
-        // Asignar el id generado al objeto estudiante
         estudiante.setId(String.valueOf(idGenerado));
 
         if (archivoImagenSeleccionada != null) {
@@ -179,24 +174,20 @@ public class RegistroController {
 
                 File archivoOriginal = archivoImagenSeleccionada;
 
-                // Ruta de destino en resources
                 String extension = archivoOriginal.getName().substring(archivoOriginal.getName().lastIndexOf("."));
                 String nombreArchivoNuevo = "imagen_perfil" + estudiante.getId() + extension;
 
                 File destino = new File("src/main/resources/co/edu/uniquindio/red_social/usuarios/imagenes_perfil/", nombreArchivoNuevo);
                 System.out.println("Ruta de destino: " + destino.getPath());
 
-                // Copiar archivo
                 java.nio.file.Files.copy(
                         archivoOriginal.toPath(),
                         destino.toPath(),
                         java.nio.file.StandardCopyOption.REPLACE_EXISTING
                 );
 
-                // Guardar la ruta relativa (puedes ajustarla si usas base de datos)
                 estudiante.setImagenPerfil(destino);
 
-                // También actualizar la interfaz con la nueva ruta
                 Image imagenNueva = new Image(destino.toURI().toString());
                 imagenPerfil.setImage(imagenNueva);
             } catch (Exception e) {
@@ -205,7 +196,6 @@ public class RegistroController {
             }
         }
 
-        // Mostrar mensaje de éxito
         labelRegistro.setText("¡Registro exitoso!");
 
         UtilSQL.actualizarEstudiante(estudiante);

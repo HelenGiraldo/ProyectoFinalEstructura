@@ -141,21 +141,18 @@ public class EstudiantesConMasConexionesAdminController {
 
     @FXML
     private void initialize() {
-        // Configurar las columnas
         estudianteTableColumn.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getNombre()));
 
         conexionesTableColumn.setCellValueFactory(cellData ->
                 new SimpleStringProperty(String.valueOf(cellData.getValue().getContactos().size())));
 
-        // Cargar estudiantes sin ordenar
         cargarEstudiantes();
     }
 
     private void cargarEstudiantes() {
         ListaSimplementeEnlazada<Estudiante> estudiantes = RedSocial.getInstance().getEstudiantes();
 
-        // Limpiar y cargar la tabla
         estudiantesConMasConexionesTable.getItems().clear();
         for (Estudiante est : estudiantes) {
             estudiantesConMasConexionesTable.getItems().add(est);

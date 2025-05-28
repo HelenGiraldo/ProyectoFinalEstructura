@@ -101,7 +101,6 @@ public class TarjetaContenidoController {
                 Desktop.getDesktop().open(archivo);
             } catch (IOException e) {
                 e.printStackTrace();
-                // Puedes mostrar un diálogo de error aquí si quieres
             }
         } else {
             System.out.println("Archivo no existe o es nulo");
@@ -140,13 +139,13 @@ public class TarjetaContenidoController {
             });
         } else {
             archivoAdjuntoLabel.setText("Sin archivo adjunto");
-            archivoAdjuntoLabel.setOnMouseClicked(null); // Quitar listener si no hay archivo
+            archivoAdjuntoLabel.setOnMouseClicked(null);
         }
 
         if (contenido.getGrupo() != null) {
             grupoLabel.setText(contenido.getGrupo().getNombre());
         } else {
-            grupoLabel.setText(""); // Cadena vacía para que no muestre nada
+            grupoLabel.setText("");
         }
     }
 
