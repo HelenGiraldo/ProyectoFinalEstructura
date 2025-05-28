@@ -46,9 +46,7 @@ public class LoginController {
         String correo = textFieldEmail.getText().trim();
         String contrasena = passwordField.getText().trim();
 
-        // Buscar estudiante
         Estudiante estudiante = redSocial.estudianteExisteCorreo(correo);
-        // Buscar administrador
         Administrador admin = redSocial.administradorExisteCorreo(correo);
 
 
@@ -64,7 +62,6 @@ public class LoginController {
         }
 
         if (admin != null) {
-            // Solo accede si la contraseña también es "admin123"
             if (contrasena.equals("admin123")) {
                 PerfilUsuario.setUsuarioActual(admin);
                 irAVistaAdministrador();
@@ -128,7 +125,6 @@ public class LoginController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/Logo.fxml"));
             Parent newRoot = loader.load();
 
-            // Obtener la ventana actual (stage)
             Stage stage = (Stage) textFieldEmail.getScene().getWindow();
             Scene newScene = new Scene(newRoot);
             stage.setScene(newScene);
@@ -149,7 +145,6 @@ public class LoginController {
             InicioController inicioController = loader.getController();
             inicioController.inicializarUsuario(usuarioLogueado);
 
-            // Obtener la ventana actual (stage)
             Stage stage = (Stage) textFieldEmail.getScene().getWindow();
             Scene newScene = new Scene(newRoot);
             stage.setScene(newScene);

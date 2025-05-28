@@ -72,7 +72,7 @@ public class CrearGrupoController {
     private void crearGrupo() {
         String nombre = nombreField.getText();
         String descripcion = descripcionField.getText();
-        String tipo = tipoGrupoField.getText(); // Asegúrate de usar el campo correcto
+        String tipo = tipoGrupoField.getText();
 
         if (!nombre.isEmpty() && !descripcion.isEmpty() && !tipo.isEmpty()) {
             Grupo nuevoGrupo = new Grupo(nombre, descripcion, tipo, true);
@@ -80,7 +80,6 @@ public class CrearGrupoController {
             GrupoTabla.NOMBRE_GRUPO = null;
             creadoConExitoLabel.setText("¡Grupo creado con éxito!");
 
-            // Espera 3 segundos y cierra la ventana
             PauseTransition pause = new PauseTransition(Duration.seconds(3));
             pause.setOnFinished(e -> {
                 Stage stage = (Stage) root.getScene().getWindow();

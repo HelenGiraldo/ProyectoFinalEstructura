@@ -30,12 +30,9 @@ public class RecuperarController {
             mensajeLabel.setText("Por favor ingrese su correo.");
         } else {
             try {
-                // Aquí llamas tu método para enviar el correo
                 Email.sendEmail(correoDestino, "Recuperación de contraseña", "Este es tu enlace para recuperar la contraseña: [aquí iría el enlace o instrucciones]");
                 mensajeLabel.setText("Correo enviado con éxito a " + correoDestino);
 
-                // Cierra la ventana después de mostrar el mensaje
-                // Espera 1 segundo para que el usuario vea el mensaje
                 new Thread(() -> {
                     try {
                         Thread.sleep(3000);

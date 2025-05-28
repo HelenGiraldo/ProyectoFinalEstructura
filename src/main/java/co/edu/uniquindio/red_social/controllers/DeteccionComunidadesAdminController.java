@@ -97,7 +97,7 @@ public class DeteccionComunidadesAdminController {
 
     }
 
-    @FXML//crear XD
+    @FXML
     void irAGrafo(ActionEvent event) {
         if (grupoSeleccionado == null || grupoSeleccionado.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -117,11 +117,9 @@ public class DeteccionComunidadesAdminController {
             stage.setTitle("Gráfico del Grupo: " + grupoSeleccionado);
             stage.setScene(new Scene(root));
 
-            // Configurar como ventana modal (opcional)
             stage.initModality(Modality.WINDOW_MODAL);
             stage.initOwner(((Node)event.getSource()).getScene().getWindow());
 
-            // Mostrar la ventana
             stage.show();
 
         } catch (IOException e) {
@@ -160,7 +158,6 @@ public class DeteccionComunidadesAdminController {
     String grupoSeleccionado;
     @FXML
     void initialize() {
-        // Obtener los grupos automáticos y sus tipos
         ListaSimplementeEnlazada<String> grupos = redSocial.obtenerGruposAutomaticos();
         ListaSimplementeEnlazada<String> tipos = new ListaSimplementeEnlazada<>();
 
@@ -169,19 +166,16 @@ public class DeteccionComunidadesAdminController {
             tipos.add("Automático, posibles miembros: " + cantidad);
         }
 
-        // Configurar las columnas
         estudianteTableColumn.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getNombreGrupo()));
         tipoGrupoTableColumn.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getTipoGrupo()));
 
-        // Llenar la tabla con los datos
         ListaSimplementeEnlazada<GrupoTabla> datosTabla = new ListaSimplementeEnlazada<>();
         for (int i = 0; i < grupos.size(); i++) {
             datosTabla.add(new GrupoTabla(grupos.get(i), tipos.get(i)));
         }
 
-        // Convertir la lista personalizada a un ObservableList para la TableView
         ObservableList<GrupoTabla> datosObservables = FXCollections.observableArrayList();
         for (GrupoTabla dato : datosTabla) {
             datosObservables.add(dato);
@@ -189,7 +183,6 @@ public class DeteccionComunidadesAdminController {
 
         estudiantesConMasConexionesTable.setItems(datosObservables);
 
-        // Manejar la selección de filas
         estudiantesConMasConexionesTable.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> {
                     if (newValue != null) {

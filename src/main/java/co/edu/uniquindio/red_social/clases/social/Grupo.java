@@ -40,6 +40,11 @@ public class Grupo {
         }
         return false;
     }
+    /* * Método para agregar un miembro al grupo.
+     * Este método verifica si el miembro ya está en el grupo antes de agregarlo.
+     *         * @param miembro El estudiante que se desea agregar al grupo.
+     * @return true si el miembro fue agregado exitosamente, false si ya era miembro.
+     */
     public boolean eliminarMiembro(Estudiante miembro) {
         if (miembro == null) return false;
 
@@ -56,6 +61,12 @@ public class Grupo {
         return false;
     }
 
+    /**
+     * Método para verificar si un estudiante es miembro del grupo.
+     * @param estudiante El estudiante a verificar.
+     * @return true si el estudiante es miembro del grupo, false en caso contrario.
+     */
+
     public boolean esMiembro(Estudiante estudiante) {
         if (estudiante == null) return false;
 
@@ -67,9 +78,11 @@ public class Grupo {
         return false;
     }
 
-    public int getCantidadMiembros() {
-        return miembros.size();
-    }
+    /**
+     * Método para agregar una publicación al grupo.
+     * @param contenido El contenido a agregar.
+     * @return true si la publicación fue agregada exitosamente, false si el contenido o tema es nulo.
+     */
 
     public boolean agregarPublicacion(Contenido contenido) {
         if (contenido == null || contenido.getTema() == null) {
@@ -88,6 +101,11 @@ public class Grupo {
     }
 
 
+    /**
+     * Método para eliminar una publicación del grupo.
+     * @param contenido El contenido a eliminar.
+     * @return true si la publicación fue eliminada exitosamente, false si no existe en el grupo.
+     */
     public boolean eliminarPublicacion(Contenido contenido) {
         if (contenidos.contains(contenido)) {
             RedSocial.getInstance().eliminarPublicacion(contenido);
@@ -96,6 +114,10 @@ public class Grupo {
         return false;
     }
 
+    /**
+     * Método para eliminar el grupo y sus contenidos.
+     * Este método elimina todos los miembros del grupo y sus publicaciones asociadas.
+     */
     public void eliminarGrupo(){
         for(Estudiante miembro : miembros){
             miembro.eliminarGrupo(this);
@@ -111,6 +133,11 @@ public class Grupo {
         contenidos.clear();
     }
 
+    /**
+     * Método para verificar si un estudiante puede unirse al grupo.
+     * @param estudiante El estudiante que desea unirse.
+     * @return true si el grupo es público y el estudiante no es miembro, false en caso contrario.
+     */
     public boolean puedeUnirse(Estudiante estudiante) {
         return publico && !miembros.contains(estudiante);
     }

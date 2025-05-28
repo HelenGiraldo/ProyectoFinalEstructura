@@ -102,7 +102,7 @@ public class RespuestasController {
         ListaSimplementeEnlazada<Solucion> soluciones = estudiante.getSoluciones();
 
         respuestaColumn.setCellValueFactory(cellData ->
-                new SimpleStringProperty("Solicitud resuelta")); // Título fijo
+                new SimpleStringProperty("Solicitud resuelta"));
         contenidoColumn.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getTexto()));
 
@@ -142,7 +142,6 @@ public class RespuestasController {
     @FXML
     void onEliminar(ActionEvent event) {
         if (solucionSeleccionada != null) {
-            // Lógica para eliminar la solución seleccionada
             System.out.println("Eliminando solución: " + solucionSeleccionada);
         } else {
             System.out.println("No hay solución seleccionada");

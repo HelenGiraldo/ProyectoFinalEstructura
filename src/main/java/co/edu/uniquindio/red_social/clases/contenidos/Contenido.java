@@ -28,6 +28,7 @@ public class Contenido implements Comparable<Contenido> {
         this.autor = autor;
         this.contenido = archivoAdjunto;
         this.grupo = grupo;
+        calificaciones = new ListaSimplementeEnlazada<>();
     }
 
     public Estudiante getAutor() {
@@ -130,7 +131,12 @@ public class Contenido implements Comparable<Contenido> {
         }
         if (!calificaciones.contains(calificacion)) {
             calificaciones.add(calificacion);
-            calificacionPromedio = (calificacionPromedio * (calificaciones.size()-1) + calificacion.getValoracion()) / calificaciones.size();
+            if(calificaciones.isEmpty()) {
+                calificacionPromedio = 0;
+            } else {
+                calificacionPromedio = (calificacionPromedio * (calificaciones.size()-1) + calificacion.getValoracion()) / calificaciones.size();
+
+            }
             int id = UtilSQL.agregarCalificacion(calificacion);
             calificacion.setId(String.valueOf(id));
             return true;

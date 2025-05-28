@@ -250,7 +250,7 @@ public class Estudiante extends Usuario implements AdministracionContenido {
                 return chat;
             }
         }
-        return null; // Si no existe un chat con ese estudiante
+        return null;
     }
 
 

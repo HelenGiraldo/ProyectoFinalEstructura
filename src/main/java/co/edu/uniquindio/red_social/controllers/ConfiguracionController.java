@@ -1,6 +1,5 @@
 package co.edu.uniquindio.red_social.controllers;
 
-import co.edu.uniquindio.red_social.clases.usuarios.Administrador;
 import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
 import co.edu.uniquindio.red_social.clases.usuarios.PerfilUsuario;
 import javafx.event.ActionEvent;
@@ -114,13 +113,6 @@ public class ConfiguracionController {
     @FXML
     private AnchorPane root;
 
-
-    private Estudiante usuario;
-
-    public void setUsuarioActual(Estudiante usuario) {
-        this.usuario = usuario;
-    }
-
     @FXML
     public void initialize() {
         configuracionPerfilButton.setSelected(true);
@@ -152,7 +144,6 @@ public class ConfiguracionController {
                 }
             }
 
-            // Listener para cambios en la imagen
             perfil.imagenPerfilProperty().addListener((obs, oldImg, newImg) -> {
                 if (newImg != null) {
                     profileImage.setImage(newImg);
@@ -160,7 +151,6 @@ public class ConfiguracionController {
                 }
             });
 
-            // Si ya está en memoria
             if (perfil.getImagenPerfil() != null) {
                 profileImage.setImage(perfil.getImagenPerfil());
                 System.out.println("Imagen cargada desde memoria.");
@@ -198,35 +188,29 @@ public class ConfiguracionController {
         estudiante.setApellido(nuevoApellido);
         estudiante.setEmail(nuevoEmail);
 
-        // Procesar la imagen del ImageView
         Image imagenActual = profileImage.getImage();
         if (imagenActual != null) {
             try {
                 URI uri = new URI(imagenActual.getUrl());
                 File archivoOriginal = new File(uri);
 
-                // Ruta de destino en resources
                 String extension = archivoOriginal.getName().substring(archivoOriginal.getName().lastIndexOf("."));
                 String nombreArchivoNuevo = "imagen_perfil" + estudiante.getId() + extension;
 
                 File destino = new File("src/main/resources/co/edu/uniquindio/red_social/usuarios/imagenes_perfil", nombreArchivoNuevo);
 
-                // Crear carpeta si no existe
                 if (!destino.getParentFile().exists()) {
                     destino.getParentFile().mkdirs();
                 }
 
-                // Copiar archivo
                 java.nio.file.Files.copy(
                         archivoOriginal.toPath(),
                         destino.toPath(),
                         java.nio.file.StandardCopyOption.REPLACE_EXISTING
                 );
 
-                // Guardar la ruta relativa (puedes ajustarla si usas base de datos)
                 estudiante.setImagenPerfil(destino);
 
-                // También actualizar la interfaz con la nueva ruta
                 Image imagenNueva = new Image(destino.toURI().toString());
                 profileImage.setImage(imagenNueva);
 
@@ -291,7 +275,7 @@ public class ConfiguracionController {
                 );
 
                 Image nuevaImagen = new Image(archivoDestino.toURI().toString());
-                profileImage.setImage(nuevaImagen); // Solo actualiza la vista
+                profileImage.setImage(nuevaImagen);
 
                 System.out.println("Imagen cargada: " + archivoDestino.getAbsolutePath());
 
@@ -369,30 +353,17 @@ public class ConfiguracionController {
     @FXML
     private void irAInicio(ActionEvent event) {
         try {
-            // Obtener la URL de la vista a cargar
             URL configUrl = getClass().getResource("/co/edu/uniquindio/red_social/Inicio.fxml");
             if (configUrl == null) {
                 throw new IOException("Vista no encontrada");
             }
 
-            // Cargar la vista
             FXMLLoader loader = new FXMLLoader(configUrl);
             Parent configView = loader.load();
 
-            // Obtener el controlador de la vista cargada
-            InicioController controller = loader.getController();
-            // PASAR el usuario (que tienes en 'usuario' o usa PerfilUsuario.getUsuarioActual())
-            if (usuario != null) {
-                controller.setUsuarioActual(usuario);
-                System.out.println("Usuario enviado a InicioController: " + usuario.getNombre());
-            } else {
-                System.out.println("usuario en ConfiguracionController es null");
-            }
-
-            // Asegúrate de que root no es null
             if (root != null) {
-                root.getChildren().clear();  // Limpiar la vista actual
-                root.getChildren().add(configView);  // Agregar la nueva vista
+                root.getChildren().clear();
+                root.getChildren().add(configView);
             } else {
                 System.err.println("El contenedor principal es null.");
             }
@@ -423,14 +394,6 @@ public class ConfiguracionController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/sugerencias.fxml"));
             Parent configView = loader.load();
-            SugerenciasController controller = loader.getController();
-            // PASAR el usuario (que tienes en 'usuario' o usa PerfilUsuario.getUsuarioActual())
-            if (usuario != null) {
-                controller.setUsuarioActual(usuario);
-                System.out.println("Usuario enviado a SugerenciasController: " + usuario.getNombre());
-            } else {
-                System.out.println("usuario en ConfiguracionController es null");
-            }
 
             Scene scene = new Scene(configView);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -448,15 +411,6 @@ public class ConfiguracionController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/solicitudes.fxml"));
             Parent configView = loader.load();
-
-            SolicitudesAyudaController controller = loader.getController();
-            // PASAR el usuario (que tienes en 'usuario' o usa PerfilUsuario.getUsuarioActual())
-            if (usuario != null) {
-                controller.setUsuarioActual(usuario);
-                System.out.println("Usuario enviado a SolicitudesController: " + usuario.getNombre());
-            } else {
-                System.out.println("usuario en ConfiguracionController es null");
-            }
 
             Scene scene = new Scene(configView);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -477,14 +431,6 @@ public class ConfiguracionController {
             System.out.println("URL Logo: " + configUrl);
             FXMLLoader loader = new FXMLLoader(configUrl);
             Parent configView = loader.load();
-            ContenidosController controller = loader.getController();
-            // PASAR el usuario (que tienes en 'usuario' o usa PerfilUsuario.getUsuarioActual())
-            if (usuario != null) {
-                controller.setUsuarioActual(usuario);
-                System.out.println("Usuario enviado a TusContenidosController: " + usuario.getNombre());
-            } else {
-                System.out.println("usuario en ConfiguracionController es null");
-            }
 
             if (root != null) {
                 root.getChildren().clear();

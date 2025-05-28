@@ -196,7 +196,6 @@ public class InicioController {
 
     private void actualizarUltimoContenidoUsuario() {
         try {
-            // Verificar que el usuario esté inicializado
             if (usuario == null) {
                 usuario = (Estudiante) PerfilUsuario.getUsuarioActual();
                 if (usuario == null) {
@@ -206,20 +205,16 @@ public class InicioController {
                 }
             }
 
-            // Obtener el último contenido
             Contenido ultimo = redSocial.obtenerUltimoContenidoDeUsuario(usuario.getId());
 
-            // Actualizar la UI en el hilo de JavaFX
             Platform.runLater(() -> {
                 if (ultimo != null) {
                     LabelTusContenidosContenido.setText(ultimo.getTitulo());
                     LabelTipo.setText(ultimo.getTipoContenido());
 
-                    // Formatear la calificación a 1 decimal
                     String calificacion = String.format("★ %.1f", ultimo.getCalificacionPromedio());
                     LabelValoracion.setText(calificacion);
 
-                    // Actualizar contador de publicaciones
                     int totalContenidos = redSocial.contarContenidosDeUsuario(usuario.getId());
                     LabelTotalPublicados.setText(totalContenidos + " Publicados");
                 } else {
@@ -242,7 +237,6 @@ public class InicioController {
 
     private void actualizarGruposSugeridos() {
         try {
-            // Verificar y obtener el usuario actual
             Usuario usuarioActual = PerfilUsuario.getUsuarioActual();
             if (!(usuarioActual instanceof Estudiante)) {
                 System.out.println("El usuario actual no es un Estudiante");
@@ -284,7 +278,6 @@ public class InicioController {
         this.usuario = usuario;
 
 
-        // Actualizar saludo o información en la vista
         actualizarSaludo();
     }
 
@@ -339,7 +332,6 @@ public class InicioController {
 
             GruposDeEstudioController controller = loader.getController();
 
-            // PASAR el usuario (que tienes en 'usuario' o usa PerfilUsuario.getUsuarioActual())
             if (usuario != null) {
                 controller.setUsuarioActual(usuario);
                 System.out.println("Usuario enviado a GruposDeEstudioController: " + usuario.getNombre());

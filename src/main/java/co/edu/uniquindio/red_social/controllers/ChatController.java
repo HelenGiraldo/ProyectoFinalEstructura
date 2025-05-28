@@ -213,7 +213,7 @@ public class ChatController implements  ChatObserver {
             boton.setUserData(usuario);
             boton.getStyleClass().add("sidebar-button-chat");
 
-            String rutaOriginal = usuario.getImagenPerfil().toString(); // "src\\main\\resources\\co\\edu\\uniquindio\\...\\imagen_perfil2.jpg"
+            String rutaOriginal = usuario.getImagenPerfil().toString();
             String rutaClasspath = rutaOriginal.replace("\\", "/").replace("src/main/resources/", "");
 
             if (!rutaClasspath.startsWith("/")) {
@@ -369,7 +369,7 @@ public class ChatController implements  ChatObserver {
         HBox contenedor = new HBox(mensaje);
         contenedor.setPadding(new Insets(5));
 
-        HBox.setHgrow(mensaje, Priority.ALWAYS);  // Esto permite que el mensaje ocupe todo el espacio disponible
+        HBox.setHgrow(mensaje, Priority.ALWAYS);
         contenedor.setAlignment(esPropio ? Pos.CENTER_RIGHT : Pos.CENTER_LEFT);
 
         contenedorMensajes.getChildren().add(contenedor);
@@ -412,21 +412,17 @@ public class ChatController implements  ChatObserver {
 
 
     private void cagarMensajesChat(Chat chat) {
-        // Limpiar mensajes actuales
         contenedorMensajes.getChildren().clear();
 
-        // Verificar que el chat no sea nulo y tenga mensajes
         if (chat == null || chat.getMensajes().isEmpty()) {
             return;
         }
 
-        // Cargar todos los mensajes del chat
         for (Mensaje mensaje : chat.getMensajes()) {
             boolean esPropio = mensaje.getUsuarioRemitente().equals(estudianteActual);
             agregarMensaje(mensaje.getMensaje(), esPropio);
         }
 
-        // Forzar scroll al final
         Platform.runLater(() -> {
             scrollPaneContenedorMensajes.setVvalue(1.0);
         });
@@ -484,7 +480,6 @@ public class ChatController implements  ChatObserver {
 
             GruposDeEstudioController controller = loader.getController();
 
-            // PASAR el usuario (que tienes en 'usuario' o usa PerfilUsuario.getUsuarioActual())
             if (usuario != null) {
                 controller.setUsuarioActual(usuario);
                 System.out.println("Usuario enviado a GruposDeEstudioController: " + usuario.getNombre());
