@@ -1,0 +1,315 @@
+/* Estilos base */
+.root {
+    -fx-background-color: #1c1c1e;
+}
+
+/* Asegurar que el campo de texto siempre sea visible */
+.text-field {
+    -fx-display-caret: true;
+    -fx-focus-traversable: true;
+    -fx-visible: true;
+    -fx-managed: true;
+}
+
+/* Estilo para el botón de enviar */
+.button {
+    -fx-focus-traversable: false;
+}
+
+/* ScrollPane transparente */
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-padding: 10;
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:vertical {
+    -fx-background-color: transparent;
+}
+
+/* Contenedores de chat (con transparencia aumentada) */
+#contenedorMensajes,
+#chatSpace,
+.message-container {
+    -fx-background-color: rgba(255, 255, 255, 0.7); /* 70% de opacidad (más transparente) */
+    -fx-background-radius: 10px;
+    -fx-border-color: rgba(214, 228, 255, 0.5);
+    -fx-border-radius: 10px;
+    -fx-border-width: 1px;
+    -fx-padding: 15px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.05), 5, 0, 0, 2);
+}
+
+/* Lista de usuarios */
+#userchatListVBoxPrueba,
+.user-chat-list {
+    -fx-background-color: rgba(227, 237, 255, 0.85);
+    -fx-background-radius: 20px;
+    -fx-border-color: rgba(232, 242, 251, 0.7);
+    -fx-border-radius: 10px;
+    -fx-border-width: 1px;
+    -fx-padding: 10px;
+}
+
+/* Estilo para el VBox que contiene los usuarios */
+#userchatListVBox {
+    -fx-spacing: 10px;
+    -fx-padding: 10px;
+    -fx-background-color: rgba(240, 240, 240, 0.8);
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}
+
+/* Estilo para los botones de usuario dentro del VBox */
+#userchatListVBox .user-button {
+    -fx-background-radius: 50%;
+    -fx-min-width: 40px;
+    -fx-min-height: 40px;
+    -fx-max-width: 40px;
+    -fx-max-height: 40px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0, 0, 1);
+}
+/* Estilo para botones de usuario */
+.user-button {
+    -fx-background-color: rgba(243, 156, 18, 0.3);
+    -fx-background-radius: 50%;
+    -fx-min-width: 40px;
+    -fx-min-height: 40px;
+    -fx-max-width: 40px;
+    -fx-max-height: 40px;
+    -fx-border-color: rgba(243, 156, 18, 0.5);
+    -fx-border-radius: 50%;
+    -fx-border-width: 1px;
+    -fx-padding: 0;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0, 0, 1);
+}
+
+.user-button:hover {
+    -fx-background-color: rgba(243, 156, 18, 0.4);
+}
+
+.user-button.selected {
+    -fx-background-color: rgba(243, 156, 18, 0.7);
+    -fx-border-width: 2px;
+    -fx-effect: dropshadow(gaussian, rgba(243, 156, 18, 0.7), 8, 0.3, 0, 2);
+}
+
+/* Elementos de chat */
+.chat-item {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #353333;
+    -fx-padding: 10;
+    -fx-background-radius: 10;
+    -fx-margin: 5;
+}
+
+.chat-item.recibido {
+    -fx-background-color: #91ec89;
+    -fx-alignment: center-left;
+}
+
+.chat-item.enviado {
+    -fx-background-color: #0055aa;
+    -fx-alignment: center-right;
+}
+
+.chat-item:hover {
+    -fx-background-color: #3a3a3c;
+    -fx-cursor: hand;
+}
+
+/* Sidebar */
+.sidebar {
+    -fx-background-color: #f8f8f8;
+    -fx-padding: 20;
+}
+
+.sidebar-button,
+.sidebar-button-chat {
+    -fx-background-color: transparent;
+    -fx-text-fill: #444;
+    -fx-font-size: 14px;
+    -fx-alignment: CENTER_LEFT;
+    -fx-pref-width: 160;
+    -fx-padding: 10 15 10 15;
+    -fx-spacing: 10;
+    -fx-cursor: hand;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+}
+
+.sidebar-button:hover,
+.sidebar-button-chat:hover {
+    -fx-background-color: #eaeaea;
+}
+
+/* Estilo mejorado para elementos seleccionados */
+.sidebar-button:selected,
+.sidebar-button-active,
+.sidebar-button-chat:selected,
+.sidebar-button-chat-active,
+.user-item:selected,
+.chat-item:selected {
+    -fx-background-color: rgba(243, 156, 18, 0.3); /* Naranja muy transparente */
+    -fx-text-fill: #2c2c2c; /* Texto oscuro para mejor legibilidad */
+    -fx-background-radius: 15px; /* Bordes más redondeados */
+    -fx-border-radius: 15px;
+    -fx-border-color: rgba(243, 156, 18, 0.5);
+    -fx-border-width: 1px;
+    -fx-effect: innershadow(gaussian, rgba(243, 156, 18, 0.2), 5, 0.3, 0, 1);
+}
+
+/* Efecto hover más suave */
+.sidebar-button:hover,
+.sidebar-button-chat:hover,
+.user-item:hover {
+    -fx-background-color: rgba(243, 156, 18, 0.15); /* Muy transparente */
+    -fx-background-radius: 15px;
+}
+
+/* Estilo para los mensajes */
+.message-bubble {
+    -fx-background-color: rgba(255, 255, 255, 0.9);
+    -fx-background-radius: 15px 15px 15px 5px; /* Bordes asimétricos */
+    -fx-padding: 10px 15px;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 3, 0.1, 1, 1);
+}
+
+/* Área de entrada de mensajes */
+.message-input-area {
+    -fx-background-color: rgba(255, 255, 255, 0.8);
+    -fx-background-radius: 20px;
+    -fx-border-color: rgba(214, 228, 255, 0.5);
+    -fx-border-radius: 20px;
+}
+/* Títulos y texto */
+.title-label {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+    -fx-padding: 10 0 10 20;
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+}
+
+.header-label-saludo {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333;
+}
+
+.title-label-saludo {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c2c2c;
+    -fx-padding: 20 0 10 0;
+}
+
+.contact-name {
+    -fx-text-fill: #000000;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+}
+
+/* Elementos de entrada */
+#messageTextField {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #000000;
+    -fx-prompt-text-fill: #888282;
+    -fx-background-radius: 20;
+    -fx-border-color: transparent;
+    -fx-padding: 8;
+}
+
+#sendButton {
+    -fx-background-color: white;
+    -fx-graphic-text-gap: 5;
+    -fx-background-radius: 40;
+}
+
+#sendButton:hover {
+    -fx-background-color: #bce3ba;
+    -fx-background-radius: 20;
+}
+
+/* Avatar */
+.avatar {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 4, 0.3, 0, 1);
+    -fx-border-color: white;
+    -fx-border-width: 1px;
+    -fx-background-radius: 50%;
+    -fx-border-radius: 60%;
+}
+
+/* Tarjetas */
+.preview-card {
+    -fx-background-color: #f9f9f9;
+    -fx-padding: 15px;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 5, 0, 0, 2);
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-spacing: 5;
+}
+
+.card-mini {
+    -fx-background-color: #f7f7f7;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 4, 0, 0, 2);
+}
+
+.card-mini:hover {
+    -fx-background-color: #eaeaea;
+    -fx-cursor: hand;
+}
+
+/* Separador */
+.separator .line {
+    -fx-border-color: rgba(214, 228, 255, 0.6);
+    -fx-border-width: 1px;
+}
+
+.sidebar-button-grupo {
+    -fx-background-color: transparent;      /* Igual que sidebar-button para fondo limpio */
+    -fx-text-fill: #444;                     /* Color texto base */
+    -fx-font-size: 14px;
+    -fx-alignment: CENTER_LEFT;
+    -fx-pref-width: 160px;
+    -fx-padding: 10 15 10 15;
+    -fx-spacing: 10px;
+    -fx-cursor: hand;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-border-color: transparent;
+    -fx-border-width: 1px;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.05), 3, 0, 0, 1);
+    -fx-transition: all 0.3s ease; /* para suavizar hover */
+}
+
+.sidebar-button-grupo:hover {
+    -fx-background-color: #eaeaea; /* Igual hover que sidebar-button */
+    -fx-border-color: rgba(243, 156, 18, 0.5); /* un ligero borde naranja */
+    -fx-effect: dropshadow(gaussian, rgba(243, 156, 18, 0.3), 6, 0, 0, 1);
+}
+
+.sidebar-button-grupo:selected,
+.sidebar-button-grupo:focused,
+.sidebar-button-grupo.active {
+    -fx-background-color: rgba(243, 156, 18, 0.3); /* naranja muy transparente */
+    -fx-text-fill: #2c2c2c;
+    -fx-border-color: rgba(243, 156, 18, 0.7);
+    -fx-border-width: 2px;
+    -fx-background-radius: 15px;
+    -fx-border-radius: 15px;
+    -fx-effect: innershadow(gaussian, rgba(243, 156, 18, 0.2), 6, 0.3, 0, 1);
+}
+
+
