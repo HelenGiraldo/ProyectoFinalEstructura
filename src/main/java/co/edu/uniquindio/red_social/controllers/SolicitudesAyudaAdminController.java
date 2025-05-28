@@ -1,13 +1,16 @@
 package co.edu.uniquindio.red_social.controllers;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 import co.edu.uniquindio.red_social.clases.RedSocial;
 import co.edu.uniquindio.red_social.clases.social.SolicitudAyuda;
+import co.edu.uniquindio.red_social.clases.usuarios.Administrador;
 import co.edu.uniquindio.red_social.clases.usuarios.PerfilUsuario;
 import co.edu.uniquindio.red_social.util.SolicitudActual;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,11 +24,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
 public class SolicitudesAyudaAdminController {
@@ -122,15 +127,49 @@ public class SolicitudesAyudaAdminController {
     @FXML
     private Label tituloLabel2;
 
-    @FXML
-    void irAConfig(ActionEvent event) {
 
+
+
+
+    @FXML
+    private void initialize() {
+
+        SolicitudesDeAyudaButton.setSelected(true);
+        System.out.println(redSocial.getSolicitudesAyuda().size());
+        redSocial.getSolicitudesAyuda().show();
+        cargarComboBox();
+        cargarSolicitudes();
+        chambaImagen();
     }
 
-    @FXML
-    void irAInicio(ActionEvent event) {
+    private void chambaImagen(){
+        Platform.runLater(() -> {
+            if (imagenPerfil != null) {
+                double radius = imagenPerfil.getFitWidth() / 2;
+                Circle clip = new Circle(radius, radius, radius);
+                imagenPerfil.setClip(clip);
+            }
+        });
 
+        PerfilUsuario perfil = PerfilUsuario.getInstancia();
+
+
+        perfil.imagenPerfilProperty().addListener((obs, oldImg, newImg) -> {
+            if (newImg != null) {
+                imagenPerfil.setImage(newImg);
+            }
+        });
+
+        System.out.println("Imagen de perfil: " + perfil.getImagenPerfil());
+
+        if (perfil.getImagenPerfil() != null) {
+            imagenPerfil.setImage(perfil.getImagenPerfil());
+        }
+        File file = PerfilUsuario.getUsuarioActual().getImagenPerfil();
+        Image imagen = new Image(file.toURI().toString());
+        imagenPerfil.setImage(imagen);
     }
+
 
     @FXML
     void onBuscar(ActionEvent event) {
@@ -150,7 +189,7 @@ public class SolicitudesAyudaAdminController {
             String titulo = solicitudAyuda.getTitulo();
             String contenido = solicitudAyuda.getMensaje();
             String id = solicitudAyuda.getId();
-            agregarSolicitud(nombreEstudiante, importancia, titulo, contenido,id);        }
+            agregarSolicitud(nombreEstudiante, importancia, titulo, contenido,id);   }
     }
 
     @FXML
@@ -204,14 +243,9 @@ public class SolicitudesAyudaAdminController {
         }
     }
 
-    @FXML
-    private void initialize() {
-        System.out.println(redSocial.getSolicitudesAyuda().size());
-        adminLabel.setText(PerfilUsuario.getUsuarioActual().getNombre());
-        redSocial.getSolicitudesAyuda().show();
-        cargarComboBox();
-        cargarSolicitudes();
-    }
+
+
+
 
     private void cargarComboBox() {
         comboFiltro.getItems().addAll("Muy urgente", "Urgente", "Normal");
@@ -330,6 +364,64 @@ public class SolicitudesAyudaAdminController {
     }
 
     @FXML
-    public void irAGrupoEStudio(ActionEvent actionEvent) {
+    private void irAGruposEstudio(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/GruposDeEstudioAdmin.fxml"));
+            Parent configView = loader.load();
+
+
+            Scene scene = new Scene(configView);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+
+    @FXML
+    private void irAConfig(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/configuracionAdmin.fxml"));
+            Parent configView = loader.load();
+
+
+
+
+            Scene scene = new Scene(configView);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void irAInicio(ActionEvent event) {
+        try {
+
+            URL configUrl = getClass().getResource("/co/edu/uniquindio/red_social/InicioAdmin.fxml");
+            System.out.println("URL config: " + configUrl);
+            FXMLLoader loader = new FXMLLoader(configUrl);
+            Parent configView = loader.load();
+
+
+
+            if (root != null) {
+                root.getChildren().clear();
+                root.getChildren().add(configView);
+            } else {
+                System.err.println("El contenedor principal es null.");
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

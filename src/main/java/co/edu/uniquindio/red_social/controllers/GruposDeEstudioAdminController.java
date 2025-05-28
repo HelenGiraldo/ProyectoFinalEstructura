@@ -4,10 +4,13 @@ import co.edu.uniquindio.red_social.clases.RedSocial;
 import co.edu.uniquindio.red_social.clases.contenidos.Contenido;
 import co.edu.uniquindio.red_social.clases.social.Grupo;
 import co.edu.uniquindio.red_social.clases.usuarios.Administrador;
+import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
+import co.edu.uniquindio.red_social.clases.usuarios.PerfilUsuario;
 import co.edu.uniquindio.red_social.data_base.UtilSQL;
 import co.edu.uniquindio.red_social.estructuras.ArbolBinario;
 import co.edu.uniquindio.red_social.estructuras.ListaSimplementeEnlazada;
 import co.edu.uniquindio.red_social.util.GrupoService;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,12 +19,15 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -69,18 +75,45 @@ public class GruposDeEstudioAdminController {
 
     // Variables de control
     private ToggleGroup grupoGrupos = new ToggleGroup();
-    private Administrador administradorActual;
     private GrupoService grupoService = GrupoService.getInstance();
     private ArbolBinario<Contenido> arbolContenido;
 
+
+
+
     @FXML
     private void initialize() {
+        gruposEstudioButton.setSelected(true);
         cargarGrupos();
+        chambaImagen();
     }
 
-    public void setAdministradorActual(Administrador administrador) {
-        this.administradorActual = administrador;
-        cargarGrupos();
+    private void chambaImagen(){
+        Platform.runLater(() -> {
+            if (imagenPerfil != null) {
+                double radius = imagenPerfil.getFitWidth() / 2;
+                Circle clip = new Circle(radius, radius, radius);
+                imagenPerfil.setClip(clip);
+            }
+        });
+
+        PerfilUsuario perfil = PerfilUsuario.getInstancia();
+
+
+        perfil.imagenPerfilProperty().addListener((obs, oldImg, newImg) -> {
+            if (newImg != null) {
+                imagenPerfil.setImage(newImg);
+            }
+        });
+
+        System.out.println("Imagen de perfil: " + perfil.getImagenPerfil());
+
+        if (perfil.getImagenPerfil() != null) {
+            imagenPerfil.setImage(perfil.getImagenPerfil());
+        }
+        File file = PerfilUsuario.getUsuarioActual().getImagenPerfil();
+        Image imagen = new Image(file.toURI().toString());
+        imagenPerfil.setImage(imagen);
     }
 
     private void cargarGrupos() {
@@ -232,54 +265,34 @@ public class GruposDeEstudioAdminController {
         }
     }
 
-    @FXML
-    private void irAChat(ActionEvent event) {
-        navegarAVentana("/co/edu/uniquindio/red_social/mensajes.fxml", event);
-    }
 
     @FXML
     private void irAInicio(ActionEvent event) {
-        navegarAVentana("/co/edu/uniquindio/red_social/gruposEstudio.fxml", event);
-    }
-
-    @FXML
-    private void irASugerencias(ActionEvent event) {
-        navegarAVentana("/co/edu/uniquindio/red_social/Configuracion.fxml", event);
+        navegar("/co/edu/uniquindio/red_social/InicioAdmin.fxml", event);
     }
 
     @FXML
     private void irAConfig(ActionEvent event) {
-        navegarAVentana("/co/edu/uniquindio/red_social/Configuracion.fxml", event);
+        navegar("/co/edu/uniquindio/red_social/configuracionAdmin.fxml", event);
     }
 
     @FXML
     private void irASolicitudesAyuda(ActionEvent event) {
-        navegarAVentana("/co/edu/uniquindio/red_social/solicitudes.fxml", event);
+        navegar("/co/edu/uniquindio/red_social/solicitudesAyudaAdmin.fxml", event);
     }
 
-    @FXML
-    private void irAContenidos(ActionEvent event) {
-        navegarAVentana("/co/edu/uniquindio/red_social/TusContenidos.fxml", event);
-    }
-
-    private void navegarAVentana(String fxmlPath, ActionEvent event) {
+    private void navegar(String url, ActionEvent event) {
         try {
-            URL configUrl = getClass().getResource(fxmlPath);
-            FXMLLoader loader = new FXMLLoader(configUrl);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(url));
             Parent configView = loader.load();
 
-            if (root != null) {
-                root.getChildren().clear();
-                root.getChildren().add(configView);
-            } else {
-                Scene scene = new Scene(configView);
-                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                stage.setScene(scene);
-                stage.show();
-            }
+            Scene scene = new Scene(configView);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+
         } catch (IOException e) {
             e.printStackTrace();
-            mostrarAlerta("Error", "No se pudo cargar la ventana: " + fxmlPath);
         }
     }
 }

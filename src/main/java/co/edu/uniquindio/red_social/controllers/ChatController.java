@@ -26,6 +26,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -146,12 +147,9 @@ public class ChatController implements  ChatObserver {
 
         MensajesButton.setSelected(true);
 
+        chambaImagen();
 
-        if (imagenPerfil != null) {
-            double radius = imagenPerfil.getFitWidth() / 2;
-            Circle clip = new Circle(radius, radius, radius);
-            imagenPerfil.setClip(clip);
-        }
+
 
         if (estudianteActual.getChats().isEmpty()) {
 
@@ -171,12 +169,35 @@ public class ChatController implements  ChatObserver {
             scrollPaneContenedorMensajes.setVvalue(1.0);
         });
 
+
+    }
+
+    private void chambaImagen(){
+        Platform.runLater(() -> {
+            if (imagenPerfil != null) {
+                double radius = imagenPerfil.getFitWidth() / 2;
+                Circle clip = new Circle(radius, radius, radius);
+                imagenPerfil.setClip(clip);
+            }
+        });
+
         PerfilUsuario perfil = PerfilUsuario.getInstancia();
+
+
+        perfil.imagenPerfilProperty().addListener((obs, oldImg, newImg) -> {
+            if (newImg != null) {
+                imagenPerfil.setImage(newImg);
+            }
+        });
+
+        System.out.println("Imagen de perfil: " + perfil.getImagenPerfil());
+
         if (perfil.getImagenPerfil() != null) {
             imagenPerfil.setImage(perfil.getImagenPerfil());
         }
-
-
+        File file = PerfilUsuario.getUsuarioActual().getImagenPerfil();
+        Image imagen = new Image(file.toURI().toString());
+        imagenPerfil.setImage(imagen);
     }
 
     private void inicializarUsuarios() {
@@ -485,7 +506,7 @@ public class ChatController implements  ChatObserver {
     @FXML
     private void irASugerencias(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/Configuracion.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/sugerencias.fxml"));
             Parent configView = loader.load();
 
             Scene scene = new Scene(configView);

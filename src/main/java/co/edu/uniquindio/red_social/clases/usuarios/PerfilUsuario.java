@@ -34,9 +34,8 @@ public class PerfilUsuario {
 
 
     public Image getImagenPerfil() {
-        File file = PerfilUsuario.getUsuarioActual().getImagenPerfil();
-        Image imagen = new Image(file.toURI().toString());
-        return imagen;
+        File file = usuarioActual.getImagenPerfil();
+        return new Image(file.toURI().toString());
     }
 
     public void setImagenPerfil(Image imagen) {
