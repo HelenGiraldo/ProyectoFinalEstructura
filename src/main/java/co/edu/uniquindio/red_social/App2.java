@@ -28,10 +28,9 @@ public class App2 {
         System.out.println("---------------------------------");
 
         Estudiante estudiante = red.getEstudiantes().get(1);
-        estudiante.anadirPreferencia("La cuca");
+        estudiante.anadirPreferencia("cuca");
         Estudiante estudiante1 = red.getEstudiantes().get(4);
-        estudiante1.anadirPreferencia("La cuca");
-
+        estudiante1.anadirPreferencia("cuca");
 
     }
 }

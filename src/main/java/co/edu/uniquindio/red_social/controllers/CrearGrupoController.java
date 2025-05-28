@@ -2,6 +2,7 @@ package co.edu.uniquindio.red_social.controllers;
 
 import co.edu.uniquindio.red_social.clases.social.Grupo;
 import co.edu.uniquindio.red_social.util.GrupoService;
+import co.edu.uniquindio.red_social.util.GrupoTabla;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -56,7 +57,9 @@ public class CrearGrupoController {
 
     @FXML
     public void initialize() {
-
+        if(GrupoTabla.NOMBRE_GRUPO != null) {
+            nombreField.setText(GrupoTabla.NOMBRE_GRUPO);
+        }
     }
 
 
@@ -74,7 +77,7 @@ public class CrearGrupoController {
         if (!nombre.isEmpty() && !descripcion.isEmpty() && !tipo.isEmpty()) {
             Grupo nuevoGrupo = new Grupo(nombre, descripcion, tipo, true);
             GrupoService.getInstance().agregarGrupo(nuevoGrupo);
-
+            GrupoTabla.NOMBRE_GRUPO = null;
             creadoConExitoLabel.setText("¡Grupo creado con éxito!");
 
             // Espera 3 segundos y cierra la ventana
