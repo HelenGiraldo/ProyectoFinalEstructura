@@ -9,6 +9,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
@@ -235,7 +236,11 @@ public class PublicarController {
     }
 
 
-
-
-
+    public void onVolver(MouseEvent mouseEvent) {
+        if (stage != null) {
+            stage.close();
+        } else {
+            System.out.println("No se pudo cerrar la ventana, el stage es nulo.");
+        }
+    }
 }

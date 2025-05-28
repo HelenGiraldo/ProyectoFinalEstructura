@@ -146,7 +146,7 @@ public class DeteccionComunidadesAdminController {
 
     @FXML
     void irAMasValorados(ActionEvent event) {
-        navegar("/co/edu/uniquindio/red_social/estudiantesConMasConexiones.fxml", event);
+        navegar("/co/edu/uniquindio/red_social/ContenidosMasValorados.fxml", event);
 
     }
 

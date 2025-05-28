@@ -205,11 +205,6 @@ public class CreacionGrafo {
 
     }
 
-    public static void main(String[] args) {
-        App3.iniciarDatos();
-        CreacionGrafo creacionGrafo = CreacionGrafo.getInstance();
-        creacionGrafo.crearGrafo();
-    }
 
 
 }

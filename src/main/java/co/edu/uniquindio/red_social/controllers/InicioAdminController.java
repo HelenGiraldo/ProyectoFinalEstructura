@@ -129,12 +129,7 @@ public class InicioAdminController {
     @FXML
     private AnchorPane root;
 
-    private Administrador usuario;
 
-    public void setAdministradorActual(Administrador usuario) {
-        this.usuario = usuario;
-        inicializarUsuario(usuario);
-    }
 
     @FXML
     public void initialize() {
@@ -142,15 +137,21 @@ public class InicioAdminController {
 
         PerfilUsuario perfil = PerfilUsuario.getInstancia();
 
+        chambaImagen();
+        actualizarSaludo();
+    }
+
+    private void chambaImagen(){
         Platform.runLater(() -> {
             if (imagenPerfil != null) {
                 double radius = imagenPerfil.getFitWidth() / 2;
                 Circle clip = new Circle(radius, radius, radius);
                 imagenPerfil.setClip(clip);
-
-
             }
         });
+
+        PerfilUsuario perfil = PerfilUsuario.getInstancia();
+
 
         perfil.imagenPerfilProperty().addListener((obs, oldImg, newImg) -> {
             if (newImg != null) {
@@ -158,14 +159,18 @@ public class InicioAdminController {
             }
         });
 
-        actualizarSaludo();
-    }
+        System.out.println("Imagen de perfil: " + perfil.getImagenPerfil());
 
+        if (perfil.getImagenPerfil() != null) {
+            imagenPerfil.setImage(perfil.getImagenPerfil());
+        }
+        File file = PerfilUsuario.getUsuarioActual().getImagenPerfil();
+        Image imagen = new Image(file.toURI().toString());
+        imagenPerfil.setImage(imagen);
+    }
 
     @FXML
     public void inicializarUsuario(Administrador usuario) {
-        this.usuario = usuario;
-
 
         cargarDatosUsuario();
     }
@@ -214,17 +219,6 @@ public class InicioAdminController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/GruposDeEstudioAdmin.fxml"));
             Parent configView = loader.load();
-
-            GruposDeEstudioAdminController controller = loader.getController();
-
-            // PASAR el usuario (que tienes en 'usuario' o usa PerfilUsuario.getUsuarioActual())
-            if (usuario != null) {
-                controller.setUsuarioActual(usuario);
-                System.out.println("Usuario enviado a GruposDeEstudioController: " + usuario.getNombre());
-            } else {
-                System.out.println("usuario en InicioController es null");
-            }
-
             Scene scene = new Scene(configView);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);
@@ -244,14 +238,6 @@ public class InicioAdminController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/ConfiguracionAdmin.fxml"));
             Parent configView = loader.load();
 
-            ConfiguracionAdminController controller = loader.getController();
-            // PASAR el usuario (que tienes en 'usuario' o usa PerfilUsuario.getUsuarioActual())
-            if (usuario != null) {
-                controller.setAdministradorActual(usuario);
-                System.out.println("Usuario enviado a ConfiguracionAdminController: " + usuario.getNombre());
-            } else {
-                System.out.println("usuario en InicioAdminController es null");
-            }
 
             Scene scene = new Scene(configView);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -271,14 +257,6 @@ public class InicioAdminController {
             System.out.println("URL config: " + configUrl);
             FXMLLoader loader = new FXMLLoader(configUrl);
             Parent configView = loader.load();
-            SolicitudesAyudaAdminController controller = loader.getController();
-            // PASAR el usuario (que tienes en 'usuario' o usa PerfilUsuario.getUsuarioActual())
-            if (usuario != null) {
-                controller.setUsuarioActual(usuario);
-                System.out.println("Usuario enviado a SolicitudesAyudaAdminController: " + usuario.getNombre());
-            } else {
-                System.out.println("usuario en InicioAdminController es null");
-            }
 
             if (root != null) {
                 root.getChildren().clear();
@@ -293,5 +271,23 @@ public class InicioAdminController {
     }
 
 
+    public void irAEstadisticas(ActionEvent event) {
+        try {
 
+            URL configUrl = getClass().getResource("/co/edu/uniquindio/red_social/CaminoMasCorto.fxml");
+            System.out.println("URL config: " + configUrl);
+            FXMLLoader loader = new FXMLLoader(configUrl);
+            Parent configView = loader.load();
+
+            if (root != null) {
+                root.getChildren().clear();
+                root.getChildren().add(configView);
+            } else {
+                System.err.println("El contenedor principal es null.");
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

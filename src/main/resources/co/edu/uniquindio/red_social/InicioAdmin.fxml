@@ -83,15 +83,16 @@
             <ScrollPane fx:id="scrollPrincipal" fitToHeight="true" fitToWidth="true" stylesheets="@styles.css" BorderPane.alignment="CENTER">
                <content>
                   <GridPane fx:id="hBoxizquierda" prefHeight="292.0" prefWidth="372.0" styleClass="subtitulo-inicio" stylesheets="@styles.css">
-                    <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="402.5" minWidth="0.0" prefWidth="306.2760314941406" />
-                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="402.5" minWidth="0.0" prefWidth="95.72396850585938" />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints maxHeight="79.82978820800781" minHeight="10.0" prefHeight="79.82978820800781" vgrow="SOMETIMES" />
-                      <RowConstraints maxHeight="120.0" minHeight="10.0" prefHeight="95.56118774414062" vgrow="SOMETIMES" />
-                      <RowConstraints maxHeight="110.0" minHeight="10.0" prefHeight="90.93881225585938" vgrow="SOMETIMES" />
-                    </rowConstraints>
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="402.5" minWidth="0.0" prefWidth="306.2760314941406" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="402.5" minWidth="0.0" prefWidth="95.72396850585938" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints maxHeight="79.82978820800781" minHeight="10.0" prefHeight="79.82978820800781" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="120.0" minHeight="10.0" prefHeight="95.56118774414062" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="120.0" minHeight="10.0" prefHeight="95.56118774414062" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="110.0" minHeight="10.0" prefHeight="90.93881225585938" vgrow="SOMETIMES" />
+                     </rowConstraints>
                      <children>
                         <VBox fx:id="VistaInicio" styleClass="card-mini" stylesheets="@styles.css">
                            <children>
@@ -100,45 +101,12 @@
                               <VBox prefHeight="74.0" prefWidth="267.0">
                                  <children>
                                     <Label fx:id="LabelUltimoContenidoTexto" styleClass="card-label" stylesheets="@styles.css" text="Último contenido publicado" />
-                                    <Label fx:id="LabelUltimoContenido" styleClass="card-label" stylesheets="@styles.css" text="&quot;Guía de estructuras de datos&quot;" />
+                                    <Label fx:id="LabelUltimoContenido" styleClass="card-label" stylesheets="@styles.css" />
                                  </children>
                               </VBox>
                            </children>
                         </VBox>
-                        <VBox fx:id="TuscontendiosVBox" styleClass="card-mini" stylesheets="@styles.css" GridPane.rowIndex="1">
-                           <children>
-                              <Label fx:id="LabelTusContenidos" styleClass="titulo-inicio" stylesheets="@styles.css" text="Tus contendios" />
-                              <Label fx:id="LabelTotalPublicados" styleClass="subtitulo-inicio" stylesheets="@styles.css" text="5 Publicados" />
-                              <HBox fx:id="HboxTusContendiosContenido" prefHeight="100.0" prefWidth="200.0">
-                                 <children>
-                                    <VBox fx:id="VBoxTusContenidosContenido" prefHeight="76.0" prefWidth="309.0">
-                                       <children>
-                                          <Label fx:id="LabelTusContenidosContenido" styleClass="titulo-inicio" text="Resumen Estrcutura de datos" />
-                                          <Label fx:id="LabelTipo" styleClass="label-tipo" stylesheets="@styles.css" text="PDF" />
-                                          <Label fx:id="LabelValoracion" styleClass="label-valoracion" text="★ 4.7" />
-                                       </children>
-                                    </VBox>
-                                 </children>
-                              </HBox>
-                           </children>
-                           <GridPane.margin>
-                              <Insets top="10.0" />
-                           </GridPane.margin>
-                        </VBox>
-                        <VBox fx:id="VBoxGruposEstudio" styleClass="card-mini" stylesheets="@styles.css" GridPane.rowIndex="2">
-                           <children>
-                              <Label fx:id="LabelGruposDeEstudiosSugeridos" styleClass="titulo-inicio" stylesheets="@styles.css" text="Grupos de estudio sugeridos" />
-                              <Label fx:id="LabelGruposEncontradosParaTi" text="Se han encontrado 3 grupos para ti" />
-                              <Label fx:id="LabelGrupoSugerido" styleClass="titulo-inicio" stylesheets="@styles.css" text="Álgebra Lineal " />
-                              <Label fx:id="LabelCantidadIntegrantes" styleClass="label-tipo" text="5 integrantes" />
-                           </children>
-                           <GridPane.margin>
-                              <Insets top="10.0" />
-                           </GridPane.margin>
-                           <padding>
-                              <Insets bottom="10.0" />
-                           </padding>
-                        </VBox>
+                        <Button fx:id="buttonEstadisticas" mnemonicParsing="false" onAction="#irAEstadisticas" styleClass="boton-guardar" stylesheets="@stylesConfig.css" text="Ir a Estadisticas" GridPane.rowIndex="2" />
                      </children>
                   </GridPane>
                </content>

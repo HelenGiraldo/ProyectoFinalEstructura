@@ -99,7 +99,7 @@
                                                    <columns>
                                                       <TableColumn fx:id="tituloTableColumn" prefWidth="115.0" text="titulo" />
                                                       <TableColumn fx:id="valoracionTableColumn" prefWidth="176.0" text="valoracion promedio" />
-                                                      <TableColumn fx:id="numeroTableColumn1" prefWidth="172.0" text="numero de valoraciones" />
+                                                      <TableColumn fx:id="numeroValoracionesColumn" prefWidth="172.0" text="numero de valoraciones" />
                                                    </columns>
                                                 </TableView>
                                              </content>

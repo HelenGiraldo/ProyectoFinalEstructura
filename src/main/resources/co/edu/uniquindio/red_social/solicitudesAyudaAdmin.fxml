@@ -73,7 +73,7 @@
             <VBox fx:id="hBoxDerecha" prefHeight="322.0" prefWidth="178.0" BorderPane.alignment="CENTER">
                <children>
                   <ToggleButton fx:id="InicioButton" mnemonicParsing="false" onAction="#irAInicio" prefHeight="37.0" prefWidth="161.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Inicio" />
-                  <ToggleButton fx:id="gruposEstudioButton" mnemonicParsing="false" onAction="#irAGrupoEstudio" prefHeight="42.0" prefWidth="151.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Grupos estudio" />
+                  <ToggleButton fx:id="gruposEstudioButton" mnemonicParsing="false" onAction="#irAGruposEstudio" prefHeight="42.0" prefWidth="151.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Grupos estudio" />
                   <ToggleButton fx:id="SolicitudesDeAyudaButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="160.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Solicitudes de ayuda" />
                   <ToggleButton fx:id="configuracionPerfilButton" mnemonicParsing="false" onAction="#irAConfig" prefHeight="39.0" prefWidth="161.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Configuracion perfil" />
                </children>

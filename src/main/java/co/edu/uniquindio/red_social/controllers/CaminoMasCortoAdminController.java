@@ -85,7 +85,18 @@ public class CaminoMasCortoAdminController {
 
     @FXML
     void handleVolver(MouseEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/InicioAdmin.fxml"));
+            Parent configView = loader.load();
 
+            Scene scene = new Scene(configView);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -102,6 +113,7 @@ public class CaminoMasCortoAdminController {
 
     @FXML
     void irAMasValorados(ActionEvent event) {
+        navegar("/co/edu/uniquindio/red_social/ContenidosMasValorados.fxml", event);
 
 
     }
@@ -132,9 +144,7 @@ public class CaminoMasCortoAdminController {
         Estudiante estudiante1 = comboBoxEstudiante1.getValue();
         Estudiante estudiante2 = comboBoxEstudiante2.getValue();
 
-        System.out.println("Estudiante 1 seleccionado: " + estudiante1);
-        System.out.println("Estudiante 2 seleccionado: " + estudiante2);
-
+      caminoMasCortoLabel.setText(estudiante1.getNombre() + " - " + estudiante2.getNombre());
     }
 
     @FXML

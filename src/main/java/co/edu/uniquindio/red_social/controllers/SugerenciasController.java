@@ -1,6 +1,7 @@
 package co.edu.uniquindio.red_social.controllers;
 
 import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -9,6 +10,7 @@ import co.edu.uniquindio.red_social.clases.RedSocial;
 import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
 import co.edu.uniquindio.red_social.clases.usuarios.PerfilUsuario;
 import co.edu.uniquindio.red_social.estructuras.ListaSimplementeEnlazada;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -28,6 +30,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
 public class SugerenciasController {
@@ -128,6 +131,11 @@ public class SugerenciasController {
     }
 
     @FXML
+    void irMisContenidos(ActionEvent event) {
+        navegar("/co/edu/uniquindio/red_social/TusContenidos.fxml", event);
+    }
+
+    @FXML
     void irAConfig(ActionEvent event) {
         navegar("/co/edu/uniquindio/red_social/configuracion.fxml", event);
     }
@@ -204,6 +212,35 @@ public class SugerenciasController {
     @FXML
     void initialize() {
         agregarEstudiantes();
+        chambaImagen();
+    }
+
+    private void chambaImagen(){
+        Platform.runLater(() -> {
+            if (imagenPerfil != null) {
+                double radius = imagenPerfil.getFitWidth() / 2;
+                Circle clip = new Circle(radius, radius, radius);
+                imagenPerfil.setClip(clip);
+            }
+        });
+
+        PerfilUsuario perfil = PerfilUsuario.getInstancia();
+
+
+        perfil.imagenPerfilProperty().addListener((obs, oldImg, newImg) -> {
+            if (newImg != null) {
+                imagenPerfil.setImage(newImg);
+            }
+        });
+
+        System.out.println("Imagen de perfil: " + perfil.getImagenPerfil());
+
+        if (perfil.getImagenPerfil() != null) {
+            imagenPerfil.setImage(perfil.getImagenPerfil());
+        }
+        File file = PerfilUsuario.getUsuarioActual().getImagenPerfil();
+        Image imagen = new Image(file.toURI().toString());
+        imagenPerfil.setImage(imagen);
     }
 
 

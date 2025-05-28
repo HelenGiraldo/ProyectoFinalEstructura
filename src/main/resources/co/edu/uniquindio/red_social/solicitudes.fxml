@@ -67,7 +67,7 @@
                   <ToggleButton fx:id="misContenidosButton" mnemonicParsing="false" onAction="#irAContenido" prefHeight="43.0" prefWidth="132.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Mis Contenidos" />
                   <ToggleButton fx:id="gruposEstudioButton" mnemonicParsing="false" onAction="#irAGrupoEStudio" prefHeight="42.0" prefWidth="151.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Grupos estudio" />
                   <ToggleButton fx:id="MensajesButton" mnemonicParsing="false" onAction="#irAChat" prefHeight="42.0" prefWidth="161.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Mensajes" />
-                  <ToggleButton fx:id="SugerenciasButton" onAction="#irASugerencias" mnemonicParsing="false" prefHeight="38.0" prefWidth="159.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Sugerencias" />
+                  <ToggleButton fx:id="SugerenciasButton" mnemonicParsing="false" onAction="#irSugerencias" prefHeight="38.0" prefWidth="159.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Sugerencias" />
                   <ToggleButton fx:id="SolicitudesDeAyudaButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="160.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Solicitudes de ayuda" />
                   <ToggleButton fx:id="configuracionPerfilButton" mnemonicParsing="false" onAction="#irAConfig" prefHeight="39.0" prefWidth="161.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Configuracion perfil" />
                </children>
@@ -84,7 +84,7 @@
                                  <children>
                                     <HBox prefHeight="46.0" prefWidth="40.0">
                                        <children>
-                                          <Button fx:id="buttonRespuestas" mnemonicParsing="false" prefHeight="23.0" prefWidth="37.0" styleClass="boton-notificacion" stylesheets="@styleSugerencias.css" text="🔔" />
+                                          <Button fx:id="buttonRespuestas" mnemonicParsing="false" onAction="#irARespuestas" prefHeight="23.0" prefWidth="37.0" styleClass="boton-notificacion" stylesheets="@styleSugerencias.css" text="🔔" />
                                        </children></HBox>
                                     <HBox prefHeight="46.0" prefWidth="0.0" stylesheets="@styleSugerencias.css" />
                                     <Button fx:id="botonAniadir" mnemonicParsing="false" onAction="#aniadirSolicitud" styleClass="boton-accion" stylesheets="@styleSolicitudes.css" text="+" />

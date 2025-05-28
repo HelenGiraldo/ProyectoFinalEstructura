@@ -5,10 +5,12 @@ import co.edu.uniquindio.red_social.clases.contenidos.Contenido;
 import co.edu.uniquindio.red_social.clases.social.Grupo;
 import co.edu.uniquindio.red_social.clases.usuarios.Administrador;
 import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
+import co.edu.uniquindio.red_social.clases.usuarios.PerfilUsuario;
 import co.edu.uniquindio.red_social.data_base.UtilSQL;
 import co.edu.uniquindio.red_social.estructuras.ArbolBinario;
 import co.edu.uniquindio.red_social.estructuras.ListaSimplementeEnlazada;
 import co.edu.uniquindio.red_social.util.GrupoService;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,12 +19,15 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -70,7 +75,6 @@ public class GruposDeEstudioAdminController {
 
     // Variables de control
     private ToggleGroup grupoGrupos = new ToggleGroup();
-    private Administrador usuario;
     private GrupoService grupoService = GrupoService.getInstance();
     private ArbolBinario<Contenido> arbolContenido;
 
@@ -81,11 +85,35 @@ public class GruposDeEstudioAdminController {
     private void initialize() {
         gruposEstudioButton.setSelected(true);
         cargarGrupos();
+        chambaImagen();
     }
 
-    public void setUsuarioActual(Administrador usuario) {
-        this.usuario = usuario;
-        cargarGrupos();
+    private void chambaImagen(){
+        Platform.runLater(() -> {
+            if (imagenPerfil != null) {
+                double radius = imagenPerfil.getFitWidth() / 2;
+                Circle clip = new Circle(radius, radius, radius);
+                imagenPerfil.setClip(clip);
+            }
+        });
+
+        PerfilUsuario perfil = PerfilUsuario.getInstancia();
+
+
+        perfil.imagenPerfilProperty().addListener((obs, oldImg, newImg) -> {
+            if (newImg != null) {
+                imagenPerfil.setImage(newImg);
+            }
+        });
+
+        System.out.println("Imagen de perfil: " + perfil.getImagenPerfil());
+
+        if (perfil.getImagenPerfil() != null) {
+            imagenPerfil.setImage(perfil.getImagenPerfil());
+        }
+        File file = PerfilUsuario.getUsuarioActual().getImagenPerfil();
+        Image imagen = new Image(file.toURI().toString());
+        imagenPerfil.setImage(imagen);
     }
 
     private void cargarGrupos() {
@@ -182,7 +210,6 @@ public class GruposDeEstudioAdminController {
                             getClass().getResource("/co/edu/uniquindio/red_social/TarjetaContenido.fxml"));
                     VBox tarjeta = loader.load();
 
-
                     TarjetaContenidoController controller = loader.getController();
                     controller.setContenido(contenido, arbolContenido.getPeso());
                     contenidosVBox.getChildren().add(tarjeta);
@@ -224,7 +251,6 @@ public class GruposDeEstudioAdminController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/crearGrupo.fxml"));
             Parent root = loader.load();
 
-
             Stage popupStage = new Stage();
             popupStage.setTitle("Crear nuevo grupo");
             popupStage.setScene(new Scene(root));
@@ -259,17 +285,6 @@ public class GruposDeEstudioAdminController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(url));
             Parent configView = loader.load();
-            Object controller = loader.getController();
-
-            if (controller instanceof SolicitudesAyudaAdminController) {
-                ((SolicitudesAyudaAdminController) controller).setUsuarioActual(usuario);
-                System.out.println("Usuario enviado a GruposDeEstudioAdminController: " + usuario.getNombre());
-            } else if (controller instanceof InicioAdminController) {
-                ((InicioAdminController) controller).setAdministradorActual(usuario);
-                System.out.println("Usuario enviado a InicioController: " + usuario.getNombre());
-            } else if (controller instanceof ConfiguracionAdminController) {
-                ((ConfiguracionAdminController) controller).setAdministradorActual(usuario);
-            } // Agrega otros controladores según el destino
 
             Scene scene = new Scene(configView);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

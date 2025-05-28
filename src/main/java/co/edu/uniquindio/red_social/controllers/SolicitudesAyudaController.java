@@ -4,6 +4,7 @@ import co.edu.uniquindio.red_social.clases.RedSocial;
 import co.edu.uniquindio.red_social.clases.social.SolicitudAyuda;
 import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
 import co.edu.uniquindio.red_social.clases.usuarios.PerfilUsuario;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,12 +13,15 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -132,6 +136,12 @@ public class SolicitudesAyudaController {
     }
 
     @FXML
+    void irSugerencias(ActionEvent event) {
+        navegar("/co/edu/uniquindio/red_social/sugerencias.fxml", event);
+
+    }
+
+    @FXML
     void irAChat(ActionEvent event) {
         navegar("/co/edu/uniquindio/red_social/mensajes.fxml", event);
 
@@ -170,6 +180,7 @@ public class SolicitudesAyudaController {
         redSocial.getSolicitudesAyuda().show();
         cargarComboBox();
         cargarSolicitudes();
+        chambaImagen();
     }
 
     private void cargarComboBox() {
@@ -181,7 +192,7 @@ public class SolicitudesAyudaController {
 
     @FXML
     private void irNotificaciones(ActionEvent event) {
-        navegar("/co/edu/uniquindio/red_social/Configuracion.fxml", event);
+        navegar("/co/edu/uniquindio/red_social/Respuestas.fxml", event);
 
     }
     @FXML
@@ -314,6 +325,33 @@ public class SolicitudesAyudaController {
     }
 
 
+    private void chambaImagen(){
+        Platform.runLater(() -> {
+            if (imagenPerfil != null) {
+                double radius = imagenPerfil.getFitWidth() / 2;
+                Circle clip = new Circle(radius, radius, radius);
+                imagenPerfil.setClip(clip);
+            }
+        });
+
+        PerfilUsuario perfil = PerfilUsuario.getInstancia();
+
+
+        perfil.imagenPerfilProperty().addListener((obs, oldImg, newImg) -> {
+            if (newImg != null) {
+                imagenPerfil.setImage(newImg);
+            }
+        });
+
+        System.out.println("Imagen de perfil: " + perfil.getImagenPerfil());
+
+        if (perfil.getImagenPerfil() != null) {
+            imagenPerfil.setImage(perfil.getImagenPerfil());
+        }
+        File file = PerfilUsuario.getUsuarioActual().getImagenPerfil();
+        Image imagen = new Image(file.toURI().toString());
+        imagenPerfil.setImage(imagen);
+    }
     public void limpiarSolicitudes() {
         AnchorPaneContenedorSolicitudes.getChildren().clear();
     }

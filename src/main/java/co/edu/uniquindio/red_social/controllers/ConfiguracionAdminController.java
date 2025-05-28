@@ -355,16 +355,9 @@ public class ConfiguracionAdminController {
                 throw new IOException("Vista no encontrada");
             }
 
-            // Cargar la vista
             FXMLLoader loader = new FXMLLoader(configUrl);
             Parent configView = loader.load();
-            InicioAdminController controller = loader.getController();
-            if (usuario != null) {
-                controller.setAdministradorActual(usuario);
-                System.out.println("Usuario enviado a InicioAdminController: " + usuario.getNombre());
-            } else {
-                System.out.println("usuario en ConfiguracionAdminController es null");
-            }
+
 
             // Asegúrate de que root no es null
             if (root != null) {
@@ -384,13 +377,7 @@ public class ConfiguracionAdminController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/GruposDeEstudioAdmin.fxml"));
             Parent configView = loader.load();
 
-            GruposDeEstudioAdminController controller = loader.getController();
-            if (usuario != null) {
-                controller.setUsuarioActual(usuario);
-                System.out.println("Usuario enviado a GruposDeEstudioController: " + usuario.getNombre());
-            } else {
-                System.out.println("usuario en ConfiguracionAdminController es null");
-            }
+
 
             Scene scene = new Scene(configView);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -409,13 +396,7 @@ public class ConfiguracionAdminController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/solicitudesAyudaAdmin.fxml"));
             Parent configView = loader.load();
-            SolicitudesAyudaAdminController controller = loader.getController();
-            if (usuario != null) {
-                controller.setUsuarioActual(usuario);
-                System.out.println("Usuario enviado a SolicitudesAyudaAdminController: " + usuario.getNombre());
-            } else {
-                System.out.println("usuario en ConfiguracionAdminController es null");
-            }
+
 
             Scene scene = new Scene(configView);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

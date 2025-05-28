@@ -40,7 +40,7 @@
                                     <Insets />
                                  </opaqueInsets>
                               </TextField>
-                              <Button fx:id="botonBuscar" minWidth="47.0" mnemonicParsing="false"  prefHeight="30.0" prefWidth="47.0" styleClass="boton-buscar" stylesheets="@styles.css" text="🔍">
+                              <Button fx:id="botonBuscar" minWidth="47.0" mnemonicParsing="false" onAction="#onBuscar" prefHeight="30.0" prefWidth="47.0" styleClass="boton-buscar" stylesheets="@styles.css" text="🔍">
                                  <opaqueInsets>
                                     <Insets />
                                  </opaqueInsets>
@@ -62,11 +62,11 @@
             <VBox fx:id="hBoxDerecha" prefHeight="322.0" prefWidth="192.0" BorderPane.alignment="CENTER">
                <children>
                   <ToggleButton fx:id="InicioButton" mnemonicParsing="false" onAction="#irAInicio" prefHeight="37.0" prefWidth="161.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Inicio" />
-                  <ToggleButton fx:id="misContenidosButton" onAction="#irAContenido" mnemonicParsing="false" prefHeight="43.0" prefWidth="132.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Mis Contenidos" />
+                  <ToggleButton fx:id="misContenidosButton" mnemonicParsing="false" onAction="#irMisContenidos" prefHeight="43.0" prefWidth="132.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Mis Contenidos" />
                   <ToggleButton fx:id="gruposEstudioButton" mnemonicParsing="false" onAction="#irAGruposEstudio" prefHeight="42.0" prefWidth="151.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Grupos estudio" />
                   <ToggleButton fx:id="MensajesButton" mnemonicParsing="false" onAction="#irAChat" prefHeight="42.0" prefWidth="161.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Mensajes" />
-                  <ToggleButton fx:id="SugerenciasButton" mnemonicParsing="false"  prefHeight="38.0" prefWidth="159.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Sugerencias" />
-                  <ToggleButton fx:id="SolicitudesDeAyudaButton" mnemonicParsing="false" onAction="#irASolitudesAyuda" prefHeight="40.0" prefWidth="160.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Solicitudes de ayuda" />
+                  <ToggleButton fx:id="SugerenciasButton" mnemonicParsing="false" onAction="#irASugerencias" prefHeight="38.0" prefWidth="159.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Sugerencias" />
+                  <ToggleButton fx:id="SolicitudesDeAyudaButton" mnemonicParsing="false" onAction="#irASolicitudesAyuda" prefHeight="40.0" prefWidth="160.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Solicitudes de ayuda" />
                   <ToggleButton fx:id="configuracionPerfilButton" mnemonicParsing="false" onAction="#irAConfig" prefHeight="39.0" prefWidth="161.0" styleClass="sidebar-button" stylesheets="@styles.css" text="Configuracion perfil" />
                </children>
             </VBox>
@@ -84,12 +84,12 @@
                                        <children>
                                           <HBox prefHeight="100.0" prefWidth="200.0">
                                              <children>
-                                                <Button fx:id="buttonEnviarSolicitud" mnemonicParsing="false" prefHeight="14.0" prefWidth="103.0" styleClass="boton-guardar" stylesheets="@stylesConfig.css" text="enviar Solicitud" />
+                                                <Button fx:id="buttonEnviarSolicitud" mnemonicParsing="false" onAction="#onEnviar" prefHeight="14.0" prefWidth="103.0" styleClass="boton-guardar" stylesheets="@stylesConfig.css" text="enviar Solicitud" />
                                                 <HBox prefHeight="47.0" prefWidth="164.0">
                                                    <children>
-                                                      <Button fx:id="buttonSolicitudes" mnemonicParsing="false"  prefHeight="23.0" prefWidth="37.0" styleClass="boton-notificacion" stylesheets="@styleSugerencias.css" text="🔔" />
+                                                      <Button fx:id="buttonSolicitudes" mnemonicParsing="false" onAction="#irARecibirSolicitudes" prefHeight="23.0" prefWidth="37.0" styleClass="boton-notificacion" stylesheets="@styleSugerencias.css" text="🔔" />
                                                    </children></HBox>
-                                                <Button maxHeight="56.0" maxWidth="66.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="66.0" styleClass="intereses-button" stylesheets="@styleSugerencias.css" text="intereses" />
+                                                <Button maxHeight="56.0" maxWidth="66.0" mnemonicParsing="false" onAction="#onIntereses" prefHeight="40.0" prefWidth="66.0" styleClass="intereses-button" stylesheets="@styleSugerencias.css" text="intereses" />
                                              </children>
                                           </HBox>
                                           <ScrollPane fx:id="scrollPaneContenedorContenidos" fitToWidth="true">
