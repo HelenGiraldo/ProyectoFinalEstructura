@@ -387,6 +387,20 @@ public class SugerenciasController {
         contenedor.getChildren().clear();
     }
 
+    public void irARecibirSolicitudes(ActionEvent actionEvent) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/RecibirSolicitudes.fxml"));
+            Parent configView = loader.load();
+
+            Scene scene = new Scene(configView);
+            Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
 
 

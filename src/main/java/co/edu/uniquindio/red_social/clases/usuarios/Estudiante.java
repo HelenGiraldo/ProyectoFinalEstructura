@@ -381,6 +381,17 @@ public class Estudiante extends Usuario implements AdministracionContenido {
         return false;
     }
 
+
+    public String valoracionesPublicacion() {
+        double valoraciones = 0;
+        for (Contenido contenido : contenidos.recorrerInorden()) {
+            valoraciones += contenido.getCalificacionPromedio();
+        }
+        valoraciones /= contenidos.getPeso();
+
+        return String.valueOf(valoraciones);
+
+    }
     // Getters y Setters
 
 
@@ -458,14 +469,7 @@ public class Estudiante extends Usuario implements AdministracionContenido {
 
     @Override
     public String toString() {
-        return "Estudiante{" +
-                "nombre='" + getNombre() + '\'' +
-                ", apellido='" + getApellido() + '\'' +
-                "contrasena='" + getContrasena() + '\'' +
-                ", email='" + getEmail() + '\'' +
-                ", contrasena='" + getContrasena() + '\'' +
-                "id" + id + '\'' +
-                '}';
+        return getNombre() + " " + getApellido() + " " + getEmail() ;
     }
 
 

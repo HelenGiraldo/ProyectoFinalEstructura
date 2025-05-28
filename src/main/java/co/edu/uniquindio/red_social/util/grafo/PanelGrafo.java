@@ -69,7 +69,7 @@ class PanelGrafo extends JPanel implements MouseListener, MouseMotionListener {
             g2d.drawLine(a.origen.x, a.origen.y, a.destino.x, a.destino.y);
 
             // Dibujar etiqueta si existe
-            if (a.etiqueta != null && !a.etiqueta.isEmpty()) {
+            if (a.getEtiqueta() != null && !a.getEtiqueta().isEmpty()) {
                 dibujarEtiquetaArista(g2d, a);
             }
         }
@@ -77,7 +77,7 @@ class PanelGrafo extends JPanel implements MouseListener, MouseMotionListener {
 
     private void dibujarEtiquetaArista(Graphics2D g2d, Arista a) {
         FontMetrics fm = g2d.getFontMetrics();
-        int textoAncho = fm.stringWidth(a.etiqueta);
+        int textoAncho = fm.stringWidth(a.getEtiqueta());
         int textoAlto = fm.getHeight();
 
         // Fondo de la etiqueta
@@ -99,7 +99,7 @@ class PanelGrafo extends JPanel implements MouseListener, MouseMotionListener {
 
         // Texto de la etiqueta
         g2d.setColor(COLOR_ETIQUETA_ARISTA);
-        g2d.drawString(a.etiqueta, a.etiquetaX - textoAncho/2, a.etiquetaY + textoAlto/4);
+        g2d.drawString(a.getEtiqueta(), a.etiquetaX - textoAncho/2, a.etiquetaY + textoAlto/4);
     }
 
     private void dibujarNodos(Graphics2D g2d) {
@@ -142,9 +142,9 @@ class PanelGrafo extends JPanel implements MouseListener, MouseMotionListener {
     public void mousePressed(MouseEvent e) {
         // Primero verificar si se está seleccionando una etiqueta
         for (Arista a : grafo.aristas) {
-            if (a.etiqueta != null && !a.etiqueta.isEmpty()) {
+            if (a.getEtiqueta() != null && !a.getEtiqueta().isEmpty()) {
                 FontMetrics fm = getFontMetrics(getFont());
-                int textoAncho = fm.stringWidth(a.etiqueta);
+                int textoAncho = fm.stringWidth(a.getEtiqueta());
                 int textoAlto = fm.getHeight();
 
                 Rectangle etiquetaRect = new Rectangle(
