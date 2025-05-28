@@ -166,10 +166,7 @@ public class InicioAdminController {
     public void inicializarUsuario(Administrador usuario) {
         this.usuario = usuario;
 
-        // Guardar el usuario en el singleton
-//        PerfilUsuario.getInstancia().setUsuarioActual(usuario);
 
-        // Actualizar la UI con los datos del usuario
         cargarDatosUsuario();
     }
 

@@ -202,10 +202,39 @@ public class SolicitudesAyudaAdminController {
 
     RedSocial redSocial = RedSocial.getInstance();
 
+    @FXML
+    void irAGrupoEstudio(ActionEvent event) {
+        navegar("/co/edu/uniquindio/red_social/gruposDeEstudioAdmin.fxml", event);
+
+    }
+
+    @FXML
+    void irAConfig(ActionEvent event) {
+        navegar("/co/edu/uniquindio/red_social/configuracionAdmin.fxml", event);
+    }
+
+    @FXML
+    void irAInicio(ActionEvent event) {
+        navegar("/co/edu/uniquindio/red_social/InicioAdmin.fxml", event);
+    }
+
     private void navegar(String url, ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(url));
             Parent configView = loader.load();
+            Object controller = loader.getController();
+            if (controller instanceof GruposDeEstudioAdminController) {
+                ((GruposDeEstudioAdminController) controller).setUsuarioActual(usuario);
+                System.out.println("Usuario enviado a GruposDeEstudioAdminController: " + usuario.getNombre());
+            } else if (controller instanceof InicioAdminController) {
+                ((InicioAdminController) controller).setAdministradorActual(usuario);
+                System.out.println("Usuario enviado a InicioAdminController: " + usuario.getNombre());
+            } else if (controller instanceof ConfiguracionAdminController) {
+                ((ConfiguracionAdminController) controller).setAdministradorActual(usuario);
+            } // Agrega otros controladores según el destino
+            else if (controller instanceof SolicitudesAyudaAdminController) {
+                ((SolicitudesAyudaAdminController) controller).setUsuarioActual(usuario);
+            }
 
             Scene scene = new Scene(configView);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -337,86 +366,5 @@ public class SolicitudesAyudaAdminController {
         AnchorPaneContenedorSolicitudes.getChildren().clear();
     }
 
-    @FXML
-    private void irAGruposEstudio(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/GruposDeEstudioAdmin.fxml"));
-            Parent configView = loader.load();
 
-            GruposDeEstudioAdminController controller = loader.getController();
-
-            if (usuario != null) {
-                controller.setUsuarioActual(usuario);
-                System.out.println("Usuario enviado a GruposDeEstudioController: " + usuario.getNombre());
-            } else {
-                System.out.println("usuario en InicioController es null");
-            }
-
-            Scene scene = new Scene(configView);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-
-
-    @FXML
-    private void irAConfig(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/configuracionAdmin.fxml"));
-            Parent configView = loader.load();
-
-            ConfiguracionAdminController controller = loader.getController();
-
-            if (usuario != null) {
-                controller.setAdministradorActual(usuario);
-                System.out.println("Usuario enviado a GruposDeEstudioController: " + usuario.getNombre());
-            } else {
-                System.out.println("usuario en InicioController es null");
-            }
-
-
-            Scene scene = new Scene(configView);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @FXML
-    private void irAInicio(ActionEvent event) {
-        try {
-
-            URL configUrl = getClass().getResource("/co/edu/uniquindio/red_social/InicioAdmin.fxml");
-            System.out.println("URL config: " + configUrl);
-            FXMLLoader loader = new FXMLLoader(configUrl);
-            Parent configView = loader.load();
-
-            InicioAdminController controller = loader.getController();
-            if (usuario != null) {
-                controller.setAdministradorActual(usuario);
-                System.out.println("Usuario enviado a InicioAdminController: " + usuario.getNombre());
-            } else {
-                System.out.println("usuario en InicioController es null");
-            }
-
-            if (root != null) {
-                root.getChildren().clear();
-                root.getChildren().add(configView);
-            } else {
-                System.err.println("El contenedor principal es null.");
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 }

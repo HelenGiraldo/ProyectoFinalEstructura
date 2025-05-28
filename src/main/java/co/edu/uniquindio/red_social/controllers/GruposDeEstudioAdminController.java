@@ -182,6 +182,7 @@ public class GruposDeEstudioAdminController {
                             getClass().getResource("/co/edu/uniquindio/red_social/TarjetaContenido.fxml"));
                     VBox tarjeta = loader.load();
 
+
                     TarjetaContenidoController controller = loader.getController();
                     controller.setContenido(contenido, arbolContenido.getPeso());
                     contenidosVBox.getChildren().add(tarjeta);
@@ -222,6 +223,7 @@ public class GruposDeEstudioAdminController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/crearGrupo.fxml"));
             Parent root = loader.load();
+
 
             Stage popupStage = new Stage();
             popupStage.setTitle("Crear nuevo grupo");

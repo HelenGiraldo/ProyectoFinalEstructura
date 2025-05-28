@@ -2,10 +2,8 @@ package co.edu.uniquindio.red_social.controllers;
 
 import co.edu.uniquindio.red_social.clases.RedSocial;
 import co.edu.uniquindio.red_social.clases.social.SolicitudAyuda;
-import co.edu.uniquindio.red_social.clases.usuarios.Administrador;
 import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
 import co.edu.uniquindio.red_social.clases.usuarios.PerfilUsuario;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,15 +12,12 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -125,19 +120,6 @@ public class SolicitudesAyudaController {
     @FXML
     private Label titulo2;
 
-    private Estudiante usuario;
-
-
-
-    public void setUsuarioActual(Estudiante usuario) {
-        this.usuario = usuario;
-    }
-
-
-    @FXML
-    void irASugerencias(ActionEvent event) {
-        navegar("/co/edu/uniquindio/red_social/Sugerencias.fxml", event);
-    }
     @FXML
     void irAContenido(ActionEvent event) {
         navegar("/co/edu/uniquindio/red_social/TusContenidos.fxml", event);
@@ -163,7 +145,6 @@ public class SolicitudesAyudaController {
     @FXML
     void irAInicio(ActionEvent event) {
         navegar("/co/edu/uniquindio/red_social/Inicio.fxml", event);
-
     }
 
     RedSocial redSocial = RedSocial.getInstance();
@@ -172,18 +153,6 @@ public class SolicitudesAyudaController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(url));
             Parent configView = loader.load();
-
-            Object controller = loader.getController();
-
-            if (controller instanceof GruposDeEstudioController) {
-                ((GruposDeEstudioController) controller).setUsuarioActual(usuario);
-                System.out.println("Usuario enviado a GruposDeEstudioAdminController: " + usuario.getNombre());
-            } else if (controller instanceof InicioController) {
-                ((InicioController) controller).setUsuarioActual(usuario);
-                System.out.println("Usuario enviado a InicioController: " + usuario.getNombre());
-            } else if (controller instanceof ConfiguracionController) {
-                ((ConfiguracionController) controller).setUsuarioActual(usuario);
-            } // Agrega otros controladores según el destino
 
             Scene scene = new Scene(configView);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -195,38 +164,8 @@ public class SolicitudesAyudaController {
         }
     }
 
-
     @FXML
     private void initialize() {
-        SolicitudesDeAyudaButton.setSelected(true);
-
-        Platform.runLater(() -> {
-            if (imagenPerfil != null) {
-                double radius = imagenPerfil.getFitWidth() / 2;
-                Circle clip = new Circle(radius, radius, radius);
-                imagenPerfil.setClip(clip);
-            }
-        });
-
-        PerfilUsuario perfil = PerfilUsuario.getInstancia();
-
-
-        perfil.imagenPerfilProperty().addListener((obs, oldImg, newImg) -> {
-            if (newImg != null) {
-                imagenPerfil.setImage(newImg);
-            }
-        });
-
-
-        System.out.println("Imagen de perfil: " + perfil.getImagenPerfil());
-        // Mostrar imagen actual si ya existe
-        if (perfil.getImagenPerfil() != null) {
-            imagenPerfil.setImage(perfil.getImagenPerfil());
-        }
-        File file = PerfilUsuario.getUsuarioActual().getImagenPerfil();
-        Image imagen = new Image(file.toURI().toString());
-        imagenPerfil.setImage(imagen);
-
         System.out.println(redSocial.getSolicitudesAyuda().size());
         redSocial.getSolicitudesAyuda().show();
         cargarComboBox();
