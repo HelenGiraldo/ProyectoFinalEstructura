@@ -178,11 +178,7 @@ public class InicioAdminController {
     private void cargarDatosUsuario() {
         Usuario usuarioActual = PerfilUsuario.getUsuarioActual();
 
-        if (usuarioActual != null && usuarioActual.getImagenPerfil() != null) {
-            Image imagen = new Image(usuarioActual.getImagenPerfil().toURI().toString());
-            imagenPerfil.setImage(imagen);
-            PerfilUsuario.getInstancia().setImagenPerfil(imagen);
-        }
+
 
         actualizarSaludo();
     }

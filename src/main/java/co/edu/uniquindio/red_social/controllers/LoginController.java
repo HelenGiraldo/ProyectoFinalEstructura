@@ -38,7 +38,7 @@ public class LoginController {
 
     @FXML
     private void initialize() {
-
+        RedSocial.getInstance().getEstudiantes().show();
     }
 
     @FXML
