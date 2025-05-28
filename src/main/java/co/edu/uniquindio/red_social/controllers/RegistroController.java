@@ -154,7 +154,7 @@ public class RegistroController {
 
 
         Estudiante estudiante= redSocial.crearEstudiante(nombre, apellido, email, password, new File("src/main/resources/co/edu/uniquindio/red_social/imagenes/imagePerfil.png"));
-
+        System.out.println(estudiante);
         if (estudiante == null) {
             labelRegistroValidacion.setText("Error al crear el estudiante.");
             return;

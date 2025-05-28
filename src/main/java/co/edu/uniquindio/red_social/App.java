@@ -36,10 +36,10 @@ public class App extends Application {
         if (iniciarDatos) {
             iniciarDatos();
             JOptionPane.showMessageDialog(null, "Has seleccionado Sí. Iniciando datos...");
-            // Aquí iría el código para iniciar los datos
         } else {
+            RedSocial red = RedSocial.getInstance("Think Together");
+
             JOptionPane.showMessageDialog(null, "Has seleccionado No. ");
-            // Aquí iría el código para la opción No
         }
         launch();
     }

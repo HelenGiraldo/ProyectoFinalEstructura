@@ -91,7 +91,9 @@ public class RedSocial implements AdministracionEstudiante, AdministracionGrupo,
                 return null;
             }
 
-            return new Estudiante(nombre, apellido, correo, contrasena, fotoPerfil);
+            Estudiante est = new Estudiante(nombre, apellido, correo, contrasena, fotoPerfil);
+            estudiantes.add(est);
+            return est;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
