@@ -1,5 +1,6 @@
 package co.edu.uniquindio.red_social.controllers;
 
+import co.edu.uniquindio.red_social.clases.usuarios.Administrador;
 import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
 import co.edu.uniquindio.red_social.clases.usuarios.PerfilUsuario;
 import javafx.event.ActionEvent;

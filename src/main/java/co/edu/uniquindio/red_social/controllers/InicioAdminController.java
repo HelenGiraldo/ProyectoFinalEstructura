@@ -131,14 +131,16 @@ public class InicioAdminController {
 
     private Administrador usuario;
 
-    public void setAdministradorActual(Administrador administrador) {
-        this.usuario = administrador;
-        inicializarUsuario(administrador);
+    public void setAdministradorActual(Administrador usuario) {
+        this.usuario = usuario;
+        inicializarUsuario(usuario);
     }
 
     @FXML
     public void initialize() {
         InicioButton.setSelected(true);
+
+        PerfilUsuario perfil = PerfilUsuario.getInstancia();
 
         Platform.runLater(() -> {
             if (imagenPerfil != null) {
@@ -148,26 +150,13 @@ public class InicioAdminController {
             }
         });
 
-        PerfilUsuario perfil = PerfilUsuario.getInstancia();
-
-
         perfil.imagenPerfilProperty().addListener((obs, oldImg, newImg) -> {
             if (newImg != null) {
                 imagenPerfil.setImage(newImg);
             }
         });
 
-        System.out.println("Imagen de perfil: " + perfil.getImagenPerfil());
-        // Mostrar imagen actual si ya existe
-        if (perfil.getImagenPerfil() != null) {
-            imagenPerfil.setImage(perfil.getImagenPerfil());
-        }
-        File file = PerfilUsuario.getUsuarioActual().getImagenPerfil();
-        if (file != null && file.exists()) {
-            Image imagen = new Image(file.toURI().toString());
-            imagenPerfil.setImage(imagen);
-        }
-
+        actualizarSaludo();
     }
 
 
@@ -178,14 +167,19 @@ public class InicioAdminController {
         // Guardar el usuario en el singleton
         PerfilUsuario.getInstancia().setUsuarioActual(usuario);
 
-        // Cargar imagen si está disponible
-        if (usuario.getImagenPerfil() != null) {
-            Image imagen = new Image(usuario.getImagenPerfil().toURI().toString());
+        // Actualizar la UI con los datos del usuario
+        cargarDatosUsuario();
+    }
+
+    private void cargarDatosUsuario() {
+        Usuario usuarioActual = PerfilUsuario.getUsuarioActual();
+
+        if (usuarioActual != null && usuarioActual.getImagenPerfil() != null) {
+            Image imagen = new Image(usuarioActual.getImagenPerfil().toURI().toString());
             imagenPerfil.setImage(imagen);
             PerfilUsuario.getInstancia().setImagenPerfil(imagen);
         }
 
-        // Actualizar saludo o información en la vista
         actualizarSaludo();
     }
 
@@ -251,6 +245,15 @@ public class InicioAdminController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/ConfiguracionAdmin.fxml"));
             Parent configView = loader.load();
 
+            ConfiguracionAdminController controller = loader.getController();
+            // PASAR el usuario (que tienes en 'usuario' o usa PerfilUsuario.getUsuarioActual())
+            if (usuario != null) {
+                controller.setAdministradorActual(usuario);
+                System.out.println("Usuario enviado a ConfiguracionAdminController: " + usuario.getNombre());
+            } else {
+                System.out.println("usuario en InicioAdminController es null");
+            }
+
             Scene scene = new Scene(configView);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);
@@ -269,6 +272,14 @@ public class InicioAdminController {
             System.out.println("URL config: " + configUrl);
             FXMLLoader loader = new FXMLLoader(configUrl);
             Parent configView = loader.load();
+            SolicitudesAyudaAdminController controller = loader.getController();
+            // PASAR el usuario (que tienes en 'usuario' o usa PerfilUsuario.getUsuarioActual())
+            if (usuario != null) {
+                controller.setUsuarioActual(usuario);
+                System.out.println("Usuario enviado a SolicitudesAyudaAdminController: " + usuario.getNombre());
+            } else {
+                System.out.println("usuario en InicioAdminController es null");
+            }
 
             if (root != null) {
                 root.getChildren().clear();

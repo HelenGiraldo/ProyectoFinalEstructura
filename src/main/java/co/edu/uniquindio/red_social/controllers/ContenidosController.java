@@ -148,6 +148,7 @@ public class ContenidosController {
         PerfilUsuario perfil = PerfilUsuario.getInstancia();
 
         perfil.imagenPerfilProperty().addListener((obs, oldImg, newImg) -> {
+            System.out.println("Listener imagen perfil: " + newImg);
             if (newImg != null) {
                 imagenPerfil.setImage(newImg);
             }
@@ -156,6 +157,8 @@ public class ContenidosController {
         // Mostrar imagen actual si ya existe
         if (perfil.getImagenPerfil() != null) {
             imagenPerfil.setImage(perfil.getImagenPerfil());
+        } else {
+            System.out.println("Imagen perfil es null al iniciar ContenidosController");
         }
 
 

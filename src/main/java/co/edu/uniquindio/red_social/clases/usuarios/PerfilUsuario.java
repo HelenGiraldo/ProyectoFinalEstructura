@@ -23,36 +23,25 @@ public class PerfilUsuario {
     }
 
     public ObjectProperty<Image> imagenPerfilProperty() {
-        if (usuarioActual != null) {
-            File file = usuarioActual.getImagenPerfil();
-            if (file != null && file.exists()) {
-                imagenPerfil.set(new Image(file.toURI().toString()));
-            } else {
-                imagenPerfil.set(null);
-            }
+        File file = PerfilUsuario.getUsuarioActual().getImagenPerfil();
+        if (file != null && file.exists()) {
+            imagenPerfil.set(new Image(file.toURI().toString()));
         } else {
             imagenPerfil.set(null);
         }
         return imagenPerfil;
     }
 
-    public Image getImagenPerfil() {
-        if (usuarioActual != null && usuarioActual.getImagenPerfil() != null) {
-            File file = usuarioActual.getImagenPerfil();
-            if (file.exists()) {
-                return new Image(file.toURI().toString());
-            }
-        }
-        return null;
-    }
 
+    public Image getImagenPerfil() {
+        File file = PerfilUsuario.getUsuarioActual().getImagenPerfil();
+        Image imagen = new Image(file.toURI().toString());
+        return imagen;
+    }
 
     public void setImagenPerfil(Image imagen) {
         File file = new File(imagen.getUrl());
-        if (usuarioActual != null) {
-            usuarioActual.setImagenPerfil(file);
-            imagenPerfil.set(imagen);
-        }
+        usuarioActual.setImagenPerfil(file);
     }
 
     public static Usuario getUsuarioActual() {

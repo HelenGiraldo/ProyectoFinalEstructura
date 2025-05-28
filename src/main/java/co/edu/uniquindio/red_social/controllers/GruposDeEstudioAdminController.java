@@ -70,11 +70,10 @@ public class GruposDeEstudioAdminController {
 
     // Variables de control
     private ToggleGroup grupoGrupos = new ToggleGroup();
-    private Administrador usuarioActual;
+    private Administrador usuario;
     private GrupoService grupoService = GrupoService.getInstance();
     private ArbolBinario<Contenido> arbolContenido;
 
-    private Administrador usuario;
 
 
 
@@ -84,8 +83,8 @@ public class GruposDeEstudioAdminController {
         cargarGrupos();
     }
 
-    public void setUsuarioActual(Administrador administrador) {
-        this.usuarioActual = administrador;
+    public void setUsuarioActual(Administrador usuario) {
+        this.usuario = usuario;
         cargarGrupos();
     }
 
@@ -260,8 +259,8 @@ public class GruposDeEstudioAdminController {
             Parent configView = loader.load();
             Object controller = loader.getController();
 
-            if (controller instanceof GruposDeEstudioAdminController) {
-                ((GruposDeEstudioAdminController) controller).setUsuarioActual(usuario);
+            if (controller instanceof SolicitudesAyudaAdminController) {
+                ((SolicitudesAyudaAdminController) controller).setUsuarioActual(usuario);
                 System.out.println("Usuario enviado a GruposDeEstudioAdminController: " + usuario.getNombre());
             } else if (controller instanceof InicioAdminController) {
                 ((InicioAdminController) controller).setAdministradorActual(usuario);
