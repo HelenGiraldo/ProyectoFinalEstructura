@@ -278,7 +278,7 @@ public class ConfiguracionAdminController {
                     carpetaDestino.mkdirs();
                 }
 
-                Estudiante estudiante = (Estudiante) PerfilUsuario.getInstancia().getUsuarioActual();
+                Administrador estudiante = (Administrador) PerfilUsuario.getInstancia().getUsuarioActual();
                 String extension = archivoSeleccionado.getName().substring(archivoSeleccionado.getName().lastIndexOf("."));
                 String nuevoNombreArchivo = estudiante.getId() + extension;
                 File archivoDestino = new File(carpetaDestino, nuevoNombreArchivo);
