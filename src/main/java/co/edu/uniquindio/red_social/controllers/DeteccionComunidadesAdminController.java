@@ -1,15 +1,26 @@
 package co.edu.uniquindio.red_social.controllers;
 
+import co.edu.uniquindio.red_social.clases.RedSocial;
+import co.edu.uniquindio.red_social.clases.social.Grupo;
+import co.edu.uniquindio.red_social.estructuras.ListaSimplementeEnlazada;
+import co.edu.uniquindio.red_social.util.GrupoTabla;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class DeteccionComunidadesAdminController {
 
@@ -38,10 +49,10 @@ public class DeteccionComunidadesAdminController {
     private VBox chatSpace;
 
     @FXML
-    private TableColumn<?, ?> estudianteTableColumn;
+    private TableColumn<GrupoTabla, String> estudianteTableColumn;
 
     @FXML
-    private TableView<?> estudiantesConMasConexionesTable;
+    private TableView<GrupoTabla> estudiantesConMasConexionesTable;
 
     @FXML
     private Label handlevolver;
@@ -56,36 +67,136 @@ public class DeteccionComunidadesAdminController {
     private ScrollPane scrollPrincipal;
 
     @FXML
-    private TableColumn<?, ?> tipoGrupoTableColumn;
+    private TableColumn<GrupoTabla, String> tipoGrupoTableColumn;
 
     @FXML
     void handleVolver(MouseEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/CaminoMasCorto.fxml"));
+            Parent configView = loader.load();
 
+            Scene scene = new Scene(configView);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
     void irACaminoMasCorto(ActionEvent event) {
+        navegar("/co/edu/uniquindio/red_social/CaminoMasCorto.fxml", event);
 
     }
 
     @FXML
     void irAEstudiantesMasConexiones(ActionEvent event) {
+        navegar("/co/edu/uniquindio/red_social/estudiantesConMasConexiones.fxml", event);
 
     }
 
-    @FXML
+    @FXML//crear XD
     void irAGrafo(ActionEvent event) {
+        if (grupoSeleccionado == null || grupoSeleccionado.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Advertencia");
+            alert.setHeaderText("No se ha seleccionado ningún grupo");
+            alert.setContentText("Por favor selecciona un grupo de la tabla primero.");
+            alert.showAndWait();
+            return;
+        }
+        GrupoTabla.NOMBRE_GRUPO = grupoSeleccionado;
 
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/crearGrupo.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Gráfico del Grupo: " + grupoSeleccionado);
+            stage.setScene(new Scene(root));
+
+            // Configurar como ventana modal (opcional)
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.initOwner(((Node)event.getSource()).getScene().getWindow());
+
+            // Mostrar la ventana
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void navegar(String url, ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(url));
+            Parent configView = loader.load();
+
+            Scene scene = new Scene(configView);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
     void irAMasValorados(ActionEvent event) {
+        navegar("/co/edu/uniquindio/red_social/estudiantesConMasConexiones.fxml", event);
 
     }
 
     @FXML
     void irANivelesParticipacion(ActionEvent event) {
+        navegar("/co/edu/uniquindio/red_social/NivelesDeParticipacion.fxml", event);
 
     }
 
+    RedSocial redSocial = RedSocial.getInstance();
+    String grupoSeleccionado;
+    @FXML
+    void initialize() {
+        // Obtener los grupos automáticos y sus tipos
+        ListaSimplementeEnlazada<String> grupos = redSocial.obtenerGruposAutomaticos();
+        ListaSimplementeEnlazada<String> tipos = new ListaSimplementeEnlazada<>();
+
+        for (String grupo : grupos) {
+            int cantidad = redSocial.cuantosTienenPreferencia(grupo);
+            tipos.add("Automático, posibles miembros: " + cantidad);
+        }
+
+        // Configurar las columnas
+        estudianteTableColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getNombreGrupo()));
+        tipoGrupoTableColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getTipoGrupo()));
+
+        // Llenar la tabla con los datos
+        ListaSimplementeEnlazada<GrupoTabla> datosTabla = new ListaSimplementeEnlazada<>();
+        for (int i = 0; i < grupos.size(); i++) {
+            datosTabla.add(new GrupoTabla(grupos.get(i), tipos.get(i)));
+        }
+
+        // Convertir la lista personalizada a un ObservableList para la TableView
+        ObservableList<GrupoTabla> datosObservables = FXCollections.observableArrayList();
+        for (GrupoTabla dato : datosTabla) {
+            datosObservables.add(dato);
+        }
+
+        estudiantesConMasConexionesTable.setItems(datosObservables);
+
+        // Manejar la selección de filas
+        estudiantesConMasConexionesTable.getSelectionModel().selectedItemProperty().addListener(
+                (observable, oldValue, newValue) -> {
+                    if (newValue != null) {
+                        grupoSeleccionado = newValue.getNombreGrupo();
+                        System.out.println("Grupo seleccionado: " + grupoSeleccionado);
+                    }
+                }
+        );
+    }
 }

@@ -378,4 +378,20 @@ public class SolicitudesAyudaController {
     public void limpiarSolicitudes() {
         AnchorPaneContenedorSolicitudes.getChildren().clear();
     }
+
+    @FXML
+    public void irARespuestas(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/Respuestas.fxml"));
+            Parent configView = loader.load();
+
+            Scene scene = new Scene(configView);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

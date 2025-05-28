@@ -1,7 +1,16 @@
 package co.edu.uniquindio.red_social.controllers;
 
+import co.edu.uniquindio.red_social.clases.RedSocial;
+import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
+import co.edu.uniquindio.red_social.estructuras.ListaSimplementeEnlazada;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -9,6 +18,9 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class NivelesDeParticipacionAdminController {
 
@@ -40,7 +52,7 @@ public class NivelesDeParticipacionAdminController {
     private VBox chatSpace;
 
     @FXML
-    private ComboBox<?> comboBoxEstudiante;
+    private ComboBox<Estudiante> comboBoxEstudiante;
 
     @FXML
     private Label gruposLabel;
@@ -68,26 +80,77 @@ public class NivelesDeParticipacionAdminController {
 
     @FXML
     void handleVolver(MouseEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/co/edu/uniquindio/red_social/CaminoMasCorto.fxml"));
+            Parent configView = loader.load();
 
-    }
+            Scene scene = new Scene(configView);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }    }
 
     @FXML
     void irACaminoMasCorto(ActionEvent event) {
+        navegar("/co/edu/uniquindio/red_social/CaminoMasCorto.fxml", event);
 
     }
 
     @FXML
     void irADeteccionComunidades(ActionEvent event) {
+        navegar("/co/edu/uniquindio/red_social/DeteccinComunidades.fxml", event);
 
     }
 
     @FXML
     void irAEstudiantesMasConexiones(ActionEvent event) {
+        navegar("/co/edu/uniquindio/red_social/estudiantesConMasConexiones.fxml", event);
 
     }
 
     @FXML
     void irAMasValorados(ActionEvent event) {
+
+    }
+    private void navegar(String url, ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(url));
+            Parent configView = loader.load();
+
+            Scene scene = new Scene(configView);
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    @FXML
+    void irAction(ActionEvent event){
+        Estudiante estudianteSeleccionado = comboBoxEstudiante.getValue();
+        nombreLabel.setText(estudianteSeleccionado.getNombre());
+        IdLabel.setText(String.valueOf(estudianteSeleccionado.getId()));
+        publicacionesLabel.setText(String.valueOf(estudianteSeleccionado.getContenidos().getPeso()));
+        amigosLabel.setText(String.valueOf(estudianteSeleccionado.getContactos().size()));
+        valoracionesLabel.setText(String.valueOf(estudianteSeleccionado.valoracionesPublicacion()));
+        gruposLabel.setText(String.valueOf(estudianteSeleccionado.getGrupos().size()));
+    }
+
+    RedSocial redSocial = RedSocial.getInstance();
+    @FXML
+    void initialize() {
+        ListaSimplementeEnlazada<Estudiante> estudiantes = redSocial.getEstudiantes();
+
+        ObservableList<Estudiante> listaObservable = FXCollections.observableArrayList();
+
+        for (Estudiante estudiante : estudiantes) {
+            listaObservable.add(estudiante);
+        }
+        comboBoxEstudiante.setItems(listaObservable);
 
     }
 

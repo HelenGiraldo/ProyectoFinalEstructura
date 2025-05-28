@@ -106,6 +106,7 @@
                                                                         <ComboBox fx:id="comboBoxEstudiante" prefWidth="150.0" styleClass="choice-box-estilo" stylesheets="@styleTusContenidos.css" />
                                                                      </children>
                                                                   </VBox>
+                                                                  <Button fx:id="buttonMasValorados1" mnemonicParsing="false" onAction="#irAction" prefHeight="29.0" prefWidth="117.0" styleClass="button-Estadisticas" stylesheets="@styleTusContenidos.css" text="Ir" />
                                                                </children>
                                                             </VBox>
                                                          </children>

@@ -125,6 +125,7 @@
                                              </content>
                                           </ScrollPane>
                                           <Label fx:id="caminoMasCortoLabel" prefHeight="17.0" prefWidth="501.0" text="CaminoMasCorto" />
+                                          <Button fx:id="BuscarCamino" mnemonicParsing="false" onAction="#buscarCamino" prefHeight="29.0" prefWidth="117.0" styleClass="button-Estadisticas" stylesheets="@styleTusContenidos.css" text="Buscar camino" />
                                        </children>
                                     </VBox>
                                  </children>
