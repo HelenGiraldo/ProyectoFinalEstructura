@@ -86,6 +86,7 @@ public class RecibirSolicitudesController {
             return;
         }
         estudiante.aceptarSolicitud(solicitudSeleccionada);
+        agregadoConExitoLabel.setText("Solicitud aceptada con éxito.");
     }
 
     @FXML
