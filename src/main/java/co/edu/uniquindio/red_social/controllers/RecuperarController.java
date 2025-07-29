@@ -1,5 +1,7 @@
 package co.edu.uniquindio.red_social.controllers;
 
+import co.edu.uniquindio.red_social.clases.RedSocial;
+import co.edu.uniquindio.red_social.clases.usuarios.Estudiante;
 import co.edu.uniquindio.red_social.util.Email;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -30,7 +32,8 @@ public class RecuperarController {
             mensajeLabel.setText("Por favor ingrese su correo.");
         } else {
             try {
-                Email.sendEmail(correoDestino, "Recuperación de contraseña", "Este es tu enlace para recuperar la contraseña: [aquí iría el enlace o instrucciones]");
+                Estudiante est = RedSocial.getInstance().estudianteExisteCorreo(correoDestino);
+                Email.olvidasteContrasena(correoDestino,est.getNombre() +" " + est.getApellido(),est.getContrasena());
                 mensajeLabel.setText("Correo enviado con éxito a " + correoDestino);
 
                 new Thread(() -> {
